@@ -1,9 +1,13 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import dynamic from "next/dynamic";
 import { gsap } from "gsap";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
+
+/* Three.js Globe — loaded client-side only (no SSR, WebGL requirement) */
+const Globe3D = dynamic(() => import("./Globe3D"), { ssr: false });
 
 const EXPO = [0.16, 1, 0.3, 1] as [number, number, number, number];
 
@@ -89,129 +93,80 @@ function IntelligenceCapsule() {
   );
 }
 
-/* ── Earth Globe (Planet Labs–inspired) ─────────────────────────────────── */
+/* ── 3D Earth Globe (Three.js WebGL) ────────────────────────────────────── */
 function EarthGlobe({ ready }: { ready: boolean }) {
   return (
     <div className="hidden lg:flex items-center justify-center">
       <motion.div
         className="relative"
-        style={{ width: 420, height: 420 }}
+        style={{ width: 460, height: 460 }}
         initial={{ opacity: 0, x: 70, scale: 0.88 }}
         animate={ready ? { opacity: 1, x: 0, scale: 1 } : { opacity: 0, x: 70, scale: 0.88 }}
         transition={{ duration: 1.2, delay: 0.1, ease: EXPO }}
       >
-        {/* Outer atmosphere halo */}
-        <div
-          className="absolute rounded-full pointer-events-none"
-          style={{
-            width: 476, height: 476,
-            top: "50%", left: "50%",
-            transform: "translate(-50%,-50%)",
-            background:
-              "radial-gradient(circle,transparent 44%,rgba(0,119,255,0.07) 55%,transparent 70%)",
-            border: "1px solid rgba(0,119,255,0.07)",
-          }}
-        />
 
-        {/* Orbit rings */}
+        {/* Outer atmosphere rings (CSS — independent of WebGL canvas) */}
+        {[520, 490].map((size, i) => (
+          <div
+            key={i}
+            className="absolute rounded-full pointer-events-none"
+            style={{
+              width: size, height: size,
+              top: "50%", left: "50%",
+              transform: "translate(-50%,-50%)",
+              border: `1px solid rgba(0,119,255,${0.06 - i * 0.02})`,
+              background: `radial-gradient(circle,transparent ${47 + i * 4}%,rgba(0,119,255,${0.04 - i * 0.01}) ${55 + i * 4}%,transparent ${65 + i * 4}%)`,
+            }}
+          />
+        ))}
+
+        {/* CSS orbit rings — animated over the 3D canvas */}
         {[
-          { w: "100%", dur: "26s" },
-          { w: "78%",  dur: "18s", dashed: true },
-          { w: "56%",  dur: "13s" },
+          { w: 420, dur: "26s" },
+          { w: 330, dur: "18s", dashed: true },
+          { w: 240, dur: "13s" },
         ].map((ring, i) => (
           <div
             key={i}
-            className="absolute rounded-full"
+            className="absolute rounded-full pointer-events-none"
             style={{
               width: ring.w, height: ring.w,
               top: "50%", left: "50%",
               transform: "translate(-50%,-50%)",
-              border: `1px ${ring.dashed ? "dashed" : "solid"} rgba(0,119,255,0.2)`,
+              border: `1px ${ring.dashed ? "dashed" : "solid"} rgba(0,119,255,0.22)`,
               animation: `rotateRing${i + 1} ${ring.dur} linear infinite`,
             }}
           />
         ))}
 
-        {/* Globe sphere */}
+        {/* Glow halo behind the canvas */}
+        <div
+          className="absolute rounded-full pointer-events-none"
+          style={{
+            width: 340, height: 340,
+            top: "50%", left: "50%",
+            transform: "translate(-50%,-50%)",
+            background:
+              "radial-gradient(circle,rgba(0,119,255,0.18) 0%,rgba(0,60,160,0.10) 45%,transparent 70%)",
+            filter: "blur(28px)",
+          }}
+        />
+
+        {/* ── WebGL Three.js Globe ──────────────────────────────────────── */}
         <div
           className="absolute rounded-full overflow-hidden"
           style={{
-            width: 236, height: 236,
+            width: 300, height: 300,
             top: "50%", left: "50%",
             transform: "translate(-50%,-50%)",
-            background: "radial-gradient(circle at 33% 28%, #0d3880, #071A2E)",
             boxShadow:
-              "0 0 80px rgba(0,119,255,0.4), 0 0 160px rgba(0,119,255,0.12), inset 0 0 60px rgba(0,0,30,0.6)",
+              "0 0 90px rgba(0,119,255,0.45), 0 0 180px rgba(0,119,255,0.15)",
           }}
         >
-          <svg viewBox="0 0 236 236" className="w-full h-full">
-            {/* Lat/lon grid */}
-            {[28,47,66,84,102,118,134,152,170,188,208].map((y, i) => (
-              <line key={`h${i}`} x1="0" y1={y} x2="236" y2={y}
-                stroke="rgba(0,212,255,0.07)" strokeWidth="0.6" />
-            ))}
-            {[30,60,90,118,146,176,206].map((x, i) => (
-              <line key={`v${i}`} x1={x} y1="0" x2={x} y2="236"
-                stroke="rgba(0,212,255,0.07)" strokeWidth="0.6" />
-            ))}
-
-            {/* Land masses */}
-            <path d="M123 74 L143 69 L161 78 L164 98 L155 118 L141 123 L123 115 L117 99 Z"
-              fill="rgba(0,184,148,0.55)" />
-            <path d="M85 68 L120 72 L123 74 L117 99 L97 96 L79 84 L75 74 Z"
-              fill="rgba(0,184,148,0.42)" />
-            <path d="M123 115 L141 123 L133 148 L115 158 L98 146 L103 122 Z"
-              fill="rgba(0,184,148,0.45)" />
-            <path d="M54 51 L76 47 L82 63 L76 80 L59 82 L48 68 Z"
-              fill="rgba(0,184,148,0.28)" />
-            <path d="M56 87 L76 82 L82 100 L78 130 L59 132 L46 114 L50 98 Z"
-              fill="rgba(0,184,148,0.27)" />
-            <path d="M16 58 L45 52 L54 68 L48 96 L29 100 L14 82 Z"
-              fill="rgba(0,184,148,0.23)" />
-            <path d="M163 98 L182 90 L188 108 L174 125 L160 120 L155 118 Z"
-              fill="rgba(0,184,148,0.38)" />
-
-            {/* Satellite orbit paths */}
-            <ellipse id="gvp-orb1" cx="118" cy="118" rx="90" ry="30"
-              fill="none" stroke="rgba(0,212,255,0.3)" strokeWidth="0.8"
-              strokeDasharray="3 3" transform="rotate(-20 118 118)" />
-            <ellipse id="gvp-orb2" cx="118" cy="118" rx="76" ry="24"
-              fill="none" stroke="rgba(0,184,148,0.2)" strokeWidth="0.6"
-              strokeDasharray="2 4" transform="rotate(42 118 118)" />
-
-            {/* Animated satellites */}
-            <circle r="3.5" fill="#00D4FF" style={{ filter: "drop-shadow(0 0 4px #00D4FF)" }}>
-              <animateMotion dur="7s" repeatCount="indefinite">
-                <mpath href="#gvp-orb1" />
-              </animateMotion>
-            </circle>
-            <circle r="2.5" fill="#00B894" style={{ filter: "drop-shadow(0 0 3px #00B894)" }}>
-              <animateMotion dur="11s" repeatCount="indefinite" begin="3s">
-                <mpath href="#gvp-orb2" />
-              </animateMotion>
-            </circle>
-
-            {/* Satellite scan swath */}
-            <rect x="112" y="58" width="62" height="116" fill="rgba(0,212,255,0.04)" rx="1" />
-            <line x1="112" y1="58" x2="174" y2="58"
-              stroke="rgba(0,212,255,0.6)" strokeWidth="1.2">
-              <animate attributeName="y1" values="58;174;58" dur="4s" repeatCount="indefinite" />
-              <animate attributeName="y2" values="58;174;58" dur="4s" repeatCount="indefinite" />
-            </line>
-
-            {/* City / project dots */}
-            <circle cx="133" cy="88" r="2.5" fill="#00D4FF" opacity="0.9">
-              <animate attributeName="opacity" values="0.9;0.3;0.9" dur="2.4s" repeatCount="indefinite" />
-            </circle>
-            <circle cx="151" cy="98"  r="2"   fill="#00B894" opacity="0.85" />
-            <circle cx="118" cy="104" r="2"   fill="#0077FF" opacity="0.85" />
-            <circle cx="62"  cy="63"  r="2"   fill="#7B61FF" opacity="0.7"  />
-            <circle cx="24"  cy="76"  r="1.8" fill="#00D4FF" opacity="0.55" />
-            <circle cx="176" cy="105" r="2"   fill="#00B894" opacity="0.7"  />
-          </svg>
+          <Globe3D />
         </div>
 
-        {/* ── Floating data cards (hidden on smaller lg, full on xl) ── */}
+        {/* ── Floating data cards ───────────────────────────────────────── */}
 
         {/* Card 1: NDVI */}
         <motion.div
@@ -220,11 +175,11 @@ function EarthGlobe({ ready }: { ready: boolean }) {
           transition={{ duration: 0.5, delay: 0.32, ease: EXPO }}
           className="absolute hidden xl:block"
           style={{
-            top: -22, left: -70,
+            top: -18, left: -76,
             background: "rgba(7,26,46,0.88)",
             border: "1px solid rgba(0,212,255,0.18)",
             backdropFilter: "blur(20px)",
-            boxShadow: "0 12px 40px rgba(0,0,0,0.4)",
+            boxShadow: "0 12px 40px rgba(0,0,0,0.45)",
             borderRadius: 16,
             padding: "12px 14px",
             animation: "floatCard 4s ease-in-out 0s infinite",
@@ -249,11 +204,11 @@ function EarthGlobe({ ready }: { ready: boolean }) {
           transition={{ duration: 0.5, delay: 0.48, ease: EXPO }}
           className="absolute hidden xl:block"
           style={{
-            bottom: -22, left: -60,
+            bottom: -18, left: -64,
             background: "rgba(7,26,46,0.88)",
             border: "1px solid rgba(0,119,255,0.2)",
             backdropFilter: "blur(20px)",
-            boxShadow: "0 12px 40px rgba(0,0,0,0.4)",
+            boxShadow: "0 12px 40px rgba(0,0,0,0.45)",
             borderRadius: 16,
             padding: "12px 14px",
             animation: "floatCard 5s ease-in-out 1.5s infinite",
@@ -284,11 +239,11 @@ function EarthGlobe({ ready }: { ready: boolean }) {
           transition={{ duration: 0.5, delay: 0.62, ease: EXPO }}
           className="absolute hidden xl:block"
           style={{
-            top: -16, right: -60,
+            top: -14, right: -64,
             background: "rgba(7,26,46,0.88)",
             border: "1px solid rgba(0,212,255,0.18)",
             backdropFilter: "blur(20px)",
-            boxShadow: "0 12px 40px rgba(0,0,0,0.4)",
+            boxShadow: "0 12px 40px rgba(0,0,0,0.45)",
             borderRadius: 16,
             padding: "12px 14px",
             animation: "floatCard 4.5s ease-in-out 0.8s infinite",
@@ -316,11 +271,11 @@ function EarthGlobe({ ready }: { ready: boolean }) {
           transition={{ duration: 0.5, delay: 0.76, ease: EXPO }}
           className="absolute hidden xl:block"
           style={{
-            bottom: -16, right: -56,
+            bottom: -14, right: -60,
             background: "rgba(7,26,46,0.88)",
             border: "1px solid rgba(0,184,148,0.2)",
             backdropFilter: "blur(20px)",
-            boxShadow: "0 12px 40px rgba(0,0,0,0.4)",
+            boxShadow: "0 12px 40px rgba(0,0,0,0.45)",
             borderRadius: 16,
             padding: "12px 14px",
             animation: "floatCard 5.5s ease-in-out 2.5s infinite",
