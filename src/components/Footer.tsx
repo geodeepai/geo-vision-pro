@@ -1,3 +1,5 @@
+import VisitorCount from "./VisitorCount";
+
 const footerLinks = {
   Services: [
     "Remote Sensing", "LULC Mapping", "GIS Analysis",
@@ -76,8 +78,9 @@ export default function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="border-t border-slate-800 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500">
+        <div className="border-t border-slate-800 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
           <p>&copy; 2026 GeoVision Pro. All rights reserved.</p>
+          <VisitorCount />
           <p>Built with passion for geospatial excellence.</p>
         </div>
       </div>
