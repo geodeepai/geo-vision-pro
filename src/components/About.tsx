@@ -79,14 +79,14 @@ export default function About() {
 
       {/* Stats banner */}
       <div style={{ background: "linear-gradient(135deg,#0c1445 0%,#1e3a8a 50%,#0c1445 100%)" }}>
-        <div className="max-w-7xl mx-auto px-6 py-14">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 divide-x divide-blue-700/40">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10 md:py-14">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 md:divide-x md:divide-blue-700/40">
             {STATS.map((s, i) => <StatCard key={s.label} value={s.value} label={s.label} delay={i * 100} />)}
           </div>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 py-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 md:py-20">
 
         {/* Header */}
         <div
@@ -243,7 +243,7 @@ export default function About() {
 
         {/* Domain expertise */}
         <div
-          className="rounded-3xl p-10 text-center"
+          className="rounded-3xl p-6 sm:p-10 text-center"
           style={{ background: "linear-gradient(135deg,#0c1445,#1e3a8a,#0c1445)" }}
         >
           <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: "linear-gradient(rgba(147,197,253,1) 1px,transparent 1px),linear-gradient(90deg,rgba(147,197,253,1) 1px,transparent 1px)", backgroundSize: "40px 40px" }} />

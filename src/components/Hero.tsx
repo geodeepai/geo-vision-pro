@@ -50,22 +50,22 @@ function IntelligenceCapsule() {
           opacity: 0.9,
         }}
       />
-      <div className="relative rounded-2xl px-5 py-4" style={{ background: "#071A2E" }}>
+      <div className="relative rounded-2xl px-4 py-3.5 sm:px-5 sm:py-4" style={{ background: "#071A2E" }}>
         <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 min-w-0">
             <span
-              className="w-1.5 h-1.5 rounded-full bg-emerald-400"
+              className="w-1.5 h-1.5 rounded-full bg-emerald-400 flex-shrink-0"
               style={{ animation: "pulseDot 2s ease-in-out infinite" }}
             />
             <span
-              className="text-[10px] font-bold tracking-[0.16em] uppercase"
+              className="text-[10px] font-bold tracking-[0.12em] uppercase truncate"
               style={{ color: "#64748b" }}
             >
-              GeoVisionPro Intelligence Network
+              GeoVisionPro Intelligence
             </span>
           </div>
           <span
-            className="text-[9px] font-bold px-2 py-0.5 rounded-md"
+            className="text-[9px] font-bold px-2 py-0.5 rounded-md flex-shrink-0 ml-2"
             style={{ background: "rgba(0,184,148,0.15)", color: "#00B894" }}
           >
             LIVE
@@ -96,54 +96,57 @@ function IntelligenceCapsule() {
 /* ── 3D Earth Globe (Three.js WebGL) ────────────────────────────────────── */
 function EarthGlobe({ ready }: { ready: boolean }) {
   return (
-    <div className="hidden lg:flex items-center justify-center">
+    <div className="flex items-center justify-center mt-8 lg:mt-0">
       <motion.div
-        className="relative"
-        style={{ width: 460, height: 460 }}
+        className="relative w-64 h-64 sm:w-72 sm:h-72 md:w-80 md:h-80 lg:w-[460px] lg:h-[460px]"
         initial={{ opacity: 0, x: 70, scale: 0.88 }}
         animate={ready ? { opacity: 1, x: 0, scale: 1 } : { opacity: 0, x: 70, scale: 0.88 }}
         transition={{ duration: 1.2, delay: 0.1, ease: EXPO }}
       >
 
-        {/* Outer atmosphere rings (CSS — independent of WebGL canvas) */}
-        {[520, 490].map((size, i) => (
-          <div
-            key={i}
-            className="absolute rounded-full pointer-events-none"
-            style={{
-              width: size, height: size,
-              top: "50%", left: "50%",
-              transform: "translate(-50%,-50%)",
-              border: `1px solid rgba(0,119,255,${0.06 - i * 0.02})`,
-              background: `radial-gradient(circle,transparent ${47 + i * 4}%,rgba(0,119,255,${0.04 - i * 0.01}) ${55 + i * 4}%,transparent ${65 + i * 4}%)`,
-            }}
-          />
-        ))}
+        {/* Outer atmosphere rings — desktop only (fixed pixel sizes) */}
+        <div className="hidden lg:block">
+          {[520, 490].map((size, i) => (
+            <div
+              key={i}
+              className="absolute rounded-full pointer-events-none"
+              style={{
+                width: size, height: size,
+                top: "50%", left: "50%",
+                transform: "translate(-50%,-50%)",
+                border: `1px solid rgba(0,119,255,${0.06 - i * 0.02})`,
+                background: `radial-gradient(circle,transparent ${47 + i * 4}%,rgba(0,119,255,${0.04 - i * 0.01}) ${55 + i * 4}%,transparent ${65 + i * 4}%)`,
+              }}
+            />
+          ))}
+        </div>
 
-        {/* CSS orbit rings — animated over the 3D canvas */}
-        {[
-          { w: 420, dur: "26s" },
-          { w: 330, dur: "18s", dashed: true },
-          { w: 240, dur: "13s" },
-        ].map((ring, i) => (
-          <div
-            key={i}
-            className="absolute rounded-full pointer-events-none"
-            style={{
-              width: ring.w, height: ring.w,
-              top: "50%", left: "50%",
-              transform: "translate(-50%,-50%)",
-              border: `1px ${ring.dashed ? "dashed" : "solid"} rgba(0,119,255,0.22)`,
-              animation: `rotateRing${i + 1} ${ring.dur} linear infinite`,
-            }}
-          />
-        ))}
+        {/* CSS orbit rings — desktop only (fixed pixel sizes) */}
+        <div className="hidden lg:block">
+          {[
+            { w: 420, dur: "26s" },
+            { w: 330, dur: "18s", dashed: true },
+            { w: 240, dur: "13s" },
+          ].map((ring, i) => (
+            <div
+              key={i}
+              className="absolute rounded-full pointer-events-none"
+              style={{
+                width: ring.w, height: ring.w,
+                top: "50%", left: "50%",
+                transform: "translate(-50%,-50%)",
+                border: `1px ${ring.dashed ? "dashed" : "solid"} rgba(0,119,255,0.22)`,
+                animation: `rotateRing${i + 1} ${ring.dur} linear infinite`,
+              }}
+            />
+          ))}
+        </div>
 
-        {/* Glow halo behind the canvas */}
+        {/* Glow halo — proportional to container size */}
         <div
           className="absolute rounded-full pointer-events-none"
           style={{
-            width: 340, height: 340,
+            width: "74%", height: "74%",
             top: "50%", left: "50%",
             transform: "translate(-50%,-50%)",
             background:
@@ -152,11 +155,11 @@ function EarthGlobe({ ready }: { ready: boolean }) {
           }}
         />
 
-        {/* ── WebGL Three.js Globe ──────────────────────────────────────── */}
+        {/* ── WebGL Three.js Globe — proportional to container size ──── */}
         <div
           className="absolute rounded-full overflow-hidden"
           style={{
-            width: 300, height: 300,
+            width: "65%", height: "65%",
             top: "50%", left: "50%",
             transform: "translate(-50%,-50%)",
             boxShadow:
@@ -447,7 +450,7 @@ export default function Hero() {
       </div>
 
       {/* ── Content ─────────────────────────────────────────────────────── */}
-      <div className="relative z-10 max-w-7xl mx-auto px-6 w-full py-24 grid lg:grid-cols-2 gap-16 items-center">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 w-full py-12 lg:py-24 grid lg:grid-cols-2 gap-8 lg:gap-16 items-center">
 
         {/* ── Left column ──────────────────────────────────────────────── */}
         <div>
@@ -470,8 +473,8 @@ export default function Hero() {
                   animation: "pulseDot 2s ease-in-out infinite",
                 }}
               />
-              <span className="text-sm font-semibold" style={{ color: "#00D4FF" }}>
-                Next-Generation Geospatial Intelligence
+              <span className="text-xs sm:text-sm font-semibold" style={{ color: "#00D4FF" }}>
+                Next-Gen Geospatial Intelligence
               </span>
             </div>
           </motion.div>
@@ -480,7 +483,7 @@ export default function Hero() {
           <h1
             ref={titleRef}
             className="font-black text-white leading-[1.06] tracking-tight mb-6"
-            style={{ fontSize: "clamp(2.8rem, 5.4vw, 4.4rem)" }}
+            style={{ fontSize: "clamp(2rem, 6.5vw, 4.4rem)" }}
           >
             {/* "Visualizing the Earth." */}
             <span className="block mb-1">
@@ -511,7 +514,7 @@ export default function Hero() {
           {/* Subheading */}
           <motion.p
             {...fm(0.18)}
-            className="text-lg leading-relaxed mb-8 max-w-lg"
+            className="text-base lg:text-lg leading-relaxed mb-8 max-w-lg"
             style={{ color: "#94a3b8" }}
           >
             AI-powered geospatial intelligence transforming satellite data into strategic
@@ -542,7 +545,7 @@ export default function Hero() {
               }}
               whileHover={{ y: -3, scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
-              className="group relative inline-flex items-center gap-2 px-7 py-3.5 rounded-xl font-bold text-white overflow-hidden cursor-pointer"
+              className="group relative inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl font-bold text-white overflow-hidden cursor-pointer w-full sm:w-auto"
               style={{
                 background: "linear-gradient(135deg,#0077FF,#00D4FF)",
                 boxShadow: "0 8px 32px rgba(0,119,255,0.4), 0 2px 8px rgba(0,0,0,0.3)",
@@ -570,7 +573,7 @@ export default function Hero() {
               }}
               whileHover={{ y: -3, scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
-              className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl font-bold cursor-pointer transition-all"
+              className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl font-bold cursor-pointer transition-all w-full sm:w-auto"
               style={{
                 border: "1px solid rgba(0,212,255,0.3)",
                 color: "#00D4FF",

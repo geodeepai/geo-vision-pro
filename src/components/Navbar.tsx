@@ -104,7 +104,7 @@ export default function Navbar() {
           : "bg-transparent"
       }`}
     >
-      <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
 
         {/* Logo */}
         <a href="#home" className="flex items-center gap-2.5">
@@ -139,7 +139,7 @@ export default function Navbar() {
                   ? "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
                   : "text-white/80 hover:text-white hover:bg-white/10"
               } ${svcOpen ? (scrolled ? "text-blue-600 bg-blue-50" : "text-white bg-white/10") : ""}`}
-              style={{ fontSize: 18 }}
+              style={{ fontSize: 15 }}
             >
               Services
               <ChevronDown
@@ -153,7 +153,7 @@ export default function Navbar() {
               <div
                 onMouseEnter={openSvc}
                 onMouseLeave={closeSvc}
-                className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-[680px] rounded-2xl border border-slate-200 bg-white shadow-2xl shadow-slate-200/60 overflow-hidden"
+                className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-[min(680px,90vw)] rounded-2xl border border-slate-200 bg-white shadow-2xl shadow-slate-200/60 overflow-hidden"
                 style={{ animation: "fadeSlideDown 0.18s ease-out forwards" }}
               >
                 {/* Header strip */}
@@ -213,7 +213,7 @@ export default function Navbar() {
                     ? "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
                     : "text-white/80 hover:text-white hover:bg-white/10"
                 }`}
-                style={{ fontSize: 18 }}
+                style={{ fontSize: 15 }}
               >
                 {l.label}
               </a>
@@ -257,7 +257,7 @@ export default function Navbar() {
               <button
                 onClick={() => setSvcMobOpen((p) => !p)}
                 className="w-full flex items-center justify-between px-3 py-2.5 text-slate-600 hover:text-slate-900 hover:bg-slate-50 rounded-lg transition-all font-medium"
-                style={{ fontSize: 18 }}
+                style={{ fontSize: 15 }}
               >
                 Services
                 <ChevronDown
@@ -293,7 +293,7 @@ export default function Navbar() {
                   href={l.href}
                   onClick={() => setOpen(false)}
                   className="block px-3 py-2.5 text-slate-600 hover:text-slate-900 hover:bg-slate-50 rounded-lg transition-all font-medium"
-                  style={{ fontSize: 18 }}
+                  style={{ fontSize: 15 }}
                 >
                   {l.label}
                 </a>
@@ -306,7 +306,7 @@ export default function Navbar() {
               href="/login"
               onClick={() => setOpen(false)}
               className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-slate-200 text-slate-700 font-semibold hover:bg-slate-50 transition-all"
-              style={{ fontSize: 18 }}
+              style={{ fontSize: 15 }}
             >
               <LogIn size={15} /> Log In
             </Link>

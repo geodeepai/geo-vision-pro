@@ -86,7 +86,7 @@ const STATS = [
 ─────────────────────────────────────────────── */
 function GlobeViz() {
   return (
-    <div className="relative flex items-center justify-center select-none" style={{ width: 440, height: 440 }}>
+    <div className="relative flex items-center justify-center select-none w-full max-w-[440px] mx-auto" style={{ aspectRatio: "1 / 1" }}>
 
       {/* Outer ambient glow */}
       <div className="absolute inset-0 rounded-full pointer-events-none" style={{ background: `radial-gradient(circle, rgba(0,212,255,0.18) 0%, transparent 68%)`, filter:"blur(32px)" }} />
@@ -95,7 +95,7 @@ function GlobeViz() {
       <div className="absolute rounded-full border border-dashed pointer-events-none" style={{ inset:10, borderColor:`rgba(0,212,255,0.12)`, animation:"spinSlow 60s linear infinite" }} />
       <div className="absolute rounded-full border border-dashed pointer-events-none" style={{ inset:28, borderColor:`rgba(0,184,148,0.10)`, animation:"spinSlowReverse 40s linear infinite" }} />
 
-      <svg viewBox="0 0 400 400" width="400" height="400" style={{ position:"relative", zIndex:2, overflow:"visible" }}>
+      <svg viewBox="0 0 400 400" width="100%" height="100%" style={{ position:"relative", zIndex:2, overflow:"visible" }}>
         <defs>
           <radialGradient id="sph" cx="34%" cy="28%" r="72%">
             <stop offset="0%"   stopColor="#1e4fa0" />
@@ -217,29 +217,29 @@ function GlobeViz() {
 
       </svg>
 
-      {/* ── Floating data chips ── */}
-      <div className="absolute" style={{ top:62, right:-8, animation:"floatChip1 4.2s ease-in-out infinite" }}>
+      {/* ── Floating data chips — hidden on small screens to avoid overflow ── */}
+      <div className="absolute hidden sm:block" style={{ top:62, right:-8, animation:"floatChip1 4.2s ease-in-out infinite" }}>
         <div style={{ background:"rgba(0,212,255,0.08)", border:`1px solid rgba(0,212,255,0.28)`, borderRadius:12, padding:"9px 13px", backdropFilter:"blur(14px)" }}>
           <p style={{ fontSize:9, color:`rgba(0,212,255,0.75)`, fontWeight:700, letterSpacing:"0.1em", textTransform:"uppercase", margin:"0 0 3px" }}>NDVI Index</p>
           <p style={{ fontSize:20, fontWeight:900, color:CY, margin:0, lineHeight:1 }}>0.82</p>
         </div>
       </div>
 
-      <div className="absolute" style={{ bottom:88, left:-14, animation:"floatChip2 5.1s ease-in-out infinite", animationDelay:"1.1s" }}>
+      <div className="absolute hidden sm:block" style={{ bottom:88, left:-14, animation:"floatChip2 5.1s ease-in-out infinite", animationDelay:"1.1s" }}>
         <div style={{ background:"rgba(0,184,148,0.08)", border:`1px solid rgba(0,184,148,0.28)`, borderRadius:12, padding:"9px 13px", backdropFilter:"blur(14px)" }}>
           <p style={{ fontSize:9, color:`rgba(0,184,148,0.75)`, fontWeight:700, letterSpacing:"0.1em", textTransform:"uppercase", margin:"0 0 3px" }}>Land Class</p>
           <p style={{ fontSize:13, fontWeight:800, color:EM, margin:0 }}>Dense Forest</p>
         </div>
       </div>
 
-      <div className="absolute" style={{ top:168, right:-28, animation:"floatChip3 6s ease-in-out infinite", animationDelay:"0.6s" }}>
+      <div className="absolute hidden sm:block" style={{ top:168, right:-28, animation:"floatChip3 6s ease-in-out infinite", animationDelay:"0.6s" }}>
         <div style={{ background:"rgba(139,92,246,0.08)", border:"1px solid rgba(139,92,246,0.28)", borderRadius:12, padding:"9px 13px", backdropFilter:"blur(14px)" }}>
           <p style={{ fontSize:9, color:"rgba(139,92,246,0.75)", fontWeight:700, letterSpacing:"0.1em", textTransform:"uppercase", margin:"0 0 3px" }}>AI Accuracy</p>
           <p style={{ fontSize:20, fontWeight:900, color:"#8b5cf6", margin:0, lineHeight:1 }}>94.7%</p>
         </div>
       </div>
 
-      <div className="absolute" style={{ bottom:185, right:-18, animation:"floatChip1 4.8s ease-in-out infinite", animationDelay:"2s" }}>
+      <div className="absolute hidden sm:block" style={{ bottom:185, right:-18, animation:"floatChip1 4.8s ease-in-out infinite", animationDelay:"2s" }}>
         <div style={{ background:"rgba(245,158,11,0.08)", border:"1px solid rgba(245,158,11,0.28)", borderRadius:12, padding:"9px 13px", backdropFilter:"blur(14px)" }}>
           <p style={{ fontSize:9, color:"rgba(245,158,11,0.75)", fontWeight:700, letterSpacing:"0.1em", textTransform:"uppercase", margin:"0 0 3px" }}>Cloud Cover</p>
           <p style={{ fontSize:20, fontWeight:900, color:"#f59e0b", margin:0, lineHeight:1 }}>8%</p>
@@ -274,7 +274,7 @@ export default function AIIntelligence() {
       {/* Right glow orb */}
       <div className="absolute bottom-1/4 -right-32 w-96 h-96 rounded-full pointer-events-none" style={{ background:`radial-gradient(circle,rgba(0,184,148,0.07),transparent 70%)`, filter:"blur(48px)" }} />
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6 py-20">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 py-12 md:py-20">
 
         {/* ══════════════════════════════════════
             PART 1 — Hero: Globe + Text

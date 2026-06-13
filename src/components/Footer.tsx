@@ -22,7 +22,7 @@ const anchors: Record<string, string> = {
 export default function Footer() {
   return (
     <footer className="bg-slate-900">
-      <div className="max-w-7xl mx-auto px-6 py-14">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 md:py-14">
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-10 mb-10">
           {/* Brand */}
           <div>

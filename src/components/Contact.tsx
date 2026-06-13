@@ -58,8 +58,8 @@ export default function Contact() {
   }
 
   return (
-    <section id="contact" className="py-24 bg-slate-50">
-      <div className="max-w-7xl mx-auto px-6">
+    <section id="contact" className="py-14 md:py-24 bg-slate-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
         {/* Header */}
         <div className="text-center mb-14">
           <span className="inline-block px-3.5 py-1.5 rounded-full border border-blue-200 bg-blue-50 text-blue-700 text-xs font-semibold tracking-wide uppercase mb-4">
