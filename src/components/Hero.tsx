@@ -7,10 +7,9 @@ import { ArrowRight } from "lucide-react";
 
 const EXPO = [0.16, 1, 0.3, 1] as [number, number, number, number];
 
-// Headline split
-const LINE1 = ["Visualizing", "the", "Earth."];
+const LINE1       = ["Visualizing", "the", "Earth."];
 const LINE2_PLAIN = ["Engineering", "the"];
-const LINE2_GRAD = "Future.";
+const LINE2_GRAD  = "Future.";
 
 const CHIPS = [
   { icon: "🛰️", label: "Satellite Data" },
@@ -18,38 +17,36 @@ const CHIPS = [
   { icon: "🤖", label: "GeoAI" },
   { icon: "📊", label: "Predictive" },
 ];
-
 const STATS = [
-  { value: "500+",  label: "Projects Delivered" },
+  { value: "500+",  label: "Projects" },
   { value: "92.4%", label: "AI Accuracy" },
-  { value: "15+",   label: "Years Experience" },
-  { value: "12+",   label: "States Covered" },
+  { value: "15+",   label: "Years" },
+  { value: "12+",   label: "States" },
 ];
 
-/* ── Intelligence Network Capsule ───────────────────────────────────────── */
+/* Deterministic star field — avoids hydration mismatch */
+const STARS = Array.from({ length: 80 }, (_, i) => ({
+  x:  ((i * 73  + 11) % 97),
+  y:  ((i * 47  + 23) % 89),
+  s:  ((i * 31) % 12) / 10 + 0.3,
+  o:  ((i * 19) % 28) / 100 + 0.04,
+  d:  (i * 0.3) % 6,
+}));
+
+/* ── Spinning-border capsule (Linear-inspired) ──────────────────────────── */
 function IntelligenceCapsule() {
   return (
-    <div
-      className="relative rounded-2xl"
-      style={{ padding: 1.5, overflow: "hidden" }}
-    >
-      {/* Spinning conic-gradient border */}
+    <div className="relative rounded-2xl" style={{ padding: 1.5, overflow: "hidden" }}>
       <div
         className="absolute pointer-events-none"
         style={{
           inset: "-100%",
-          background:
-            "conic-gradient(from 0deg, #0077FF, #00D4FF, #00B894, #7B61FF, #0077FF)",
+          background: "conic-gradient(from 0deg,#0077FF,#00D4FF,#00B894,#7B61FF,#0077FF)",
           animation: "spinSlow 5s linear infinite",
           opacity: 0.9,
         }}
       />
-
-      <div
-        className="relative rounded-2xl px-5 py-4"
-        style={{ background: "#071A2E" }}
-      >
-        {/* Header row */}
+      <div className="relative rounded-2xl px-5 py-4" style={{ background: "#071A2E" }}>
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
             <span
@@ -70,8 +67,6 @@ function IntelligenceCapsule() {
             LIVE
           </span>
         </div>
-
-        {/* Chips */}
         <div className="flex flex-wrap gap-2">
           {CHIPS.map((chip, i) => (
             <span
@@ -94,27 +89,41 @@ function IntelligenceCapsule() {
   );
 }
 
-/* ── Globe Visualization ─────────────────────────────────────────────────── */
-function GlobeViz({ ready }: { ready: boolean }) {
+/* ── Earth Globe (Planet Labs–inspired) ─────────────────────────────────── */
+function EarthGlobe({ ready }: { ready: boolean }) {
   return (
-    <div className="hidden lg:flex relative items-center justify-center">
+    <div className="hidden lg:flex items-center justify-center">
       <motion.div
-        className="relative w-[340px] h-[340px]"
-        initial={{ opacity: 0, x: 60, scale: 0.92 }}
-        animate={ready ? { opacity: 1, x: 0, scale: 1 } : { opacity: 0, x: 60, scale: 0.92 }}
-        transition={{ duration: 1.1, delay: 0.1, ease: EXPO }}
+        className="relative"
+        style={{ width: 420, height: 420 }}
+        initial={{ opacity: 0, x: 70, scale: 0.88 }}
+        animate={ready ? { opacity: 1, x: 0, scale: 1 } : { opacity: 0, x: 70, scale: 0.88 }}
+        transition={{ duration: 1.2, delay: 0.1, ease: EXPO }}
       >
-        {/* Orbital rings */}
+        {/* Outer atmosphere halo */}
+        <div
+          className="absolute rounded-full pointer-events-none"
+          style={{
+            width: 476, height: 476,
+            top: "50%", left: "50%",
+            transform: "translate(-50%,-50%)",
+            background:
+              "radial-gradient(circle,transparent 44%,rgba(0,119,255,0.07) 55%,transparent 70%)",
+            border: "1px solid rgba(0,119,255,0.07)",
+          }}
+        />
+
+        {/* Orbit rings */}
         {[
-          { size: "100%", dur: "24s", dashed: false },
-          { size: "76%",  dur: "17s", dashed: true },
-          { size: "54%",  dur: "12s", dashed: false },
+          { w: "100%", dur: "26s" },
+          { w: "78%",  dur: "18s", dashed: true },
+          { w: "56%",  dur: "13s" },
         ].map((ring, i) => (
           <div
             key={i}
             className="absolute rounded-full"
             style={{
-              width: ring.size, height: ring.size,
+              width: ring.w, height: ring.w,
               top: "50%", left: "50%",
               transform: "translate(-50%,-50%)",
               border: `1px ${ring.dashed ? "dashed" : "solid"} rgba(0,119,255,0.2)`,
@@ -125,127 +134,213 @@ function GlobeViz({ ready }: { ready: boolean }) {
 
         {/* Globe sphere */}
         <div
-          className="absolute rounded-full"
+          className="absolute rounded-full overflow-hidden"
           style={{
-            width: 210, height: 210,
+            width: 236, height: 236,
             top: "50%", left: "50%",
             transform: "translate(-50%,-50%)",
-            background: "radial-gradient(circle at 32% 28%, #0c3470, #071A2E)",
+            background: "radial-gradient(circle at 33% 28%, #0d3880, #071A2E)",
             boxShadow:
-              "0 0 60px rgba(0,119,255,0.3), 0 0 120px rgba(0,119,255,0.08), inset 0 0 50px rgba(0,0,30,0.5)",
+              "0 0 80px rgba(0,119,255,0.4), 0 0 160px rgba(0,119,255,0.12), inset 0 0 60px rgba(0,0,30,0.6)",
           }}
         >
-          <svg
-            viewBox="0 0 210 210"
-            className="w-full h-full absolute inset-0 rounded-full overflow-hidden"
-          >
-            {/* Grid */}
-            {[35,53,70,88,105,123,140,158,175].map((y, i) => (
-              <line key={`h${i}`} x1="0" y1={y} x2="210" y2={y}
-                stroke="rgba(0,212,255,0.07)" strokeWidth="0.7" />
+          <svg viewBox="0 0 236 236" className="w-full h-full">
+            {/* Lat/lon grid */}
+            {[28,47,66,84,102,118,134,152,170,188,208].map((y, i) => (
+              <line key={`h${i}`} x1="0" y1={y} x2="236" y2={y}
+                stroke="rgba(0,212,255,0.07)" strokeWidth="0.6" />
             ))}
-            {[35,70,105,140,175].map((x, i) => (
-              <line key={`v${i}`} x1={x} y1="0" x2={x} y2="210"
-                stroke="rgba(0,212,255,0.07)" strokeWidth="0.7" />
+            {[30,60,90,118,146,176,206].map((x, i) => (
+              <line key={`v${i}`} x1={x} y1="0" x2={x} y2="236"
+                stroke="rgba(0,212,255,0.07)" strokeWidth="0.6" />
             ))}
 
             {/* Land masses */}
-            <path d="M112 68 L130 63 L145 72 L148 90 L140 108 L128 112 L112 105 L106 90 Z"
-              fill="rgba(0,184,148,0.5)" />
-            <path d="M78 62 L108 65 L112 68 L106 90 L88 88 L72 78 L68 68 Z"
-              fill="rgba(0,184,148,0.4)" />
-            <path d="M112 105 L128 112 L122 132 L105 140 L90 130 L94 112 Z"
-              fill="rgba(0,184,148,0.4)" />
-            <path d="M50 48 L70 44 L76 58 L70 72 L55 74 L45 62 Z"
+            <path d="M123 74 L143 69 L161 78 L164 98 L155 118 L141 123 L123 115 L117 99 Z"
+              fill="rgba(0,184,148,0.55)" />
+            <path d="M85 68 L120 72 L123 74 L117 99 L97 96 L79 84 L75 74 Z"
+              fill="rgba(0,184,148,0.42)" />
+            <path d="M123 115 L141 123 L133 148 L115 158 L98 146 L103 122 Z"
+              fill="rgba(0,184,148,0.45)" />
+            <path d="M54 51 L76 47 L82 63 L76 80 L59 82 L48 68 Z"
               fill="rgba(0,184,148,0.28)" />
-            <path d="M52 80 L70 76 L76 92 L72 118 L55 120 L44 104 L46 90 Z"
-              fill="rgba(0,184,148,0.28)" />
-            <path d="M16 55 L42 50 L50 64 L44 88 L28 92 L14 76 Z"
-              fill="rgba(0,184,148,0.25)" />
-            <path d="M148 90 L165 85 L170 100 L158 115 L145 112 L140 108 Z"
-              fill="rgba(0,184,148,0.35)" />
+            <path d="M56 87 L76 82 L82 100 L78 130 L59 132 L46 114 L50 98 Z"
+              fill="rgba(0,184,148,0.27)" />
+            <path d="M16 58 L45 52 L54 68 L48 96 L29 100 L14 82 Z"
+              fill="rgba(0,184,148,0.23)" />
+            <path d="M163 98 L182 90 L188 108 L174 125 L160 120 L155 118 Z"
+              fill="rgba(0,184,148,0.38)" />
+
+            {/* Satellite orbit paths */}
+            <ellipse id="gvp-orb1" cx="118" cy="118" rx="90" ry="30"
+              fill="none" stroke="rgba(0,212,255,0.3)" strokeWidth="0.8"
+              strokeDasharray="3 3" transform="rotate(-20 118 118)" />
+            <ellipse id="gvp-orb2" cx="118" cy="118" rx="76" ry="24"
+              fill="none" stroke="rgba(0,184,148,0.2)" strokeWidth="0.6"
+              strokeDasharray="2 4" transform="rotate(42 118 118)" />
+
+            {/* Animated satellites */}
+            <circle r="3.5" fill="#00D4FF" style={{ filter: "drop-shadow(0 0 4px #00D4FF)" }}>
+              <animateMotion dur="7s" repeatCount="indefinite">
+                <mpath href="#gvp-orb1" />
+              </animateMotion>
+            </circle>
+            <circle r="2.5" fill="#00B894" style={{ filter: "drop-shadow(0 0 3px #00B894)" }}>
+              <animateMotion dur="11s" repeatCount="indefinite" begin="3s">
+                <mpath href="#gvp-orb2" />
+              </animateMotion>
+            </circle>
 
             {/* Satellite scan swath */}
-            <rect x="100" y="55" width="55" height="100"
-              fill="rgba(0,212,255,0.04)" rx="1" />
-            <line x1="100" y1="55" x2="155" y2="55"
-              stroke="rgba(0,212,255,0.55)" strokeWidth="1.2">
-              <animate attributeName="y1" values="55;155;55" dur="4s" repeatCount="indefinite" />
-              <animate attributeName="y2" values="55;155;55" dur="4s" repeatCount="indefinite" />
+            <rect x="112" y="58" width="62" height="116" fill="rgba(0,212,255,0.04)" rx="1" />
+            <line x1="112" y1="58" x2="174" y2="58"
+              stroke="rgba(0,212,255,0.6)" strokeWidth="1.2">
+              <animate attributeName="y1" values="58;174;58" dur="4s" repeatCount="indefinite" />
+              <animate attributeName="y2" values="58;174;58" dur="4s" repeatCount="indefinite" />
             </line>
 
-            {/* Project / city dots */}
-            <circle cx="120" cy="82" r="2.5" fill="#00D4FF" opacity="0.95">
-              <animate attributeName="opacity" values="0.95;0.35;0.95" dur="2.2s" repeatCount="indefinite" />
+            {/* City / project dots */}
+            <circle cx="133" cy="88" r="2.5" fill="#00D4FF" opacity="0.9">
+              <animate attributeName="opacity" values="0.9;0.3;0.9" dur="2.4s" repeatCount="indefinite" />
             </circle>
-            <circle cx="138" cy="88" r="2"   fill="#00B894" opacity="0.9" />
-            <circle cx="108" cy="96" r="2"   fill="#0077FF" opacity="0.9" />
-            <circle cx="58"  cy="60" r="2"   fill="#7B61FF" opacity="0.7" />
-            <circle cx="24"  cy="70" r="1.8" fill="#00D4FF" opacity="0.6" />
-            <circle cx="160" cy="96" r="2"   fill="#00B894" opacity="0.7" />
+            <circle cx="151" cy="98"  r="2"   fill="#00B894" opacity="0.85" />
+            <circle cx="118" cy="104" r="2"   fill="#0077FF" opacity="0.85" />
+            <circle cx="62"  cy="63"  r="2"   fill="#7B61FF" opacity="0.7"  />
+            <circle cx="24"  cy="76"  r="1.8" fill="#00D4FF" opacity="0.55" />
+            <circle cx="176" cy="105" r="2"   fill="#00B894" opacity="0.7"  />
           </svg>
         </div>
 
-        {/* Floating data card — NDVI */}
+        {/* ── Floating data cards (hidden on smaller lg, full on xl) ── */}
+
+        {/* Card 1: NDVI */}
         <motion.div
           initial={{ opacity: 0, scale: 0.7 }}
           animate={ready ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.7 }}
-          transition={{ duration: 0.5, delay: 0.3, ease: EXPO }}
-          className="absolute -top-5 -left-14 px-3 py-2.5 rounded-xl"
+          transition={{ duration: 0.5, delay: 0.32, ease: EXPO }}
+          className="absolute hidden xl:block"
           style={{
-            background: "rgba(7,26,46,0.9)",
-            border: "1px solid rgba(0,212,255,0.2)",
+            top: -22, left: -70,
+            background: "rgba(7,26,46,0.88)",
+            border: "1px solid rgba(0,212,255,0.18)",
+            backdropFilter: "blur(20px)",
+            boxShadow: "0 12px 40px rgba(0,0,0,0.4)",
+            borderRadius: 16,
+            padding: "12px 14px",
             animation: "floatCard 4s ease-in-out 0s infinite",
           }}
         >
-          <p className="text-[9px] uppercase tracking-wider mb-0.5" style={{ color: "#475569" }}>NDVI Index</p>
-          <p className="text-sm font-black" style={{ color: "#00B894" }}>0.84</p>
-          <div className="flex gap-0.5 mt-1 items-end">
+          <p className="uppercase tracking-wider mb-1" style={{ fontSize: 8, color: "#475569" }}>NDVI Index</p>
+          <p className="font-black leading-none mb-2" style={{ fontSize: 22, color: "#00B894" }}>0.84</p>
+          <div className="flex gap-0.5 items-end">
             {[4, 6, 5, 8, 7, 9, 8].map((h, i) => (
-              <div
-                key={i}
-                className="w-1.5 rounded-sm"
-                style={{ height: h * 2, background: "rgba(0,184,148,0.5)" }}
-              />
+              <div key={i} style={{
+                width: 6, height: h * 2.5, borderRadius: 2,
+                background: `rgba(0,184,148,${0.3 + i * 0.09})`,
+              }} />
             ))}
           </div>
         </motion.div>
 
-        {/* Floating data card — AI Processing */}
+        {/* Card 2: GeoAI */}
         <motion.div
           initial={{ opacity: 0, scale: 0.7 }}
           animate={ready ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.7 }}
-          transition={{ duration: 0.5, delay: 0.45, ease: EXPO }}
-          className="absolute -bottom-5 -left-12 px-3 py-2.5 rounded-xl"
+          transition={{ duration: 0.5, delay: 0.48, ease: EXPO }}
+          className="absolute hidden xl:block"
           style={{
-            background: "rgba(7,26,46,0.9)",
-            border: "1px solid rgba(0,119,255,0.25)",
-            animation: "floatCard 4.8s ease-in-out 1.2s infinite",
+            bottom: -22, left: -60,
+            background: "rgba(7,26,46,0.88)",
+            border: "1px solid rgba(0,119,255,0.2)",
+            backdropFilter: "blur(20px)",
+            boxShadow: "0 12px 40px rgba(0,0,0,0.4)",
+            borderRadius: 16,
+            padding: "12px 14px",
+            animation: "floatCard 5s ease-in-out 1.5s infinite",
           }}
         >
-          <p className="text-[9px] uppercase tracking-wider mb-0.5" style={{ color: "#475569" }}>AI Processing</p>
-          <div className="flex items-center gap-1.5">
+          <p className="uppercase tracking-wider mb-1.5" style={{ fontSize: 8, color: "#475569" }}>GeoAI Model</p>
+          <div className="flex items-center gap-1.5 mb-2">
             <span className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse" />
-            <p className="text-xs font-bold" style={{ color: "#0077FF" }}>94.7% Acc.</p>
+            <p className="font-bold" style={{ fontSize: 11, color: "#0077FF" }}>94.7% Accuracy</p>
           </div>
-          <p className="text-[8px] mt-0.5" style={{ color: "#334155" }}>Model: GeoAI v3.1</p>
+          <div className="space-y-1.5">
+            {([ ["Sentinel-2", 94], ["Landsat-9", 87], ["SAR Fusion", 91] ] as [string,number][]).map(([name, val]) => (
+              <div key={name} className="flex items-center gap-2">
+                <span style={{ fontSize: 7, color: "#334155", width: 52 }}>{name}</span>
+                <div style={{ width: 44, height: 3, background: "rgba(0,119,255,0.12)", borderRadius: 2 }}>
+                  <div style={{ width: `${val}%`, height: "100%", background: "#0077FF", borderRadius: 2 }} />
+                </div>
+                <span style={{ fontSize: 7, color: "#475569" }}>{val}%</span>
+              </div>
+            ))}
+          </div>
         </motion.div>
 
-        {/* Floating data card — Coverage */}
+        {/* Card 3: Coverage */}
         <motion.div
           initial={{ opacity: 0, scale: 0.7 }}
           animate={ready ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.7 }}
-          transition={{ duration: 0.5, delay: 0.6, ease: EXPO }}
-          className="absolute -top-3 -right-12 px-3 py-2.5 rounded-xl"
+          transition={{ duration: 0.5, delay: 0.62, ease: EXPO }}
+          className="absolute hidden xl:block"
           style={{
-            background: "rgba(7,26,46,0.9)",
-            border: "1px solid rgba(0,212,255,0.2)",
-            animation: "floatCard 5.2s ease-in-out 2.4s infinite",
+            top: -16, right: -60,
+            background: "rgba(7,26,46,0.88)",
+            border: "1px solid rgba(0,212,255,0.18)",
+            backdropFilter: "blur(20px)",
+            boxShadow: "0 12px 40px rgba(0,0,0,0.4)",
+            borderRadius: 16,
+            padding: "12px 14px",
+            animation: "floatCard 4.5s ease-in-out 0.8s infinite",
           }}
         >
-          <p className="text-[9px] uppercase tracking-wider mb-0.5" style={{ color: "#475569" }}>Coverage</p>
-          <p className="text-sm font-black" style={{ color: "#00D4FF" }}>12 States</p>
-          <p className="text-[8px] mt-0.5" style={{ color: "#334155" }}>India + 3 Nations</p>
+          <p className="uppercase tracking-wider mb-1" style={{ fontSize: 8, color: "#475569" }}>Live Coverage</p>
+          <p className="font-black leading-none mb-1" style={{ fontSize: 22, color: "#00D4FF" }}>12 States</p>
+          <p style={{ fontSize: 8, color: "#334155" }} className="mb-2">India + 3 Nations</p>
+          <div className="flex gap-1">
+            {["IN","NP","BD","LK"].map((c) => (
+              <span key={c} style={{
+                fontSize: 7, color: "#00D4FF",
+                background: "rgba(0,212,255,0.1)",
+                border: "1px solid rgba(0,212,255,0.2)",
+                borderRadius: 4, padding: "1px 4px",
+              }}>{c}</span>
+            ))}
+          </div>
+        </motion.div>
+
+        {/* Card 4: LULC */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.7 }}
+          animate={ready ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.7 }}
+          transition={{ duration: 0.5, delay: 0.76, ease: EXPO }}
+          className="absolute hidden xl:block"
+          style={{
+            bottom: -16, right: -56,
+            background: "rgba(7,26,46,0.88)",
+            border: "1px solid rgba(0,184,148,0.2)",
+            backdropFilter: "blur(20px)",
+            boxShadow: "0 12px 40px rgba(0,0,0,0.4)",
+            borderRadius: 16,
+            padding: "12px 14px",
+            animation: "floatCard 5.5s ease-in-out 2.5s infinite",
+          }}
+        >
+          <p className="uppercase tracking-wider mb-2" style={{ fontSize: 8, color: "#475569" }}>LULC Classes</p>
+          {([
+            ["Urban",  "#ef4444", 28],
+            ["Agri",   "#22c55e", 45],
+            ["Forest", "#16a34a", 18],
+            ["Water",  "#3b82f6",  9],
+          ] as [string,string,number][]).map(([lbl, clr, pct]) => (
+            <div key={lbl} className="flex items-center gap-1.5 mb-1">
+              <div style={{ width: 6, height: 6, borderRadius: 2, background: clr, flexShrink: 0 }} />
+              <div style={{ width: 44, height: 3, background: "rgba(255,255,255,0.06)", borderRadius: 2 }}>
+                <div style={{ width: `${pct}%`, height: "100%", background: clr, borderRadius: 2, opacity: 0.75 }} />
+              </div>
+              <span style={{ fontSize: 7, color: "#475569", width: 22, textAlign: "right" }}>{pct}%</span>
+            </div>
+          ))}
         </motion.div>
 
       </motion.div>
@@ -257,42 +352,41 @@ function GlobeViz({ ready }: { ready: boolean }) {
 export default function Hero() {
   const [ready, setReady] = useState(false);
 
-  const orbRef1  = useRef<HTMLDivElement>(null);
-  const orbRef2  = useRef<HTMLDivElement>(null);
-  const orbRef3  = useRef<HTMLDivElement>(null);
+  const auroraA = useRef<HTMLDivElement>(null);
+  const auroraB = useRef<HTMLDivElement>(null);
+  const auroraC = useRef<HTMLDivElement>(null);
+  const auroraD = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const gsapCtx  = useRef<gsap.Context | null>(null);
 
   useEffect(() => {
-    if (orbRef1.current) orbRef1.current.style.animation = "float1 16s ease-in-out infinite";
-    if (orbRef2.current) orbRef2.current.style.animation = "float2 22s ease-in-out infinite";
-    if (orbRef3.current) orbRef3.current.style.animation = "float3 14s ease-in-out infinite";
+    /* Aurora mesh — each orb drifts on its own rhythm */
+    if (auroraA.current) auroraA.current.style.animation = "float1 20s ease-in-out infinite";
+    if (auroraB.current) auroraB.current.style.animation = "float2 26s ease-in-out infinite";
+    if (auroraC.current) auroraC.current.style.animation = "float3 16s ease-in-out infinite";
+    if (auroraD.current) auroraD.current.style.animation = "float1 22s ease-in-out 5s infinite";
 
     function startAnimations() {
       setReady(true);
       if (!titleRef.current) return;
       gsapCtx.current = gsap.context(() => {
         const tl = gsap.timeline();
-
-        /* Line 1 + "Engineering the" — word-mask reveal */
         tl.from(titleRef.current!.querySelectorAll(".word-inner"), {
           yPercent: 115,
-          duration: 0.95,
+          duration: 1,
           stagger: 0.09,
           ease: "power4.out",
         });
-
-        /* "Future." — char-by-char cascade */
         tl.from(
           titleRef.current!.querySelectorAll(".char-inner"),
           {
             yPercent: 115,
             opacity: 0,
             duration: 0.55,
-            stagger: 0.03,
+            stagger: 0.028,
             ease: "power3.out",
           },
-          "-=0.42"
+          "-=0.44"
         );
       }, titleRef);
     }
@@ -305,8 +399,8 @@ export default function Hero() {
   }, []);
 
   const fm = (delay = 0) => ({
-    initial: { opacity: 0, y: 24 },
-    animate: ready ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 },
+    initial:    { opacity: 0, y: 24 },
+    animate:    ready ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 },
     transition: { duration: 0.7, delay, ease: EXPO },
   });
 
@@ -315,51 +409,84 @@ export default function Hero() {
       id="home"
       className="relative min-h-screen flex items-center overflow-hidden pt-16"
     >
+
       {/* ── Background ──────────────────────────────────────────────────── */}
       <div className="absolute inset-0" style={{ background: "#071A2E" }}>
-        {/* Grid */}
+
+        {/* Star field */}
+        {STARS.map((star, i) => (
+          <div
+            key={i}
+            className="absolute rounded-full pointer-events-none"
+            style={{
+              left:     `${star.x}%`,
+              top:      `${star.y}%`,
+              width:    star.s,
+              height:   star.s,
+              background: "#fff",
+              opacity:  star.o,
+            }}
+          />
+        ))}
+
+        {/* Blueprint grid */}
         <div
           className="absolute inset-0"
           style={{
-            backgroundImage: `linear-gradient(rgba(0,119,255,0.06) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(0,119,255,0.06) 1px, transparent 1px)`,
+            backgroundImage: `linear-gradient(rgba(0,119,255,0.055) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(0,119,255,0.055) 1px, transparent 1px)`,
             backgroundSize: "52px 52px",
           }}
         />
-        {/* Orbs */}
+
+        {/* Aurora mesh — 4 large colour orbs (Stripe-inspired) */}
         <div
-          ref={orbRef1}
-          className="absolute top-1/4 left-1/4 w-[480px] h-[480px] rounded-full pointer-events-none"
+          ref={auroraA}
+          className="absolute rounded-full pointer-events-none"
           style={{
-            background: "radial-gradient(circle, #0077FF 0%, transparent 65%)",
+            width: "55vw", height: "55vh",
+            top: "5%", left: "8%",
+            background: "radial-gradient(ellipse, rgba(0,119,255,0.13) 0%, transparent 65%)",
+            filter: "blur(80px)",
+          }}
+        />
+        <div
+          ref={auroraB}
+          className="absolute rounded-full pointer-events-none"
+          style={{
+            width: "48vw", height: "48vh",
+            top: "20%", right: "5%",
+            background: "radial-gradient(ellipse, rgba(0,212,255,0.10) 0%, transparent 65%)",
             filter: "blur(90px)",
-            opacity: 0.1,
           }}
         />
         <div
-          ref={orbRef2}
-          className="absolute bottom-1/4 right-1/4 w-80 h-80 rounded-full pointer-events-none"
+          ref={auroraC}
+          className="absolute rounded-full pointer-events-none"
           style={{
-            background: "radial-gradient(circle, #00D4FF 0%, transparent 65%)",
+            width: "40vw", height: "40vh",
+            bottom: "8%", left: "28%",
+            background: "radial-gradient(ellipse, rgba(0,184,148,0.10) 0%, transparent 65%)",
             filter: "blur(80px)",
-            opacity: 0.09,
           }}
         />
         <div
-          ref={orbRef3}
-          className="absolute top-1/2 right-1/3 w-72 h-72 rounded-full pointer-events-none"
+          ref={auroraD}
+          className="absolute rounded-full pointer-events-none"
           style={{
-            background: "radial-gradient(circle, #00B894 0%, transparent 65%)",
-            filter: "blur(80px)",
-            opacity: 0.07,
+            width: "35vw", height: "45vh",
+            bottom: "15%", right: "18%",
+            background: "radial-gradient(ellipse, rgba(123,97,255,0.08) 0%, transparent 65%)",
+            filter: "blur(70px)",
           }}
         />
-        {/* Vignette */}
+
+        {/* Radial vignette (edges fade to navy) */}
         <div
           className="absolute inset-0"
           style={{
             background:
-              "radial-gradient(ellipse at center, transparent 40%, #071A2E 90%)",
+              "radial-gradient(ellipse 85% 85% at 50% 50%, transparent 45%, #071A2E 92%)",
           }}
         />
       </div>
@@ -367,7 +494,7 @@ export default function Hero() {
       {/* ── Content ─────────────────────────────────────────────────────── */}
       <div className="relative z-10 max-w-7xl mx-auto px-6 w-full py-24 grid lg:grid-cols-2 gap-16 items-center">
 
-        {/* Left column */}
+        {/* ── Left column ──────────────────────────────────────────────── */}
         <div>
 
           {/* Badge */}
@@ -377,12 +504,14 @@ export default function Hero() {
               style={{
                 background: "rgba(0,119,255,0.08)",
                 border: "1px solid rgba(0,119,255,0.22)",
+                boxShadow: "0 0 20px rgba(0,119,255,0.08)",
               }}
             >
               <span
                 className="w-2 h-2 rounded-full"
                 style={{
                   background: "#00D4FF",
+                  boxShadow: "0 0 8px #00D4FF",
                   animation: "pulseDot 2s ease-in-out infinite",
                 }}
               />
@@ -395,26 +524,25 @@ export default function Hero() {
           {/* Headline */}
           <h1
             ref={titleRef}
-            className="font-black text-white leading-[1.08] tracking-tight mb-6"
-            style={{ fontSize: "clamp(2.6rem, 5.2vw, 4rem)" }}
+            className="font-black text-white leading-[1.06] tracking-tight mb-6"
+            style={{ fontSize: "clamp(2.8rem, 5.4vw, 4.4rem)" }}
           >
-            {/* "Visualizing the Earth." — word reveal */}
-            <span className="block mb-2">
+            {/* "Visualizing the Earth." */}
+            <span className="block mb-1">
               {LINE1.map((word, i) => (
-                <span key={i} className="word-mask mr-[0.24em] last:mr-0">
+                <span key={i} className="word-mask mr-[0.22em] last:mr-0">
                   <span className="word-inner">{word}</span>
                 </span>
               ))}
             </span>
 
-            {/* "Engineering the Future." — word + char cascade */}
+            {/* "Engineering the Future." */}
             <span className="block">
               {LINE2_PLAIN.map((word, i) => (
-                <span key={i} className="word-mask mr-[0.24em]">
+                <span key={i} className="word-mask mr-[0.22em]">
                   <span className="word-inner">{word}</span>
                 </span>
               ))}
-              {/* "Future." — gradient + char cascade */}
               <span className="geo-grad">
                 {LINE2_GRAD.split("").map((ch, i) => (
                   <span key={i} className="char-mask">
@@ -440,48 +568,54 @@ export default function Hero() {
             <IntelligenceCapsule />
           </motion.div>
 
-          {/* CTAs */}
+          {/* CTA buttons */}
           <motion.div
             className="flex flex-wrap gap-4 mb-10"
             initial="hidden"
             animate={ready ? "show" : "hidden"}
             variants={{
               hidden: {},
-              show: { transition: { staggerChildren: 0.12, delayChildren: 0.44 } },
+              show:   { transition: { staggerChildren: 0.12, delayChildren: 0.44 } },
             }}
           >
+            {/* Primary CTA */}
             <motion.a
               href="#contact"
               variants={{
                 hidden: { opacity: 0, y: 20 },
-                show: {
-                  opacity: 1, y: 0,
-                  transition: { duration: 0.6, ease: EXPO },
-                },
+                show:   { opacity: 1, y: 0, transition: { duration: 0.6, ease: EXPO } },
               }}
               whileHover={{ y: -3, scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
-              className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl font-bold text-white cursor-pointer"
+              className="group relative inline-flex items-center gap-2 px-7 py-3.5 rounded-xl font-bold text-white overflow-hidden cursor-pointer"
               style={{
-                background: "linear-gradient(135deg, #0077FF, #00D4FF)",
-                boxShadow: "0 8px 32px rgba(0,119,255,0.35)",
+                background: "linear-gradient(135deg,#0077FF,#00D4FF)",
+                boxShadow: "0 8px 32px rgba(0,119,255,0.4), 0 2px 8px rgba(0,0,0,0.3)",
               }}
             >
-              Request Consultation <ArrowRight size={16} />
+              {/* Shimmer sweep */}
+              <span
+                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity"
+                style={{
+                  background:
+                    "linear-gradient(105deg,transparent 40%,rgba(255,255,255,0.18) 50%,transparent 60%)",
+                  animation: "shimmer 0.7s ease forwards",
+                }}
+              />
+              <span className="relative">Request Consultation</span>
+              <ArrowRight size={16} className="relative" />
             </motion.a>
 
+            {/* Secondary CTA */}
             <motion.a
               href="#services"
               variants={{
                 hidden: { opacity: 0, y: 20 },
-                show: {
-                  opacity: 1, y: 0,
-                  transition: { duration: 0.6, ease: EXPO },
-                },
+                show:   { opacity: 1, y: 0, transition: { duration: 0.6, ease: EXPO } },
               }}
               whileHover={{ y: -3, scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
-              className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl font-bold cursor-pointer"
+              className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl font-bold cursor-pointer transition-all"
               style={{
                 border: "1px solid rgba(0,212,255,0.3)",
                 color: "#00D4FF",
@@ -499,8 +633,11 @@ export default function Hero() {
             style={{ borderTop: "1px solid rgba(0,119,255,0.12)" }}
           >
             {STATS.map((stat, i) => (
-              <div key={i}>
-                <p className="text-xl font-black" style={{ color: "#00D4FF" }}>
+              <div key={i} className="group cursor-default">
+                <p
+                  className="text-2xl font-black transition-colors"
+                  style={{ color: "#00D4FF" }}
+                >
                   {stat.value}
                 </p>
                 <p className="text-xs mt-0.5" style={{ color: "#475569" }}>
@@ -512,8 +649,8 @@ export default function Hero() {
 
         </div>
 
-        {/* Right column — Globe */}
-        <GlobeViz ready={ready} />
+        {/* ── Right column — Globe ─────────────────────────────────────── */}
+        <EarthGlobe ready={ready} />
 
       </div>
 
@@ -526,7 +663,7 @@ export default function Hero() {
       >
         <div
           className="w-5 h-8 rounded-full flex items-start justify-center pt-1.5"
-          style={{ border: "1px solid rgba(0,212,255,0.25)" }}
+          style={{ border: "1px solid rgba(0,212,255,0.22)" }}
         >
           <div
             className="w-1.5 h-1.5 rounded-full"
