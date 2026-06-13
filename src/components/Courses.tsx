@@ -1,11 +1,11 @@
+import Link from "next/link";
+
 const courses = [
   {
     id: 1,
     badge: "Bestseller",
-    badgeClass: "text-amber-700 border-amber-200 bg-amber-50",
+    badgeBg: "#fef3c7", badgeBorder: "#fde68a", badgeText: "#92400e",
     accentColor: "#2563eb",
-    accentBg: "#eff6ff",
-    accentBorder: "#bfdbfe",
     title: "Google Earth Engine (GEE)",
     level: "Beginner to Advanced",
     duration: "12 Weeks",
@@ -14,10 +14,8 @@ const courses = [
   },
   {
     badge: "Popular",
-    badgeClass: "text-emerald-700 border-emerald-200 bg-emerald-50",
+    badgeBg: "#d1fae5", badgeBorder: "#a7f3d0", badgeText: "#065f46",
     accentColor: "#059669",
-    accentBg: "#ecfdf5",
-    accentBorder: "#a7f3d0",
     title: "ArcGIS Pro & ArcMap",
     level: "All Levels",
     duration: "10 Weeks",
@@ -27,8 +25,6 @@ const courses = [
   {
     badge: null,
     accentColor: "#d97706",
-    accentBg: "#fffbeb",
-    accentBorder: "#fde68a",
     title: "AutoCAD for Civil & Survey",
     level: "Beginner to Pro",
     duration: "8 Weeks",
@@ -38,8 +34,6 @@ const courses = [
   {
     badge: null,
     accentColor: "#7c3aed",
-    accentBg: "#f5f3ff",
-    accentBorder: "#ddd6fe",
     title: "STAAD Pro Structural Analysis",
     level: "Intermediate",
     duration: "10 Weeks",
@@ -48,10 +42,8 @@ const courses = [
   },
   {
     badge: "🔥 Hot",
-    badgeClass: "text-orange-700 border-orange-200 bg-orange-50",
+    badgeBg: "#fed7aa", badgeBorder: "#fdba74", badgeText: "#7c2d12",
     accentColor: "#0891b2",
-    accentBg: "#ecfeff",
-    accentBorder: "#a5f3fc",
     title: "AI & Machine Learning",
     level: "Beginner to Advanced",
     duration: "16 Weeks",
@@ -62,8 +54,6 @@ const courses = [
     id: 2,
     badge: null,
     accentColor: "#0d9488",
-    accentBg: "#f0fdfa",
-    accentBorder: "#99f6e4",
     title: "Remote Sensing Fundamentals",
     level: "Foundation to Expert",
     duration: "14 Weeks",
@@ -72,48 +62,53 @@ const courses = [
   },
 ];
 
-import Link from "next/link";
-
 export default function Courses() {
   return (
-    <section id="courses" className="py-14 md:py-24 bg-slate-50">
+    <section id="courses" className="py-14 md:py-24" style={{ background: "var(--section-alt)" }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
-        {/* Header */}
         <div className="text-center mb-14">
-          <span className="inline-block px-3.5 py-1.5 rounded-full border border-blue-200 bg-blue-50 text-blue-700 text-xs font-semibold tracking-wide uppercase mb-4">
+          <span
+            className="inline-block px-3.5 py-1.5 rounded-full border text-xs font-semibold tracking-wide uppercase mb-4"
+            style={{ background: "var(--badge-bg)", borderColor: "var(--badge-border)", color: "var(--badge-text)" }}
+          >
             Learn &amp; Grow
           </span>
-          <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ color: "var(--heading)" }}>
             Professional <span className="gradient-text">Training Courses</span>
           </h2>
-          <p className="text-slate-500 max-w-xl mx-auto">
-            Industry-recognized certification programs taught by domain experts
+          <p className="max-w-xl mx-auto" style={{ color: "var(--body-text)" }}>
+            Industry-recognised certification programs taught by domain experts
           </p>
         </div>
 
-        {/* Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
           {courses.map((c, i) => (
             <div
               key={i}
-              className="relative flex flex-col rounded-2xl border border-slate-200 bg-white p-6 hover:shadow-xl hover:shadow-slate-100 hover:-translate-y-1 transition-all duration-300 group overflow-hidden"
+              className="relative flex flex-col rounded-2xl border p-6 hover:-translate-y-1 transition-all duration-300 group overflow-hidden"
+              style={{ background: "var(--card-bg)", borderColor: "var(--card-border)" }}
             >
-              {/* Top color accent */}
-              <div
-                className="absolute top-0 left-0 right-0 h-1 rounded-t-2xl"
-                style={{ background: c.accentColor }}
-              />
+              {/* Top accent bar */}
+              <div className="absolute top-0 left-0 right-0 h-1 rounded-t-2xl" style={{ background: c.accentColor }} />
 
+              {/* Badge */}
               {c.badge && (
-                <span className={`self-start px-2.5 py-0.5 rounded-full border text-xs font-semibold mb-4 ${c.badgeClass}`}>
+                <span
+                  className="self-start px-2.5 py-0.5 rounded-full border text-xs font-semibold mb-4"
+                  style={{
+                    background: (c as { badgeBg?: string }).badgeBg ?? `${c.accentColor}18`,
+                    borderColor: (c as { badgeBorder?: string }).badgeBorder ?? `${c.accentColor}40`,
+                    color: (c as { badgeText?: string }).badgeText ?? c.accentColor,
+                  }}
+                >
                   {c.badge}
                 </span>
               )}
 
               {/* Icon */}
               <div
-                className="w-14 h-14 rounded-2xl flex items-center justify-center mb-4"
-                style={{ background: c.accentBg, border: `1.5px solid ${c.accentBorder}` }}
+                className="w-14 h-14 rounded-2xl flex items-center justify-center mb-4 transition-transform duration-300 group-hover:scale-110"
+                style={{ background: `${c.accentColor}14`, border: `1.5px solid ${c.accentColor}30` }}
               >
                 <svg viewBox="0 0 32 32" fill="none" className="w-7 h-7">
                   <circle cx="16" cy="16" r="12" stroke={c.accentColor} strokeWidth="1.5" strokeDasharray="4 3" />
@@ -122,33 +117,36 @@ export default function Courses() {
                 </svg>
               </div>
 
+              {/* Level / Duration */}
               <div className="flex items-center gap-2 mb-3">
-                <span className="text-xs text-slate-500 bg-slate-100 px-2.5 py-0.5 rounded-full">{c.level}</span>
-                <span className="text-xs text-slate-500 bg-slate-100 px-2.5 py-0.5 rounded-full">{c.duration}</span>
+                <span className="text-xs px-2.5 py-0.5 rounded-full" style={{ background: "var(--section-alt)", color: "var(--body-text)" }}>{c.level}</span>
+                <span className="text-xs px-2.5 py-0.5 rounded-full" style={{ background: "var(--section-alt)", color: "var(--body-text)" }}>{c.duration}</span>
               </div>
 
-              <h3 className="text-slate-900 font-bold text-lg mb-2">{c.title}</h3>
-              <p className="text-slate-500 text-sm leading-relaxed mb-4 flex-1">{c.desc}</p>
+              <h3 className="font-bold text-lg mb-2" style={{ color: "var(--heading)" }}>{c.title}</h3>
+              <p className="text-sm leading-relaxed mb-4 flex-1" style={{ color: "var(--body-text)" }}>{c.desc}</p>
 
+              {/* Topics */}
               <div className="flex flex-wrap gap-1.5 mb-4">
                 {c.topics.map((t, j) => (
                   <span
                     key={j}
-                    className="text-xs px-2.5 py-0.5 rounded-full border border-slate-200 bg-slate-50 text-slate-500"
+                    className="text-xs px-2.5 py-0.5 rounded-full border"
+                    style={{ background: "var(--section-alt)", borderColor: "var(--card-border)", color: "var(--body-text)" }}
                   >
                     {t}
                   </span>
                 ))}
               </div>
 
-              <div className="flex items-center gap-3 mb-5 text-xs text-slate-400">
+              <div className="flex items-center gap-3 mb-5 text-xs" style={{ color: "var(--muted)" }}>
                 <span>💻 Online / Offline</span>
                 <span>📜 Certificate</span>
               </div>
 
               {"id" in c ? (
                 <Link
-                  href={`/course/${c.id}`}
+                  href={`/course/${(c as { id: number }).id}`}
                   className="w-full py-2.5 rounded-xl text-center text-sm font-semibold transition-all hover:opacity-90 block"
                   style={{ background: c.accentColor, color: "#fff" }}
                 >

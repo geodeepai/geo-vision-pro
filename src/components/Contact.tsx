@@ -7,32 +7,24 @@ const infoItems = [
   {
     icon: <MapPin size={20} />,
     color: "#2563eb",
-    bg: "#eff6ff",
-    border: "#bfdbfe",
     title: "Location",
     lines: ["Remote & On-site Consultancy", "Pan India & Global"],
   },
   {
     icon: <Mail size={20} />,
     color: "#059669",
-    bg: "#ecfdf5",
-    border: "#a7f3d0",
     title: "Email",
     lines: ["info@geovisionpro.com", "training@geovisionpro.com"],
   },
   {
     icon: <Phone size={20} />,
     color: "#7c3aed",
-    bg: "#f5f3ff",
-    border: "#ddd6fe",
     title: "Phone",
     lines: ["+91 98XXX XXXXX", "Mon–Sat, 9am–6pm IST"],
   },
   {
     icon: <Monitor size={20} />,
     color: "#d97706",
-    bg: "#fffbeb",
-    border: "#fde68a",
     title: "Online Training",
     lines: ["Live Classes via Zoom/Teams", "Recorded sessions available"],
   },
@@ -58,17 +50,20 @@ export default function Contact() {
   }
 
   return (
-    <section id="contact" className="py-14 md:py-24 bg-slate-50">
+    <section id="contact" className="py-14 md:py-24" style={{ background: "var(--section-alt)" }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         {/* Header */}
         <div className="text-center mb-14">
-          <span className="inline-block px-3.5 py-1.5 rounded-full border border-blue-200 bg-blue-50 text-blue-700 text-xs font-semibold tracking-wide uppercase mb-4">
+          <span
+            className="inline-block px-3.5 py-1.5 rounded-full border text-xs font-semibold tracking-wide uppercase mb-4"
+            style={{ background: "var(--badge-bg)", borderColor: "var(--badge-border)", color: "var(--badge-text)" }}
+          >
             Get In Touch
           </span>
-          <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ color: "var(--heading)" }}>
             Let&apos;s <span className="gradient-text">Work Together</span>
           </h2>
-          <p className="text-slate-500">Have a project or want to enroll? We&apos;d love to hear from you.</p>
+          <p style={{ color: "var(--body-text)" }}>Have a project or want to enroll? We&apos;d love to hear from you.</p>
         </div>
 
         <div className="grid lg:grid-cols-5 gap-8">
@@ -77,18 +72,19 @@ export default function Contact() {
             {infoItems.map((item, i) => (
               <div
                 key={i}
-                className="flex items-start gap-4 p-5 rounded-2xl border border-slate-200 bg-white hover:shadow-md hover:shadow-slate-100 transition-all"
+                className="flex items-start gap-4 p-5 rounded-2xl border transition-all hover:-translate-y-0.5"
+                style={{ background: "var(--card-bg)", borderColor: "var(--card-border)" }}
               >
                 <div
                   className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
-                  style={{ background: item.bg, border: `1.5px solid ${item.border}`, color: item.color }}
+                  style={{ background: `${item.color}14`, border: `1.5px solid ${item.color}30`, color: item.color }}
                 >
                   {item.icon}
                 </div>
                 <div>
-                  <div className="text-slate-800 text-sm font-semibold mb-1">{item.title}</div>
+                  <div className="text-sm font-semibold mb-1" style={{ color: "var(--heading)" }}>{item.title}</div>
                   {item.lines.map((line, j) => (
-                    <div key={j} className="text-slate-500 text-xs">{line}</div>
+                    <div key={j} className="text-xs" style={{ color: "var(--body-text)" }}>{line}</div>
                   ))}
                 </div>
               </div>
@@ -98,15 +94,19 @@ export default function Contact() {
           {/* Form */}
           <div className="lg:col-span-3">
             {submitted ? (
-              <div className="h-full flex flex-col items-center justify-center gap-4 rounded-2xl border border-green-200 bg-green-50 p-12 text-center">
-                <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center">
-                  <CheckCircle2 size={32} className="text-green-600" />
+              <div
+                className="h-full flex flex-col items-center justify-center gap-4 rounded-2xl border p-12 text-center"
+                style={{ background: "var(--card-bg)", borderColor: "var(--card-border)" }}
+              >
+                <div className="w-16 h-16 rounded-full flex items-center justify-center" style={{ background: "rgba(5,150,105,0.12)" }}>
+                  <CheckCircle2 size={32} className="text-emerald-500" />
                 </div>
-                <h3 className="text-slate-900 text-xl font-bold">Message Sent!</h3>
-                <p className="text-slate-500">We&apos;ll get back to you within 24 hours.</p>
+                <h3 className="text-xl font-bold" style={{ color: "var(--heading)" }}>Message Sent!</h3>
+                <p style={{ color: "var(--body-text)" }}>We&apos;ll get back to you within 24 hours.</p>
                 <button
                   onClick={() => setSubmitted(false)}
-                  className="mt-2 px-5 py-2 rounded-lg border border-slate-200 text-slate-500 text-sm hover:text-slate-700 hover:border-slate-300 transition-all"
+                  className="mt-2 px-5 py-2 rounded-lg border text-sm transition-all hover:opacity-80"
+                  style={{ borderColor: "var(--card-border)", color: "var(--body-text)" }}
                 >
                   Send another
                 </button>
@@ -114,7 +114,8 @@ export default function Contact() {
             ) : (
               <form
                 onSubmit={handleSubmit}
-                className="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm space-y-5"
+                className="rounded-2xl border p-8 space-y-5 shadow-sm"
+                style={{ background: "var(--card-bg)", borderColor: "var(--card-border)" }}
               >
                 <div className="grid sm:grid-cols-2 gap-5">
                   <FormField label="Full Name" type="text" id="name" placeholder="Your name" required />
@@ -123,14 +124,15 @@ export default function Contact() {
                 <div className="grid sm:grid-cols-2 gap-5">
                   <FormField label="Phone Number" type="tel" id="phone" placeholder="+91 XXXXX XXXXX" />
                   <div>
-                    <label htmlFor="interest" className="block text-sm font-medium text-slate-700 mb-1.5">
+                    <label htmlFor="interest" className="block text-sm font-medium mb-1.5" style={{ color: "var(--heading)" }}>
                       Area of Interest <span className="text-red-500">*</span>
                     </label>
                     <select
                       id="interest"
                       name="interest"
                       required
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-700 text-sm transition-colors"
+                      className="w-full px-3.5 py-2.5 rounded-xl border text-sm transition-colors outline-none focus:ring-2 focus:ring-blue-500/40"
+                      style={{ background: "var(--input-bg)", borderColor: "var(--card-border)", color: "var(--heading)" }}
                     >
                       <option value="">Select a service/course</option>
                       {interestOptions.map((group) => (
@@ -144,7 +146,7 @@ export default function Contact() {
                   </div>
                 </div>
                 <div>
-                  <label htmlFor="message" className="block text-sm font-medium text-slate-700 mb-1.5">
+                  <label htmlFor="message" className="block text-sm font-medium mb-1.5" style={{ color: "var(--heading)" }}>
                     Message <span className="text-red-500">*</span>
                   </label>
                   <textarea
@@ -153,12 +155,14 @@ export default function Contact() {
                     rows={5}
                     required
                     placeholder="Describe your requirements or questions..."
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-700 text-sm resize-none transition-colors placeholder:text-slate-400"
+                    className="w-full px-3.5 py-2.5 rounded-xl border text-sm resize-none transition-colors outline-none focus:ring-2 focus:ring-blue-500/40"
+                    style={{ background: "var(--input-bg)", borderColor: "var(--card-border)", color: "var(--heading)" }}
                   />
                 </div>
                 <button
                   type="submit"
-                  className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold hover:opacity-90 transition-all shadow-lg shadow-blue-200 hover:-translate-y-0.5"
+                  className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl text-white font-semibold hover:opacity-90 transition-all shadow-lg hover:-translate-y-0.5"
+                  style={{ background: "linear-gradient(135deg,#2563eb,#4f46e5)", boxShadow: "0 8px 24px rgba(37,99,235,0.25)" }}
                 >
                   <span>Send Message</span>
                   <Send size={16} />
@@ -179,7 +183,7 @@ function FormField({
 }) {
   return (
     <div>
-      <label htmlFor={id} className="block text-sm font-medium text-slate-700 mb-1.5">
+      <label htmlFor={id} className="block text-sm font-medium mb-1.5" style={{ color: "var(--heading)" }}>
         {label} {required && <span className="text-red-500">*</span>}
       </label>
       <input
@@ -188,7 +192,8 @@ function FormField({
         name={id}
         placeholder={placeholder}
         required={required}
-        className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-700 text-sm placeholder:text-slate-400 transition-colors"
+        className="w-full px-3.5 py-2.5 rounded-xl border text-sm transition-colors outline-none focus:ring-2 focus:ring-blue-500/40"
+        style={{ background: "var(--input-bg)", borderColor: "var(--card-border)", color: "var(--heading)" }}
       />
     </div>
   );

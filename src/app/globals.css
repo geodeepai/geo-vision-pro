@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* Class-based dark mode — toggled by next-themes via html.dark */
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme inline {
   --color-background: #ffffff;
   --color-foreground: #0f172a;
@@ -7,13 +10,55 @@
   --font-mono: var(--font-geist-mono);
 }
 
+/* ── Design tokens: light ─────────────────────────────────────────────────── */
 :root {
-  --background: #ffffff;
-  --foreground: #0f172a;
+  --background:     #ffffff;
+  --foreground:     #0f172a;
+  --section-bg:     #ffffff;
+  --section-alt:    #f8fafc;
+  --card-bg:        #ffffff;
+  --card-border:    #e2e8f0;
+  --heading:        #0f172a;
+  --body-text:      #64748b;
+  --muted:          #94a3b8;
+  --divider:        #e2e8f0;
+  --input-bg:       #f8fafc;
+  --input-border:   #e2e8f0;
+  --badge-bg:       #eff6ff;
+  --badge-border:   #bfdbfe;
+  --badge-text:     #1d4ed8;
+  --nav-scrolled:   rgba(255,255,255,0.96);
+  --nav-border:     #e2e8f0;
+  --nav-text:       #475569;
+  --nav-text-hover: #0f172a;
 }
 
-* {
-  scroll-behavior: smooth;
+/* ── Design tokens: dark ──────────────────────────────────────────────────── */
+html.dark {
+  --background:     #071322;
+  --foreground:     #f1f5f9;
+  --section-bg:     #071322;
+  --section-alt:    #060f1c;
+  --card-bg:        rgba(255,255,255,0.04);
+  --card-border:    rgba(255,255,255,0.08);
+  --heading:        #f1f5f9;
+  --body-text:      #94a3b8;
+  --muted:          #64748b;
+  --divider:        rgba(255,255,255,0.08);
+  --input-bg:       rgba(255,255,255,0.05);
+  --input-border:   rgba(255,255,255,0.1);
+  --badge-bg:       rgba(37,99,235,0.12);
+  --badge-border:   rgba(59,130,246,0.3);
+  --badge-text:     #93c5fd;
+  --nav-scrolled:   rgba(7,19,34,0.96);
+  --nav-border:     rgba(255,255,255,0.08);
+  --nav-text:       #94a3b8;
+  --nav-text-hover: #f1f5f9;
+}
+
+/* ── Smooth theme transitions ─────────────────────────────────────────────── */
+*, *::before, *::after {
+  transition: background-color 0.25s ease, border-color 0.25s ease;
 }
 
 body {

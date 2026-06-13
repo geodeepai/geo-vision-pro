@@ -1,94 +1,63 @@
 import { MessageSquare, FileText, Activity, CheckCircle } from "lucide-react";
 
 const steps = [
-  {
-    num: "01",
-    icon: <MessageSquare size={26} />,
-    color: "#2563eb",
-    bg: "#eff6ff",
-    border: "#bfdbfe",
-    title: "Initial Consultation",
-    desc: "Share your requirements, goals, or learning objectives with our team for a personalized assessment.",
-  },
-  {
-    num: "02",
-    icon: <FileText size={26} />,
-    color: "#059669",
-    bg: "#ecfdf5",
-    border: "#a7f3d0",
-    title: "Custom Plan",
-    desc: "We design a tailored consultancy approach or course curriculum aligned with your specific needs.",
-  },
-  {
-    num: "03",
-    icon: <Activity size={26} />,
-    color: "#7c3aed",
-    bg: "#f5f3ff",
-    border: "#ddd6fe",
-    title: "Execution",
-    desc: "Our experts deliver high-quality work or structured training with regular progress updates.",
-  },
-  {
-    num: "04",
-    icon: <CheckCircle size={26} />,
-    color: "#d97706",
-    bg: "#fffbeb",
-    border: "#fde68a",
-    title: "Delivery & Support",
-    desc: "Receive final deliverables or certification with continued post-project or post-course support.",
-  },
+  { num: "01", icon: <MessageSquare size={26} />, color: "#2563eb", title: "Initial Consultation",   desc: "Share your requirements, goals, or learning objectives with our team for a personalised assessment." },
+  { num: "02", icon: <FileText size={26} />,      color: "#059669", title: "Custom Plan",            desc: "We design a tailored consultancy approach or course curriculum aligned with your specific needs." },
+  { num: "03", icon: <Activity size={26} />,      color: "#7c3aed", title: "Execution",             desc: "Our experts deliver high-quality work or structured training with regular progress updates." },
+  { num: "04", icon: <CheckCircle size={26} />,   color: "#d97706", title: "Delivery & Support",    desc: "Receive final deliverables or certification with continued post-project or post-course support." },
 ];
 
 export default function Process() {
   return (
-    <section id="process" className="py-14 md:py-24 bg-slate-50">
+    <section id="process" className="py-14 md:py-24" style={{ background: "var(--section-alt)" }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
-        {/* Header */}
         <div className="text-center mb-14">
-          <span className="inline-block px-3.5 py-1.5 rounded-full border border-blue-200 bg-blue-50 text-blue-700 text-xs font-semibold tracking-wide uppercase mb-4">
+          <span
+            className="inline-block px-3.5 py-1.5 rounded-full border text-xs font-semibold tracking-wide uppercase mb-4"
+            style={{ background: "var(--badge-bg)", borderColor: "var(--badge-border)", color: "var(--badge-text)" }}
+          >
             How It Works
           </span>
-          <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold mb-2" style={{ color: "var(--heading)" }}>
             Our <span className="gradient-text">Simple Process</span>
           </h2>
-          <p className="text-slate-500 max-w-xl mx-auto">
+          <p className="max-w-xl mx-auto text-sm" style={{ color: "var(--body-text)" }}>
             From first contact to successful project delivery or course completion
           </p>
         </div>
 
-        {/* Steps */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {steps.map((s, i) => (
             <div
               key={i}
-              className="relative rounded-2xl border border-slate-200 bg-white p-7 hover:shadow-lg hover:shadow-slate-100 hover:-translate-y-1 transition-all duration-300 group"
+              className="relative rounded-2xl border p-7 hover:-translate-y-1 transition-all duration-300 group"
+              style={{ background: "var(--card-bg)", borderColor: "var(--card-border)" }}
             >
-              {/* Connector arrow (desktop) */}
+              {/* Connector arrow */}
               {i < steps.length - 1 && (
-                <div className="hidden lg:flex absolute -right-3 top-1/2 -translate-y-1/2 z-10 w-6 h-6 rounded-full bg-white border border-slate-200 items-center justify-center shadow-sm">
-                  <span className="text-slate-400 text-xs font-bold">›</span>
+                <div className="hidden lg:flex absolute -right-3 top-1/2 -translate-y-1/2 z-10 w-6 h-6 rounded-full items-center justify-center shadow-sm" style={{ background: "var(--card-bg)", border: "1px solid var(--card-border)" }}>
+                  <span className="text-xs font-bold" style={{ color: "var(--muted)" }}>›</span>
                 </div>
               )}
 
               {/* Step number */}
-              <div className="text-5xl font-black mb-5 select-none" style={{ color: s.color, opacity: 0.1 }}>
-                {s.num}
-              </div>
+              <div className="text-xs font-black mb-4 tracking-widest" style={{ color: s.color }}>{s.num}</div>
 
+              {/* Icon */}
               <div
-                className="w-12 h-12 rounded-xl flex items-center justify-center mb-5"
-                style={{ background: s.bg, border: `1.5px solid ${s.border}`, color: s.color }}
+                className="w-14 h-14 rounded-2xl flex items-center justify-center mb-5 transition-transform duration-300 group-hover:scale-110"
+                style={{ background: `${s.color}14`, border: `1.5px solid ${s.color}30`, color: s.color }}
               >
                 {s.icon}
               </div>
 
-              <h3 className="text-slate-900 font-bold mb-2">{s.title}</h3>
-              <p className="text-slate-500 text-sm leading-relaxed">{s.desc}</p>
+              <h3 className="font-black text-sm mb-2" style={{ color: "var(--heading)" }}>{s.title}</h3>
+              <p className="text-xs leading-relaxed" style={{ color: "var(--body-text)" }}>{s.desc}</p>
 
-              {/* Bottom accent */}
+              {/* Bottom accent line on hover */}
               <div
-                className="absolute bottom-0 left-7 right-7 h-0.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-                style={{ background: s.color }}
+                className="absolute bottom-0 left-0 right-0 h-0.5 rounded-b-2xl scale-x-0 group-hover:scale-x-100 transition-transform duration-300"
+                style={{ background: `linear-gradient(90deg,transparent,${s.color},transparent)` }}
               />
             </div>
           ))}

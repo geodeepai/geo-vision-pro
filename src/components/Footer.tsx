@@ -77,7 +77,7 @@ export default function Footer() {
 
         {/* Bottom bar */}
         <div className="border-t border-slate-800 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500">
-          <p>&copy; 2025 GeoVision Pro. All rights reserved.</p>
+          <p>&copy; 2026 GeoVision Pro. All rights reserved.</p>
           <p>Built with passion for geospatial excellence.</p>
         </div>
       </div>
