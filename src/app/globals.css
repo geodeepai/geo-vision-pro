@@ -1,26 +1,155 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-background: #ffffff;
+  --color-foreground: #0f172a;
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+:root {
+  --background: #ffffff;
+  --foreground: #0f172a;
+}
+
+* {
+  scroll-behavior: smooth;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), Arial, sans-serif;
+  overflow-x: hidden;
+}
+
+/* Gradient text — blue-to-indigo for premium look */
+.gradient-text {
+  background: linear-gradient(135deg, #2563eb 0%, #4f46e5 60%, #7c3aed 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: #f1f5f9; }
+::-webkit-scrollbar-thumb { background: #2563eb; border-radius: 3px; }
+
+/* Ticker */
+@keyframes ticker {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.ticker-animate {
+  animation: ticker 40s linear infinite;
+  display: flex;
+  width: max-content;
+}
+.ticker-animate:hover { animation-play-state: paused; }
+
+/* Orb floats */
+@keyframes float1 {
+  0%, 100% { transform: translate(0,0) scale(1); }
+  33%       { transform: translate(40px,-30px) scale(1.05); }
+  66%       { transform: translate(-20px,20px) scale(0.95); }
+}
+@keyframes float2 {
+  0%, 100% { transform: translate(0,0) scale(1); }
+  33%       { transform: translate(-50px,30px) scale(1.1); }
+  66%       { transform: translate(30px,-20px) scale(0.9); }
+}
+@keyframes float3 {
+  0%, 100% { transform: translate(0,0) scale(1); }
+  50%       { transform: translate(20px,40px) scale(1.08); }
+}
+
+/* Globe rings */
+@keyframes rotateRing1 {
+  from { transform: rotateX(75deg) rotateY(0deg); }
+  to   { transform: rotateX(75deg) rotateY(360deg); }
+}
+@keyframes rotateRing2 {
+  from { transform: rotateX(45deg) rotateY(0deg) rotateZ(45deg); }
+  to   { transform: rotateX(45deg) rotateY(360deg) rotateZ(45deg); }
+}
+@keyframes rotateRing3 {
+  from { transform: rotateX(20deg) rotateY(0deg) rotateZ(-30deg); }
+  to   { transform: rotateX(20deg) rotateY(360deg) rotateZ(-30deg); }
+}
+
+/* Float cards */
+@keyframes floatCard {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-10px); }
+}
+
+/* Scroll dot */
+@keyframes scrollDot {
+  0%   { transform: translateY(0); opacity: 1; }
+  100% { transform: translateY(16px); opacity: 0; }
+}
+
+/* Pulse dot */
+@keyframes pulseDot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.5; transform: scale(0.8); }
+}
+
+/* Gradient text shimmer sweep — used on hero headline */
+@keyframes gradientSweep {
+  0%   { background-position: 0% center; }
+  100% { background-position: 200% center; }
+}
+.shimmer-text {
+  background: linear-gradient(90deg, #93c5fd 0%, #c4b5fd 35%, #60a5fa 55%, #a78bfa 75%, #93c5fd 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradientSweep 4s linear infinite;
+}
+
+/* Hero word-mask — hides overflow so words slide up from below */
+.word-mask {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+  line-height: 1.15;
+}
+.word-inner {
+  display: inline-block;
+  will-change: transform;
+}
+
+/* Character mask for char-by-char cascade */
+.char-mask {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+  line-height: 1.15;
+}
+.char-inner {
+  display: inline-block;
+  will-change: transform, opacity;
+}
+
+/* Input focus */
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: #2563eb !important;
+  box-shadow: 0 0 0 3px rgba(37,99,235,0.12);
+}
+
+/* CTA button shimmer sweep */
+@keyframes shimmer {
+  0%   { transform: translateX(-100%); }
+  60%  { transform: translateX(200%); }
+  100% { transform: translateX(200%); }
+}
+
+/* Mega-menu dropdown entrance */
+@keyframes fadeSlideDown {
+  from { opacity: 0; transform: translateX(-50%) translateY(-8px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
 }
