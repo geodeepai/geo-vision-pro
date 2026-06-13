@@ -100,8 +100,8 @@ export default function Navbar() {
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled
-          ? "bg-white/98 backdrop-blur-xl border-b border-slate-200 shadow-sm shadow-slate-100"
-          : "bg-white/80 backdrop-blur-md"
+          ? "bg-white/95 backdrop-blur-xl border-b border-slate-200 shadow-sm shadow-slate-100"
+          : "bg-transparent"
       }`}
     >
       <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
@@ -116,7 +116,7 @@ export default function Navbar() {
             </svg>
           </div>
           <span
-            className="font-bold tracking-tight text-slate-900"
+            className={`font-bold tracking-tight transition-colors ${scrolled ? "text-slate-900" : "text-white"}`}
             style={{ fontSize: 18 }}
           >
             GeoVision<span className="text-blue-600">Pro</span>
@@ -134,7 +134,11 @@ export default function Navbar() {
               onClick={() => setSvcOpen((p) => !p)}
               aria-expanded={svcOpen}
               aria-haspopup="true"
-              className={`flex items-center gap-1 px-3.5 py-2 rounded-lg transition-all font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100 ${svcOpen ? "text-blue-600 bg-blue-50" : ""}`}
+              className={`flex items-center gap-1 px-3.5 py-2 rounded-lg transition-all font-medium ${
+                scrolled
+                  ? "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+                  : "text-white/80 hover:text-white hover:bg-white/10"
+              } ${svcOpen ? (scrolled ? "text-blue-600 bg-blue-50" : "text-white bg-white/10") : ""}`}
               style={{ fontSize: 18 }}
             >
               Services
@@ -204,7 +208,11 @@ export default function Navbar() {
             <li key={l.href}>
               <a
                 href={l.href}
-                className="px-3.5 py-2 rounded-lg transition-all font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+                className={`px-3.5 py-2 rounded-lg transition-all font-medium ${
+                  scrolled
+                    ? "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+                    : "text-white/80 hover:text-white hover:bg-white/10"
+                }`}
                 style={{ fontSize: 18 }}
               >
                 {l.label}
@@ -217,7 +225,11 @@ export default function Navbar() {
         <div className="hidden md:flex items-center gap-2">
           <Link
             href="/login"
-            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl font-semibold transition-all text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+            className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-xl font-semibold transition-all ${
+              scrolled
+                ? "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+                : "text-white/85 hover:text-white hover:bg-white/10"
+            }`}
             style={{ fontSize: 18 }}
           >
             <LogIn size={18} />
@@ -227,7 +239,7 @@ export default function Navbar() {
 
         {/* Hamburger */}
         <button
-          className="md:hidden transition-colors text-slate-700"
+          className={`md:hidden transition-colors ${scrolled ? "text-slate-700" : "text-white"}`}
           onClick={() => setOpen((p) => !p)}
           aria-label="Toggle menu"
         >

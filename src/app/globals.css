@@ -154,28 +154,6 @@ input:focus, select:focus, textarea:focus {
   to   { opacity: 1; transform: translateX(-50%) translateY(0); }
 }
 
-/* Hero gradient headline */
-@keyframes heroGradFlow {
-  0%   { background-position: 0% 50%; }
-  50%  { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-.hero-grad {
-  background: linear-gradient(270deg, #1a56db, #0891b2, #059669, #7c3aed, #c026d3, #1a56db);
-  background-size: 400% 400%;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  animation: heroGradFlow 8s ease infinite;
-  display: inline;
-}
-
-/* Capsule border pulse */
-@keyframes capsulePulse {
-  0%, 100% { opacity: 0.7; }
-  50%       { opacity: 1; }
-}
-
 /* AI section floating chips */
 @keyframes floatChip1 {
   0%, 100% { transform: translateY(0px) rotate(-1deg); }
