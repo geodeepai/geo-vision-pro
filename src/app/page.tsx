@@ -1,6 +1,7 @@
 import MaskReveal from "@/components/MaskReveal";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
+import AIIntelligence from "@/components/AIIntelligence";
 import Ticker from "@/components/Ticker";
 import Services from "@/components/Services";
 import Courses from "@/components/Courses";
@@ -17,6 +18,7 @@ export default function Home() {
       <MaskReveal />
       <Navbar />
       <Hero />
+      <AIIntelligence />
       <Ticker />
       <Services />
       <Courses />
