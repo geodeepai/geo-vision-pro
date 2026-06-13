@@ -249,11 +249,11 @@ function EarthGlobe({ ready }: { ready: boolean }) {
             animation: "floatCard 4.5s ease-in-out 0.8s infinite",
           }}
         >
-          <p className="uppercase tracking-wider mb-1" style={{ fontSize: 8, color: "#475569" }}>Live Coverage</p>
-          <p className="font-black leading-none mb-1" style={{ fontSize: 22, color: "#00D4FF" }}>12 States</p>
-          <p style={{ fontSize: 8, color: "#334155" }} className="mb-2">India + 3 Nations</p>
+          <p className="uppercase tracking-wider mb-1" style={{ fontSize: 8, color: "#475569" }}>Area Mapped</p>
+          <p className="font-black leading-none mb-1" style={{ fontSize: 22, color: "#00D4FF" }}>2.4M km²</p>
+          <p style={{ fontSize: 8, color: "#334155" }} className="mb-2">Multi-sensor coverage</p>
           <div className="flex gap-1">
-            {["IN","NP","BD","LK"].map((c) => (
+            {["SAR","Optical","LiDAR","DEM"].map((c) => (
               <span key={c} style={{
                 fontSize: 7, color: "#00D4FF",
                 background: "rgba(0,212,255,0.1)",
