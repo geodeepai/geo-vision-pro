@@ -48,22 +48,21 @@ export default function Navbar() {
   function closeSvc() { closeTimer.current = setTimeout(() => setSvcOpen(false), 120); }
 
   const linkCls = scrolled
-    ? "text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-300 dark:hover:text-white dark:hover:bg-white/10"
+    ? "hover:bg-white/10"
     : "text-white/80 hover:text-white hover:bg-white/10";
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? "border-b shadow-sm dark:shadow-none"
-          : "bg-transparent"
-      }`}
+      className="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
       style={scrolled ? {
         background: "var(--nav-scrolled)",
-        borderColor: "var(--nav-border)",
+        borderBottom: "1px solid var(--nav-border)",
         backdropFilter: "blur(20px)",
         WebkitBackdropFilter: "blur(20px)",
-      } : undefined}
+        boxShadow: "0 1px 20px rgba(0,0,0,0.08)",
+      } : {
+        background: "linear-gradient(to bottom, rgba(7,26,46,0.65), transparent)",
+      }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
 
@@ -77,9 +76,8 @@ export default function Navbar() {
             </svg>
           </div>
           <span
-            className={`font-bold tracking-tight transition-colors text-[17px] ${
-              scrolled ? "text-slate-900 dark:text-white" : "text-white"
-            }`}
+            className="font-bold tracking-tight transition-colors text-[17px]"
+            style={{ color: scrolled ? "var(--heading)" : "#ffffff" }}
           >
             GeoVision<span className="text-blue-500">Pro</span>
           </span>
@@ -93,9 +91,13 @@ export default function Navbar() {
               onMouseLeave={closeSvc}
               onClick={() => setSvcOpen((p) => !p)}
               aria-expanded={svcOpen}
-              className={`flex items-center gap-1 px-3.5 py-2 rounded-lg transition-all font-medium text-[15px] ${linkCls} ${
-                svcOpen ? (scrolled ? "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20" : "text-white bg-white/10") : ""
-              }`}
+              className={`flex items-center gap-1 px-3.5 py-2 rounded-lg transition-all font-medium text-[15px] ${linkCls}`}
+              style={{
+                color: svcOpen
+                  ? "#2563eb"
+                  : scrolled ? "var(--nav-text)" : "rgba(255,255,255,0.8)",
+                background: svcOpen && !scrolled ? "rgba(255,255,255,0.1)" : undefined,
+              }}
             >
               Services
               <ChevronDown size={14} className={`transition-transform duration-200 ${svcOpen ? "rotate-180" : ""}`} />
@@ -151,7 +153,13 @@ export default function Navbar() {
 
           {NAV_LINKS.map((l) => (
             <li key={l.href}>
-              <a href={l.href} className={`px-3.5 py-2 rounded-lg transition-all font-medium text-[15px] ${linkCls}`}>
+              <a
+                href={l.href}
+                className={`px-3.5 py-2 rounded-lg transition-all font-medium text-[15px] ${linkCls}`}
+                style={{ color: scrolled ? "var(--nav-text)" : "rgba(255,255,255,0.8)" }}
+                onMouseEnter={e => { e.currentTarget.style.color = scrolled ? "var(--nav-text-hover)" : "#ffffff"; }}
+                onMouseLeave={e => { e.currentTarget.style.color = scrolled ? "var(--nav-text)" : "rgba(255,255,255,0.8)"; }}
+              >
                 {l.label}
               </a>
             </li>
@@ -164,6 +172,7 @@ export default function Navbar() {
           <Link
             href="/login"
             className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-xl font-semibold text-[15px] transition-all ${linkCls}`}
+            style={{ color: scrolled ? "var(--nav-text)" : "rgba(255,255,255,0.8)" }}
           >
             <LogIn size={16} />
             Log In
@@ -174,7 +183,8 @@ export default function Navbar() {
         <div className="md:hidden flex items-center gap-2">
           <ThemeToggle scrolled={scrolled} />
           <button
-            className={`transition-colors ${scrolled ? "text-slate-700 dark:text-slate-300" : "text-white"}`}
+            className="transition-colors"
+            style={{ color: scrolled ? "var(--heading)" : "#ffffff" }}
             onClick={() => setOpen((p) => !p)}
             aria-label="Toggle menu"
           >
