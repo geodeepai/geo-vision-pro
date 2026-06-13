@@ -235,13 +235,6 @@ export default function Navbar() {
             <LogIn size={18} />
             Log In
           </Link>
-          <a
-            href="#contact"
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold hover:opacity-90 transition-opacity shadow-md shadow-blue-200"
-            style={{ fontSize: 18 }}
-          >
-            Get Started
-          </a>
         </div>
 
         {/* Hamburger */}
@@ -317,14 +310,6 @@ export default function Navbar() {
             >
               <LogIn size={15} /> Log In
             </Link>
-            <a
-              href="#contact"
-              onClick={() => setOpen(false)}
-              className="flex items-center justify-center px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold"
-              style={{ fontSize: 18 }}
-            >
-              Get Started
-            </a>
           </div>
         </div>
       )}
