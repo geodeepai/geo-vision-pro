@@ -2,6 +2,16 @@
 
 import { useRef, useState } from "react";
 import { useInView } from "framer-motion";
+import dynamic from "next/dynamic";
+
+const ProjectMap = dynamic(() => import("@/components/ProjectMap"), { ssr: false, loading: () => (
+  <div className="w-full rounded-2xl flex items-center justify-center" style={{ height: 420, background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.08)" }}>
+    <div className="text-center">
+      <div className="w-8 h-8 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin mx-auto mb-3" />
+      <p className="text-slate-500 text-xs">Loading map…</p>
+    </div>
+  </div>
+) });
 
 const PIPELINE = [
   { step: "01", label: "Raw Data Ingestion", sub: "Satellite · Drone · Sensor", color: "#6366f1" },
@@ -254,6 +264,24 @@ export default function AIIntelligence() {
               </div>
             </div>
           </div>
+        </div>
+
+        {/* Project Coverage Map */}
+        <div
+          className="mt-14 transition-all duration-700 delay-400"
+          style={{ opacity: inView ? 1 : 0, transform: inView ? "translateY(0)" : "translateY(20px)" }}
+        >
+          <div className="flex items-center justify-between mb-5">
+            <div>
+              <h3 className="text-lg font-black text-white mb-1">Live Project Coverage Map</h3>
+              <p className="text-slate-500 text-xs">Click any marker to explore AI-powered geospatial projects across India & South Asia</p>
+            </div>
+            <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg" style={{ background: "rgba(34,197,94,0.1)", border: "1px solid rgba(34,197,94,0.2)" }}>
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="text-emerald-400 text-[10px] font-bold uppercase tracking-wider">17 Projects Active</span>
+            </div>
+          </div>
+          <ProjectMap />
         </div>
 
         {/* Tech stack */}
