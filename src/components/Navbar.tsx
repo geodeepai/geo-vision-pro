@@ -31,7 +31,8 @@ export default function Navbar() {
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
-    const handler = () => setScrolled(window.scrollY > 40);
+    const handler = () => setScrolled(window.scrollY > 10);
+    handler();
     window.addEventListener("scroll", handler);
     return () => window.removeEventListener("scroll", handler);
   }, []);
@@ -47,21 +48,15 @@ export default function Navbar() {
   function openSvc()  { if (closeTimer.current) clearTimeout(closeTimer.current); setSvcOpen(true); }
   function closeSvc() { closeTimer.current = setTimeout(() => setSvcOpen(false), 120); }
 
-  const linkCls = scrolled
-    ? "hover:bg-white/10"
-    : "text-white/80 hover:text-white hover:bg-white/10";
-
   return (
     <nav
       className="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
-      style={scrolled ? {
+      style={{
         background: "var(--nav-scrolled)",
         borderBottom: "1px solid var(--nav-border)",
         backdropFilter: "blur(20px)",
         WebkitBackdropFilter: "blur(20px)",
-        boxShadow: "0 1px 20px rgba(0,0,0,0.08)",
-      } : {
-        background: "linear-gradient(to bottom, rgba(7,26,46,0.65), transparent)",
+        boxShadow: scrolled ? "0 2px 24px rgba(0,0,0,0.10)" : "0 1px 0 var(--nav-border)",
       }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
@@ -76,8 +71,8 @@ export default function Navbar() {
             </svg>
           </div>
           <span
-            className="font-bold tracking-tight transition-colors text-[17px]"
-            style={{ color: scrolled ? "var(--heading)" : "#ffffff" }}
+            className="font-bold tracking-tight text-[17px]"
+            style={{ color: "var(--heading)" }}
           >
             GeoVision<span className="text-blue-500">Pro</span>
           </span>
@@ -91,12 +86,10 @@ export default function Navbar() {
               onMouseLeave={closeSvc}
               onClick={() => setSvcOpen((p) => !p)}
               aria-expanded={svcOpen}
-              className={`flex items-center gap-1 px-3.5 py-2 rounded-lg transition-all font-medium text-[15px] ${linkCls}`}
+              className="flex items-center gap-1 px-3.5 py-2 rounded-lg transition-all font-medium text-[15px]"
               style={{
-                color: svcOpen
-                  ? "#2563eb"
-                  : scrolled ? "var(--nav-text)" : "rgba(255,255,255,0.8)",
-                background: svcOpen && !scrolled ? "rgba(255,255,255,0.1)" : undefined,
+                color: svcOpen ? "#2563eb" : "var(--nav-text)",
+                background: svcOpen ? "var(--section-alt)" : undefined,
               }}
             >
               Services
@@ -155,10 +148,10 @@ export default function Navbar() {
             <li key={l.href}>
               <a
                 href={l.href}
-                className={`px-3.5 py-2 rounded-lg transition-all font-medium text-[15px] ${linkCls}`}
-                style={{ color: scrolled ? "var(--nav-text)" : "rgba(255,255,255,0.8)" }}
-                onMouseEnter={e => { e.currentTarget.style.color = scrolled ? "var(--nav-text-hover)" : "#ffffff"; }}
-                onMouseLeave={e => { e.currentTarget.style.color = scrolled ? "var(--nav-text)" : "rgba(255,255,255,0.8)"; }}
+                className="px-3.5 py-2 rounded-lg transition-all font-medium text-[15px]"
+                style={{ color: "var(--nav-text)" }}
+                onMouseEnter={e => { e.currentTarget.style.color = "var(--nav-text-hover)"; e.currentTarget.style.background = "var(--section-alt)"; }}
+                onMouseLeave={e => { e.currentTarget.style.color = "var(--nav-text)"; e.currentTarget.style.background = ""; }}
               >
                 {l.label}
               </a>
@@ -168,11 +161,11 @@ export default function Navbar() {
 
         {/* Right actions */}
         <div className="hidden md:flex items-center gap-1.5">
-          <ThemeToggle scrolled={scrolled} />
+          <ThemeToggle />
           <Link
             href="/login"
-            className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-xl font-semibold text-[15px] transition-all ${linkCls}`}
-            style={{ color: scrolled ? "var(--nav-text)" : "rgba(255,255,255,0.8)" }}
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl font-semibold text-[15px] transition-all"
+            style={{ color: "var(--nav-text)" }}
           >
             <LogIn size={16} />
             Log In
@@ -181,10 +174,10 @@ export default function Navbar() {
 
         {/* Hamburger */}
         <div className="md:hidden flex items-center gap-2">
-          <ThemeToggle scrolled={scrolled} />
+          <ThemeToggle />
           <button
             className="transition-colors"
-            style={{ color: scrolled ? "var(--heading)" : "#ffffff" }}
+            style={{ color: "var(--heading)" }}
             onClick={() => setOpen((p) => !p)}
             aria-label="Toggle menu"
           >
