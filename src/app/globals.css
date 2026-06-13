@@ -184,3 +184,19 @@ input:focus, select:focus, textarea:focus {
   from { transform: rotate(0deg); }
   to   { transform: rotate(-360deg); }
 }
+
+/* Geo gradient — Deep Space Navy palette: Geospatial Blue → Satellite Cyan → Earth Green → Violet */
+@keyframes geoGradFlow {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+.geo-grad {
+  background: linear-gradient(90deg, #0077FF, #00D4FF, #00B894, #7B61FF, #0077FF);
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: geoGradFlow 5s ease infinite;
+  display: inline;
+}
