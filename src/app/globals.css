@@ -50,10 +50,10 @@ html.dark {
   --badge-bg:       rgba(37,99,235,0.12);
   --badge-border:   rgba(59,130,246,0.3);
   --badge-text:     #93c5fd;
-  --nav-scrolled:   rgba(7,19,34,0.96);
-  --nav-border:     rgba(255,255,255,0.08);
-  --nav-text:       #94a3b8;
-  --nav-text-hover: #f1f5f9;
+  --nav-scrolled:   rgba(4,12,30,0.78);
+  --nav-border:     rgba(255,255,255,0.14);
+  --nav-text:       #cbd5e1;
+  --nav-text-hover: #f8fafc;
 }
 
 /* ── Smooth theme transitions ─────────────────────────────────────────────── */

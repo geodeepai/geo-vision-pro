@@ -56,7 +56,7 @@ export default function Navbar() {
         borderBottom: "1px solid var(--nav-border)",
         backdropFilter: "blur(20px)",
         WebkitBackdropFilter: "blur(20px)",
-        boxShadow: scrolled ? "0 2px 24px rgba(0,0,0,0.10)" : "0 1px 0 var(--nav-border)",
+        boxShadow: "0 1px 0 var(--nav-border), 0 4px 32px rgba(0,0,0,0.18)",
       }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
