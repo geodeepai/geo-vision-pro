@@ -53,16 +53,56 @@ const ALL_BANKS = [
   "Tamilnad Mercantile Bank","UCO Bank","Union Bank of India",
 ];
 
+const BANK_URLS: Record<string, string> = {
+  "State Bank of India": "https://retail.onlinesbi.sbi/retail/login.htm",
+  "HDFC Bank":           "https://netbanking.hdfcbank.com/netbanking/",
+  "ICICI Bank":          "https://www.icicibank.com/Personal-Banking/insta-banking/internet-banking/index.page",
+  "Axis Bank":           "https://netbanking.axisbank.com/netbanking/",
+  "Kotak Mahindra Bank": "https://www.kotak.com/en/personal-banking/tools-and-calculators/netbanking.html",
+  "Punjab National Bank":"https://www.netpnb.com/",
+  "Bank of Baroda":      "https://www.bobibanking.com/",
+  "Yes Bank":            "https://netbanking.yesbank.in/",
+  "Canara Bank":         "https://canarabank.com/netbanking",
+  "Union Bank of India": "https://www.unionbankonline.co.in/",
+  "Indian Bank":         "https://www.indianbank.net.in/",
+  "IDBI Bank":           "https://www.idbibank.in/internet-banking.aspx",
+  "Federal Bank":        "https://www.fednetbank.com/",
+  "IndusInd Bank":       "https://www.indusnetbanking.com/",
+  "Bank of India":       "https://bankofindia.co.in/netbanking",
+  "UCO Bank":            "https://www.ucoonlinebanking.com/",
+  "Central Bank of India":"https://www.centralbankofindia.co.in/",
+  "Karnataka Bank":      "https://karnatakabanknet.in/",
+  "South Indian Bank":   "https://www.southindianbank.com/personal/digital-banking/net-banking/",
+  "Bandhan Bank":        "https://www.bandhanbank.com/personal/digital-banking/net-banking",
+  "RBL Bank":            "https://www.rblbank.com/digital-banking/net-banking",
+  "City Union Bank":     "https://www.cityunionbank.com/internet-banking",
+  "Karur Vysya Bank":    "https://www.kvbnet.co.in/",
+  "Tamilnad Mercantile Bank":"https://www.tmbnet.in/",
+  "Dhanlaxmi Bank":      "https://www.dhanbank.com/",
+};
+
+const WALLET_URLS: Record<string, string> = {
+  paytm:     "https://paytm.com/",
+  phonepe:   "https://web.phonepe.com/",
+  gpay:      "https://pay.google.com/",
+  mobikwik:  "https://www.mobikwik.com/",
+  freecharge:"https://www.freecharge.in/",
+  airtel:    "https://www.airtel.in/airtel-money",
+  jio:       "https://jiomoney.jio.com/",
+  ola:       "https://www.olamoney.com/",
+  amazon:    "https://www.amazon.in/b?node=14588614031",
+};
+
 const WALLETS = [
-  { id: "paytm",    name: "Paytm",        color: "#00b9f5" },
-  { id: "phonepe",  name: "PhonePe",      color: "#5f259f" },
-  { id: "gpay",     name: "Google Pay",   color: "#4285f4" },
-  { id: "mobikwik", name: "MobiKwik",     color: "#e81c5a" },
-  { id: "freecharge",name:"FreeCharge",   color: "#00b75a" },
-  { id: "airtel",   name: "Airtel Money", color: "#e40000" },
-  { id: "jio",      name: "Jio Money",    color: "#0a5ab4" },
-  { id: "ola",      name: "Ola Money",    color: "#ef6614" },
-  { id: "amazon",   name: "Amazon Pay",   color: "#ff9900" },
+  { id: "paytm",     name: "Paytm",        color: "#00b9f5", icon: "💙" },
+  { id: "phonepe",   name: "PhonePe",      color: "#5f259f", icon: "💜" },
+  { id: "gpay",      name: "Google Pay",   color: "#4285f4", icon: "🔵" },
+  { id: "mobikwik",  name: "MobiKwik",     color: "#e81c5a", icon: "❤️" },
+  { id: "freecharge",name: "FreeCharge",   color: "#00b75a", icon: "💚" },
+  { id: "airtel",    name: "Airtel Money", color: "#e40000", icon: "🔴" },
+  { id: "jio",       name: "Jio Money",    color: "#0a5ab4", icon: "🔷" },
+  { id: "ola",       name: "Ola Money",    color: "#ef6614", icon: "🟠" },
+  { id: "amazon",    name: "Amazon Pay",   color: "#ff9900", icon: "📦" },
 ];
 
 const PAY_METHODS = [
@@ -215,7 +255,6 @@ export default function EnrollPage() {
 
   /* ── Wallet ── */
   const [selWallet, setSelWallet]   = useState("");
-  const [walletMob, setWalletMob]   = useState("");
   const [walletError, setWalletError] = useState("");
 
   /* ── NEFT ── */
@@ -327,15 +366,18 @@ export default function EnrollPage() {
 
   function handleNetBankProceed() {
     if (!selectedBank) return;
+    const url = BANK_URLS[selectedBank]
+      ?? `https://www.google.com/search?q=${encodeURIComponent(selectedBank + " net banking login")}`;
+    window.open(url, "_blank", "noopener,noreferrer");
     setBankRedirecting(true);
-    setTimeout(() => { setBankRedirecting(false); handlePaymentSuccess(); }, 3000);
   }
 
   function handleWalletPay() {
     if (!selWallet) { setWalletError("Please select a wallet"); return; }
-    if (!/^[6-9]\d{9}$/.test(walletMob.replace(/\D/g, ""))) { setWalletError("Enter a valid 10-digit mobile number"); return; }
+    const url = WALLET_URLS[selWallet];
+    if (url) window.open(url, "_blank", "noopener,noreferrer");
     setWalletError("");
-    handlePaymentSuccess();
+    setBankRedirecting(true); // reuse waiting-screen state
   }
 
   /* ── Shared UI helpers ── */
@@ -736,10 +778,38 @@ export default function EnrollPage() {
           <div className={card} style={cardStyle}>
             {gatewayHeader("Net Banking")}
             {bankRedirecting ? (
-              <div className="flex flex-col items-center gap-4 py-8">
-                <Loader2 size={40} className="animate-spin" style={{ color: "#1d9e75" }} />
-                <p className="text-white font-bold">Connecting to {selectedBank}…</p>
-                <p className="text-sm" style={{ color: "#8aa3be" }}>You will be redirected to your bank&apos;s secure page.</p>
+              <div className="flex flex-col items-center gap-5 py-6 text-center">
+                <div className="w-16 h-16 rounded-full flex items-center justify-center"
+                  style={{ background: "rgba(29,158,117,0.12)", border: "2px solid rgba(29,158,117,0.35)" }}>
+                  <Landmark size={28} style={{ color: "#1d9e75" }} />
+                </div>
+                <div>
+                  <p className="text-white font-black text-lg">{selectedBank} opened</p>
+                  <p className="text-sm mt-1" style={{ color: "#b0c4d8" }}>
+                    Complete your payment of <strong style={{ color: "#1d9e75" }}>{fmt(total)}</strong> in the bank window.
+                  </p>
+                  <p className="text-xs mt-2" style={{ color: "#8aa3be" }}>
+                    Once payment is done, come back here and click the button below.
+                  </p>
+                </div>
+                <button
+                  onClick={() => window.open(
+                    BANK_URLS[selectedBank] ?? `https://www.google.com/search?q=${encodeURIComponent(selectedBank + " net banking login")}`,
+                    "_blank", "noopener,noreferrer"
+                  )}
+                  className="text-sm font-semibold flex items-center gap-1.5 transition-all hover:opacity-80"
+                  style={{ color: "#1d9e75" }}>
+                  ↗ Reopen bank window
+                </button>
+                <button onClick={handlePaymentSuccess}
+                  className="w-full py-3.5 rounded-xl font-black text-base text-white transition-all hover:opacity-90"
+                  style={{ background: "linear-gradient(135deg,#22c48a,#1d9e75)", boxShadow: "0 4px 20px rgba(29,158,117,0.35)" }}>
+                  ✓ Payment Done — Confirm Enrollment
+                </button>
+                <button onClick={() => setBankRedirecting(false)}
+                  className="text-sm transition-all hover:opacity-70" style={{ color: "#8aa3be" }}>
+                  ← Go back / choose different bank
+                </button>
               </div>
             ) : (
               <>
@@ -775,57 +845,96 @@ export default function EnrollPage() {
 
     /* ── UPI ── */
     if (payMethod === "upi") {
+      const upiPayee = "academy@geovisionpro";
+      const upiStr   = `upi://pay?pa=${upiPayee}&pn=GeoVisionPro%20Academy&am=${total}&cu=INR&tn=Course%20${encodeURIComponent(course.ref)}`;
+      const qrUrl    = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&color=1d9e75&bgcolor=0f2035&data=${encodeURIComponent(upiStr)}`;
+
+      const UPI_APPS = [
+        { name: "Google Pay",  link: `gpay://upi/pay?pa=${upiPayee}&pn=GeoVisionPro%20Academy&am=${total}&cu=INR&tn=Enrollment`,   fallback: upiStr },
+        { name: "PhonePe",     link: `phonepe://pay?pa=${upiPayee}&pn=GeoVisionPro%20Academy&am=${total}&cu=INR`,                   fallback: upiStr },
+        { name: "Paytm",       link: `paytmmp://pay?pa=${upiPayee}&pn=GeoVisionPro%20Academy&am=${total}&cu=INR`,                   fallback: upiStr },
+        { name: "BHIM / UPI",  link: upiStr,                                                                                        fallback: upiStr },
+      ];
+
+      function openUPIApp(link: string) {
+        window.location.href = link;
+        setTimeout(() => setUpiWaiting(true), 1500);
+      }
+
       return (
         <div>
           <div className={card} style={cardStyle}>
             {gatewayHeader("UPI Payment")}
             {upiWaiting ? (
-              <div className="flex flex-col items-center gap-4 py-6 text-center">
+              <div className="flex flex-col items-center gap-5 py-4 text-center">
                 <div className="relative">
                   <Loader2 size={48} className="animate-spin" style={{ color: "#1d9e75" }} />
-                  <div className="absolute inset-0 flex items-center justify-center text-xs font-bold" style={{ color: "#1d9e75" }}>
+                  <div className="absolute inset-0 flex items-center justify-center text-[10px] font-bold" style={{ color: "#1d9e75" }}>
                     {fmtTimer(upiTimer)}
                   </div>
                 </div>
                 <div>
-                  <p className="text-white font-bold text-lg">Waiting for payment…</p>
-                  <p className="text-sm mt-1" style={{ color: "#8aa3be" }}>Open your UPI app and approve the payment request</p>
-                  <p className="text-xs mt-1" style={{ color: "#8aa3be" }}>Sent to: <strong className="text-white">{upiId}</strong></p>
+                  <p className="text-white font-black text-lg">Waiting for UPI payment…</p>
+                  <p className="text-sm mt-1" style={{ color: "#b0c4d8" }}>
+                    Approve <strong style={{ color: "#1d9e75" }}>{fmt(total)}</strong> in your UPI app
+                  </p>
+                  <p className="text-xs mt-1" style={{ color: "#8aa3be" }}>Session expires in {fmtTimer(upiTimer)}</p>
                 </div>
-                <p className="text-xs" style={{ color: "#8aa3be" }}>Session expires in {fmtTimer(upiTimer)}</p>
+                <button onClick={handlePaymentSuccess}
+                  className="w-full py-3.5 rounded-xl font-black text-base text-white transition-all hover:opacity-90"
+                  style={{ background: "linear-gradient(135deg,#22c48a,#1d9e75)", boxShadow: "0 4px 20px rgba(29,158,117,0.35)" }}>
+                  ✓ Payment Done — Confirm Enrollment
+                </button>
+                <button onClick={() => setUpiWaiting(false)}
+                  className="text-sm transition-all hover:opacity-70" style={{ color: "#8aa3be" }}>
+                  ← Go back
+                </button>
               </div>
             ) : (
-              <>
-                <div className="space-y-4">
-                  <div>
-                    <Label req>UPI ID</Label>
-                    <div className="flex gap-2">
-                      <input className={inp} value={upiId} onChange={e => { setUpiId(e.target.value); setUpiVerified(null); setUpiError(""); }}
-                        placeholder="name@upi or 9XXXXXXXXX@paytm"
-                        style={{ ...inpStyle("upiId", upiVerified === true), flex: 1 }} />
-                      <button onClick={handleUPIVerify} disabled={upiVerifying || !upiId}
-                        className="px-4 rounded-xl text-xs font-bold flex-shrink-0 transition-all"
-                        style={{ background: "rgba(29,158,117,0.2)", color: "#1d9e75", border: "1px solid rgba(29,158,117,0.3)" }}>
-                        {upiVerifying ? <Loader2 size={12} className="animate-spin" /> : upiVerified ? "✓ Verified" : "Verify"}
-                      </button>
-                    </div>
-                    {upiError && <p className="text-xs mt-1" style={{ color: "#ef4444" }}>{upiError}</p>}
-                    {upiVerified && <p className="text-xs mt-1" style={{ color: "#1d9e75" }}>✓ UPI ID verified successfully</p>}
+              <div className="space-y-5">
+                {/* QR Code */}
+                <div className="flex flex-col items-center gap-3">
+                  <p className="text-xs font-semibold" style={{ color: "#8aa3be" }}>Scan QR with any UPI app</p>
+                  <div className="p-3 rounded-2xl" style={{ background: "#0f2035", border: "2px solid rgba(29,158,117,0.3)" }}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={qrUrl} alt="UPI QR Code" width={180} height={180} className="rounded-xl" />
                   </div>
-                  <div className="h-px" style={{ background: "rgba(255,255,255,0.06)" }} />
-                  <p className="text-xs font-semibold" style={{ color: "#8aa3be" }}>Or pay via UPI app</p>
-                  <div className="grid grid-cols-4 gap-2">
-                    {["Google Pay","PhonePe","Paytm","BHIM"].map(app => (
-                      <button key={app} onClick={() => { setUpiId(`demo@${app.toLowerCase().replace(/\s/g,"")}`); setUpiVerified(true); }}
-                        className="py-2.5 px-2 rounded-xl text-xs font-semibold text-center transition-all"
-                        style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)", color: "#b0c4d8" }}>
-                        {app}
+                  <div className="text-center">
+                    <p className="text-xs" style={{ color: "#8aa3be" }}>Pay to UPI ID</p>
+                    <p className="text-sm font-bold" style={{ color: "#1d9e75" }}>{upiPayee}</p>
+                    <p className="text-xs" style={{ color: "#8aa3be" }}>Amount: <strong className="text-white">{fmt(total)}</strong></p>
+                  </div>
+                </div>
+
+                <div className="h-px" style={{ background: "rgba(255,255,255,0.06)" }} />
+
+                {/* App buttons */}
+                <div>
+                  <p className="text-xs font-semibold mb-2" style={{ color: "#8aa3be" }}>Or open directly in your app</p>
+                  <div className="grid grid-cols-2 gap-2">
+                    {UPI_APPS.map(app => (
+                      <button key={app.name} onClick={() => openUPIApp(app.link)}
+                        className="py-3 px-3 rounded-xl text-sm font-bold text-left flex items-center gap-2 transition-all hover:opacity-90"
+                        style={{ background: "rgba(29,158,117,0.1)", border: "1px solid rgba(29,158,117,0.25)", color: "#1d9e75" }}>
+                        <Smartphone size={14} />
+                        {app.name}
                       </button>
                     ))}
                   </div>
                 </div>
-                {payBtn(`Pay ${fmt(total)} via UPI`, () => { if (!upiVerified) { setUpiError("Please verify your UPI ID first"); return; } setUpiWaiting(true); setUpiTimer(600); }, !upiVerified)}
-              </>
+
+                <div className="h-px" style={{ background: "rgba(255,255,255,0.06)" }} />
+
+                {/* Manual confirm */}
+                <button onClick={() => setUpiWaiting(true)}
+                  className="w-full py-3.5 rounded-xl font-black text-base text-white transition-all hover:opacity-90"
+                  style={{ background: "linear-gradient(135deg,#22c48a,#1d9e75)", boxShadow: "0 4px 20px rgba(29,158,117,0.35)" }}>
+                  I have paid via UPI →
+                </button>
+                <p className="text-center text-xs" style={{ color: "#8aa3be" }}>
+                  After paying, click above to confirm enrollment
+                </p>
+              </div>
             )}
           </div>
           {!upiWaiting && (
@@ -901,41 +1010,71 @@ export default function EnrollPage() {
 
     /* ── WALLET ── */
     if (payMethod === "wallet") {
+      const chosenWallet = WALLETS.find(w => w.id === selWallet);
       return (
         <div>
           <div className={card} style={cardStyle}>
             {gatewayHeader("Digital Wallet")}
-            <div className="space-y-4">
-              <p className="text-xs font-semibold" style={{ color: "#8aa3be" }}>Select Wallet</p>
-              <div className="grid grid-cols-3 gap-2">
-                {WALLETS.map(w => (
-                  <button key={w.id} onClick={() => setSelWallet(w.id)}
-                    className="py-3 px-2 rounded-xl text-xs font-bold text-center transition-all"
-                    style={{
-                      background: selWallet === w.id ? `${w.color}22` : "rgba(255,255,255,0.04)",
-                      border: `1px solid ${selWallet === w.id ? w.color : "rgba(255,255,255,0.08)"}`,
-                      color: selWallet === w.id ? w.color : "#b0c4d8",
-                    }}>
-                    {w.name}
-                  </button>
-                ))}
-              </div>
-              <div>
-                <Label req>Registered Mobile Number</Label>
-                <div className="flex gap-2">
-                  <span className="flex items-center px-3 rounded-xl text-sm font-bold flex-shrink-0"
-                    style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", color: "#b0c4d8" }}>+91</span>
-                  <input className={inp} type="tel" maxLength={10} value={walletMob}
-                    onChange={e => setWalletMob(e.target.value.replace(/\D/g,""))}
-                    placeholder="10-digit wallet number" style={{ ...inpStyle("walletMob", walletMob.length === 10), flex: 1 }} />
+            {bankRedirecting ? (
+              <div className="flex flex-col items-center gap-5 py-4 text-center">
+                <div className="w-14 h-14 rounded-full flex items-center justify-center text-2xl"
+                  style={{ background: chosenWallet ? `${chosenWallet.color}18` : "rgba(29,158,117,0.12)", border: `2px solid ${chosenWallet?.color ?? "#1d9e75"}44` }}>
+                  {chosenWallet?.icon ?? "💳"}
                 </div>
+                <div>
+                  <p className="text-white font-black text-lg">
+                    {chosenWallet?.name ?? "Wallet"} opened
+                  </p>
+                  <p className="text-sm mt-1" style={{ color: "#b0c4d8" }}>
+                    Complete payment of <strong style={{ color: "#1d9e75" }}>{fmt(total)}</strong> in the wallet app
+                  </p>
+                  <p className="text-xs mt-1" style={{ color: "#8aa3be" }}>Come back here after payment is done</p>
+                </div>
+                <button onClick={handlePaymentSuccess}
+                  className="w-full py-3.5 rounded-xl font-black text-base text-white transition-all hover:opacity-90"
+                  style={{ background: "linear-gradient(135deg,#22c48a,#1d9e75)", boxShadow: "0 4px 20px rgba(29,158,117,0.35)" }}>
+                  ✓ Payment Done — Confirm Enrollment
+                </button>
+                <button onClick={() => setBankRedirecting(false)}
+                  className="text-sm transition-all hover:opacity-70" style={{ color: "#8aa3be" }}>
+                  ← Go back
+                </button>
               </div>
-              {walletError && <p className="text-xs" style={{ color: "#ef4444" }}>{walletError}</p>}
-            </div>
-            {payBtn(`Pay ${fmt(total)} via ${selWallet ? WALLETS.find(w => w.id === selWallet)?.name : "Wallet"}`, handleWalletPay, !selWallet)}
+            ) : (
+              <div className="space-y-4">
+                <p className="text-xs font-semibold" style={{ color: "#8aa3be" }}>Select Wallet</p>
+                <div className="grid grid-cols-3 gap-2">
+                  {WALLETS.map(w => (
+                    <button key={w.id} onClick={() => setSelWallet(w.id)}
+                      className="py-3 px-2 rounded-xl text-xs font-bold text-center transition-all flex flex-col items-center gap-1"
+                      style={{
+                        background: selWallet === w.id ? `${w.color}22` : "rgba(255,255,255,0.04)",
+                        border: `1px solid ${selWallet === w.id ? w.color : "rgba(255,255,255,0.08)"}`,
+                        color: selWallet === w.id ? w.color : "#b0c4d8",
+                      }}>
+                      <span className="text-base">{w.icon}</span>
+                      {w.name}
+                    </button>
+                  ))}
+                </div>
+                {walletError && <p className="text-xs" style={{ color: "#ef4444" }}>{walletError}</p>}
+                {selWallet && (
+                  <p className="text-xs text-center" style={{ color: "#8aa3be" }}>
+                    You will be redirected to <strong className="text-white">{chosenWallet?.name}</strong> to complete payment
+                  </p>
+                )}
+                {payBtn(
+                  selWallet ? `Open ${chosenWallet?.name} & Pay ${fmt(total)}` : `Select a Wallet`,
+                  handleWalletPay,
+                  !selWallet
+                )}
+              </div>
+            )}
           </div>
-          <button onClick={() => setStep(3)} className="w-full text-sm py-2 rounded-xl transition-all hover:opacity-80"
-            style={{ color: "#8aa3be" }}>← Choose Different Method</button>
+          {!bankRedirecting && (
+            <button onClick={() => setStep(3)} className="w-full text-sm py-2 rounded-xl transition-all hover:opacity-80"
+              style={{ color: "#8aa3be" }}>← Choose Different Method</button>
+          )}
         </div>
       );
     }
