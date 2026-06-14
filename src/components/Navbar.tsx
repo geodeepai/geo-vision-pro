@@ -43,9 +43,9 @@ const NEWS_LINKS = [
 ];
 
 const LEARN_LINKS = [
-  { label: "GeoVisionPro Academy", href: "/#home" },
-  { label: "Tutorials",            href: "/resources/tutorials" },
-  { label: "Events",               href: "/events" },
+  { label: "GeoVisionPro Academy", href: "/learn/academy" },
+  { label: "Tutorials",            href: "/learn/tutorials" },
+  { label: "Events",               href: "/learn/events" },
 ];
 
 const NAV_LINKS = [

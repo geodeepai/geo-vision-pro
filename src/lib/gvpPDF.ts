@@ -183,7 +183,7 @@ function addHeader(doc: Doc, m: DocMeta) {
 }
 
 /* ── Page footer ─────────────────────────────────────────────────── */
-function addFooter(doc: Doc, page: number, total: number, ref: string) {
+function addFooter(doc: Doc, page: number, total: number, ref: string, entity = "GeoVisionPro") {
   const W = doc.internal.pageSize.getWidth();
   const H = doc.internal.pageSize.getHeight();
 
@@ -194,7 +194,7 @@ function addFooter(doc: Doc, page: number, total: number, ref: string) {
   doc.setFont("helvetica", "normal");
   doc.setFontSize(7);
   doc.text(`Page ${page} of ${total}`, 10, H - 4.5);
-  doc.text(`Ref: ${ref}  |  ${DATE_SHORT}  |  © 2026 GeoVisionPro`, W / 2, H - 4.5, { align: "center" });
+  doc.text(`Ref: ${ref}  |  ${DATE_SHORT}  |  © 2026 ${entity}`, W / 2, H - 4.5, { align: "center" });
   doc.text("www.geovisionpro.com", W - 10, H - 4.5, { align: "right" });
 }
 
@@ -1342,6 +1342,342 @@ export async function downloadMediaResource(name: string, filename: string, idx 
 
   addFooter(doc, 1, 1, ref);
   doc.save(`${ref}-${filename}`);
+}
+
+/* ── 11. Course Brochure ─────────────────────────────────────────── */
+export async function downloadCourseBrochure(
+  title: string, level: string, duration: string, fee: string,
+  modules: string[], content: string, certCode: string, idx: number
+) {
+  const JsPDF = await getJsPDF();
+  const doc   = new JsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
+  const W     = doc.internal.pageSize.getWidth();
+  const H     = doc.internal.pageSize.getHeight();
+  const ref   = refNo("CRS", idx);
+  const meta: DocMeta = {
+    ref, type: "Course Brochure",
+    left:  ["Course",    title.length > 33 ? title.substring(0, 33) + "…" : title],
+    right: [["Level", level], ["Duration", duration]],
+  };
+
+  /* Page 1 */
+  addHeader(doc, meta);
+  let y = CY;
+
+  setTextColor(doc, [10, 22, 40] as RGB);
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(15);
+  const tl = doc.splitTextToSize(title, W - 20);
+  doc.text(tl, 10, y);
+  y += tl.length * 7 + 2;
+
+  tagBadge(doc, level.toUpperCase(), 10, y);
+  setTextColor(doc, BODY_TXT);
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(8);
+  doc.text(`Fee: ${fee}  ·  Format: Online | Self-paced  ·  Certificate: Included`, 10 + doc.getTextWidth(level.toUpperCase()) + 14, y);
+  y += 10;
+  hr(doc, y, GREEN); y += 9;
+
+  y = secHead(doc, "About the Course", y);
+  setTextColor(doc, BODY_TXT);
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(9.5);
+  y = wrappedText(doc, content, 10, y, W - 20, 5.5);
+  y += 9;
+
+  if (y < H - 60) {
+    y = secHead(doc, "Learning Outcomes", y);
+    const outcomes = [
+      `Understand core concepts and real-world applications of ${title}.`,
+      "Apply spatial analysis and remote sensing techniques professionally.",
+      "Use industry-standard GIS and remote sensing software with confidence.",
+      "Interpret and visualise geographic data for informed decision-making.",
+      "Produce professional-quality maps, reports, and geospatial deliverables.",
+      "Complete a hands-on capstone project demonstrating full course proficiency.",
+    ];
+    setTextColor(doc, BODY_TXT);
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(9);
+    outcomes.forEach(o => {
+      if (y > H - 30) return;
+      y = wrappedText(doc, `✓  ${o}`, 14, y, W - 24, 5); y += 2.5;
+    });
+  }
+
+  addFooter(doc, 1, 2, ref, "GeoVisionPro Academy");
+
+  /* Page 2 */
+  doc.addPage();
+  addHeader(doc, meta);
+  y = CY;
+
+  y = secHead(doc, "Course Modules", y);
+  modules.forEach((mod, i) => {
+    if (y > H - 30) return;
+    setFill(doc, i % 2 === 0 ? (DARK as RGB) : ([8, 18, 34] as RGB));
+    doc.roundedRect(10, y - 3.5, W - 20, 8, 0.5, 0.5, "F");
+    setTextColor(doc, GREEN);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(7.5);
+    doc.text(String(i + 1).padStart(2, "0"), 14, y + 0.5);
+    setTextColor(doc, WHITE);
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(8.5);
+    doc.text(mod.replace(/^Module \d+\s*[–\-]\s*/, ""), 24, y + 0.5);
+    y += 10;
+  });
+  y += 5;
+
+  if (y < H - 55) {
+    y = secHead(doc, "Who Should Enroll", y);
+    [
+      "Students and graduates in geography, environmental science, or engineering.",
+      "GIS and remote sensing professionals seeking to upskill or earn credentials.",
+      "Government officials and researchers working with spatial or environmental data.",
+      "Industry professionals in agriculture, infrastructure, or disaster management.",
+    ].forEach(w => {
+      if (y > H - 35) return;
+      setTextColor(doc, BODY_TXT);
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(9);
+      y = wrappedText(doc, `•  ${w}`, 14, y, W - 24, 5); y += 2;
+    });
+    y += 7;
+  }
+
+  if (y < H - 40) {
+    setFill(doc, DARK);
+    doc.roundedRect(10, y, W - 20, 18, 2, 2, "F");
+    setFill(doc, GREEN);
+    doc.rect(10, y, 3, 18, "F");
+    setTextColor(doc, GREEN);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(9);
+    doc.text("Certificate of Completion", 17, y + 7);
+    setTextColor(doc, LIGHT);
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(8.5);
+    doc.text(`Certificate Code: ${certCode}`, 17, y + 13.5);
+    y += 24;
+  }
+
+  if (y < H - 20) {
+    setFill(doc, GREEN);
+    doc.roundedRect(10, y, W - 20, 12, 2, 2, "F");
+    setTextColor(doc, WHITE);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(9);
+    doc.text("Enroll: www.geovisionpro.com/academy  |  academy@geovisionpro.com", W / 2, y + 7.5, { align: "center" });
+  }
+
+  addFooter(doc, 2, 2, ref, "GeoVisionPro Academy");
+  doc.save(`${ref}.pdf`);
+}
+
+/* ── 12. Tutorial PDF ────────────────────────────────────────────── */
+export async function downloadTutorialPDF(
+  title: string, level: string, software: string,
+  steps: string[], issues: string[], idx: number
+) {
+  const JsPDF = await getJsPDF();
+  const doc   = new JsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
+  const W     = doc.internal.pageSize.getWidth();
+  const H     = doc.internal.pageSize.getHeight();
+  const ref   = refNo("TUT", idx);
+  const meta: DocMeta = {
+    ref, type: "Tutorial Guide",
+    left:  ["Software", software],
+    right: [["Level", level]],
+  };
+
+  addHeader(doc, meta);
+  let y = CY;
+  let page = 1;
+  const totalPages = 1;
+
+  tagBadge(doc, software.toUpperCase(), 10, y); y += 9;
+
+  setTextColor(doc, [10, 22, 40] as RGB);
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(14);
+  const tl = doc.splitTextToSize(title, W - 20);
+  doc.text(tl, 10, y);
+  y += tl.length * 6.5 + 3;
+
+  setTextColor(doc, [80, 110, 150] as RGB);
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(8);
+  doc.text(`Level: ${level}  ·  Software: ${software}  ·  GeoVisionPro Academy`, 10, y);
+  y += 9;
+  hr(doc, y, GREEN); y += 9;
+
+  y = secHead(doc, "Objective", y);
+  setTextColor(doc, BODY_TXT);
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(9.5);
+  y = wrappedText(doc,
+    `This step-by-step guide walks you through ${title.toLowerCase()}. By the end you will be able to apply this technique in your own GIS and remote sensing projects.`,
+    10, y, W - 20, 5.5);
+  y += 7;
+
+  y = secHead(doc, "Prerequisites", y);
+  setTextColor(doc, BODY_TXT);
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(9);
+  const prereqs = level === "Beginner"
+    ? ["No prior GIS experience required.", `${software} installed on your computer.`, "Basic computer literacy."]
+    : ["Basic GIS knowledge recommended.", `${software} installed and configured.`, "Sample dataset (download from geovisionpro.com/academy/resources)."];
+  prereqs.forEach(p => {
+    if (y > H - 30) return;
+    y = wrappedText(doc, `•  ${p}`, 14, y, W - 24, 5); y += 2;
+  });
+  y += 7;
+
+  y = secHead(doc, "Step-by-Step Instructions", y);
+  steps.forEach((step, i) => {
+    if (y > H - 28) return;
+    const stepText = step.replace(/^Step \d+\s*[–\-]\s*/, "");
+    const sw = doc.splitTextToSize(stepText, W - 34);
+    const rowH = Math.max(8, sw.length * 5 + 3);
+    setFill(doc, i % 2 === 0 ? (DARK as RGB) : ([8, 18, 34] as RGB));
+    doc.roundedRect(10, y - 3.5, W - 20, rowH, 0.5, 0.5, "F");
+    setTextColor(doc, GREEN);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(7.5);
+    doc.text(`${String(i + 1).padStart(2, "0")}`, 14, y + 0.5);
+    setTextColor(doc, WHITE);
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(8.5);
+    doc.text(sw, 22, y + 0.5);
+    y += rowH + 2;
+  });
+  y += 5;
+
+  if (issues.length > 0 && y < H - 45) {
+    y = secHead(doc, "Common Issues & Fixes", y);
+    issues.forEach(issue => {
+      if (y > H - 25) return;
+      setTextColor(doc, BODY_TXT);
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(9);
+      y = wrappedText(doc, `•  ${issue}`, 14, y, W - 24, 5); y += 2.5;
+    });
+    y += 5;
+  }
+
+  if (y < H - 22) {
+    hr(doc, y); y += 7;
+    setTextColor(doc, GREEN);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(8.5);
+    doc.text("More tutorials: www.geovisionpro.com/learn/tutorials  |  academy@geovisionpro.com", 10, y);
+  }
+
+  addFooter(doc, page, totalPages, ref, "GeoVisionPro Academy");
+  const slug = title.replace(/[^a-z0-9]/gi, "-").substring(0, 30);
+  doc.save(`${ref}-${slug}.pdf`);
+}
+
+/* ── 13. Certification Brochure ──────────────────────────────────── */
+export async function downloadCertBrochure(
+  title: string, courses: string, duration: string, fee: string, idx: number
+) {
+  const JsPDF = await getJsPDF();
+  const doc   = new JsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
+  const W     = doc.internal.pageSize.getWidth();
+  const H     = doc.internal.pageSize.getHeight();
+  const ref   = refNo("CERT", idx);
+
+  addHeader(doc, {
+    ref, type: "Certification Program",
+    left:  ["Duration", duration],
+    right: [["Fee", fee]],
+  });
+
+  let y = CY;
+
+  setTextColor(doc, [10, 22, 40] as RGB);
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(15);
+  const tl = doc.splitTextToSize(title, W - 20);
+  doc.text(tl, 10, y);
+  y += tl.length * 7 + 4;
+  hr(doc, y, GREEN); y += 9;
+
+  y = secHead(doc, "Program Overview", y);
+  setTextColor(doc, BODY_TXT);
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(9.5);
+  y = wrappedText(doc,
+    `The ${title} is GeoVisionPro Academy's professional certification program for geospatial practitioners. Completing this program demonstrates mastery of GIS concepts, advanced analytical techniques, and professional mapping standards. The certificate is recognised by leading GIS employers across India and is awarded upon passing all included courses.`,
+    10, y, W - 20, 5.5);
+  y += 9;
+
+  y = secHead(doc, "Included Courses", y);
+  const courseList = courses.split("+").map(c => c.trim()).filter(Boolean);
+  courseList.forEach((c, i) => {
+    if (y > H - 20) return;
+    setFill(doc, i % 2 === 0 ? (DARK as RGB) : ([8, 18, 34] as RGB));
+    doc.roundedRect(10, y - 3.5, W - 20, 8, 0.5, 0.5, "F");
+    setTextColor(doc, GREEN);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(8);
+    doc.text(`${i + 1}.`, 14, y + 0.5);
+    setTextColor(doc, WHITE);
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(8.5);
+    doc.text(c, 22, y + 0.5);
+    y += 10;
+  });
+  y += 7;
+
+  if (y < H - 80) {
+    y = secHead(doc, "Program Benefits", y);
+    [
+      "Professional credential recognised by leading Indian GIS employers and institutions.",
+      "Comprehensive coverage of theory, software proficiency, and practical fieldwork.",
+      "Lifetime access to all included course materials and future content updates.",
+      "One-on-one mentorship session with a GeoVisionPro domain expert.",
+      "Alumni network access and job placement assistance for graduates.",
+      "Digital certificate + physical copy shipped to your registered address.",
+    ].forEach(b => {
+      if (y > H - 20) return;
+      setTextColor(doc, BODY_TXT);
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(9);
+      y = wrappedText(doc, `✓  ${b}`, 14, y, W - 24, 5); y += 2;
+    });
+    y += 9;
+  }
+
+  if (y < H - 40) {
+    setFill(doc, DARK);
+    doc.roundedRect(10, y, W - 20, 20, 2, 2, "F");
+    setFill(doc, GREEN);
+    doc.rect(10, y, 3, 20, "F");
+    setTextColor(doc, WHITE);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(9.5);
+    doc.text(`Duration: ${duration}  ·  Fee: ${fee}`, 17, y + 8);
+    setTextColor(doc, LIGHT);
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(8.5);
+    doc.text("100% Online & Self-paced  ·  GeoVisionPro Academy Certificate Awarded", 17, y + 15);
+    y += 26;
+  }
+
+  if (y < H - 20) {
+    setFill(doc, GREEN);
+    doc.roundedRect(10, y, W - 20, 12, 2, 2, "F");
+    setTextColor(doc, WHITE);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(9);
+    doc.text("Enroll: www.geovisionpro.com/academy  |  academy@geovisionpro.com", W / 2, y + 7.5, { align: "center" });
+  }
+
+  addFooter(doc, 1, 1, ref, "GeoVisionPro Academy");
+  doc.save(`${ref}.pdf`);
 }
 
 /* ── ICS calendar file ───────────────────────────────────────────── */
