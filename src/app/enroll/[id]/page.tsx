@@ -265,6 +265,9 @@ export default function EnrollPage() {
   const [ddBank, setDDBank]         = useState("");
   const [ddDate, setDDDate]         = useState("");
 
+  /* ── Post-success redirect ── */
+  const [redirectCount, setRedirectCount] = useState(10);
+
   /* ── Corporate ── */
   const [corp, setCorp]             = useState({ company: "", gst: "", email: "", contact: "", seats: "1" });
 
@@ -293,9 +296,16 @@ export default function EnrollPage() {
 
   useEffect(() => {
     if (step !== 5) return;
-    const t = setTimeout(() => setStep(6), 2800);
+    const t = setTimeout(() => { setStep(6); setRedirectCount(10); }, 2800);
     return () => clearTimeout(t);
   }, [step]);
+
+  useEffect(() => {
+    if (step !== 6) return;
+    if (redirectCount <= 0) { router.push("/"); return; }
+    const t = setTimeout(() => setRedirectCount(c => c - 1), 1000);
+    return () => clearTimeout(t);
+  }, [step, redirectCount]);
 
   /* ── Handlers ── */
   function upd<K extends keyof StudentForm>(k: K, v: StudentForm[K]) {
@@ -364,12 +374,17 @@ export default function EnrollPage() {
     setTimeout(() => { setUpiVerifying(false); setUpiVerified(true); }, 1500);
   }
 
-  function handleNetBankProceed() {
-    if (!selectedBank) return;
-    const url = BANK_URLS[selectedBank]
-      ?? `https://www.google.com/search?q=${encodeURIComponent(selectedBank + " net banking login")}`;
+  function openBankLogin(bankName: string) {
+    const url = BANK_URLS[bankName]
+      ?? `https://www.google.com/search?q=${encodeURIComponent(bankName + " net banking login")}`;
+    setSelectedBank(bankName);
     window.open(url, "_blank", "noopener,noreferrer");
     setBankRedirecting(true);
+  }
+
+  function handleNetBankProceed() {
+    if (!selectedBank) return;
+    openBankLogin(selectedBank);
   }
 
   function handleWalletPay() {
@@ -813,27 +828,35 @@ export default function EnrollPage() {
               </div>
             ) : (
               <>
-                <p className="text-xs font-semibold mb-3" style={{ color: "#8aa3be" }}>Popular Banks</p>
+                <p className="text-xs font-semibold mb-1" style={{ color: "#8aa3be" }}>Click your bank to open its login page directly</p>
+                <p className="text-xs mb-3" style={{ color: "#566b82" }}>You will be redirected to the official bank website to log in and pay</p>
                 <div className="grid grid-cols-4 gap-2 mb-4">
                   {POPULAR_BANKS.map(b => (
-                    <button key={b.id} onClick={() => setSelectedBank(b.name)}
-                      className="py-3 px-2 rounded-xl text-center text-xs font-bold transition-all"
+                    <button key={b.id} onClick={() => openBankLogin(b.name)}
+                      className="py-3.5 px-2 rounded-xl text-center text-xs font-black transition-all hover:scale-105 hover:opacity-90 flex flex-col items-center gap-1"
                       style={{
-                        background: selectedBank === b.name ? "rgba(29,158,117,0.15)" : "rgba(255,255,255,0.04)",
-                        border: `1px solid ${selectedBank === b.name ? "#1d9e75" : "rgba(255,255,255,0.08)"}`,
-                        color: selectedBank === b.name ? "#1d9e75" : "#b0c4d8",
+                        background: "linear-gradient(135deg,rgba(29,158,117,0.12),rgba(29,158,117,0.06))",
+                        border: "1px solid rgba(29,158,117,0.28)",
+                        color: "#1d9e75",
                       }}>
+                      <Landmark size={14} style={{ color: "#1d9e75", opacity: 0.8 }} />
                       {b.short}
                     </button>
                   ))}
                 </div>
-                <p className="text-xs font-semibold mb-2" style={{ color: "#8aa3be" }}>All Banks</p>
-                <select className={sel} value={selectedBank} onChange={e => setSelectedBank(e.target.value)}
-                  style={{ background: "#0a1628", border: "1px solid rgba(255,255,255,0.1)", color: selectedBank ? "#fff" : "#8aa3be" }}>
-                  <option value="">Select your bank</option>
-                  {[...POPULAR_BANKS.map(b => b.name), ...ALL_BANKS].map(b => <option key={b}>{b}</option>)}
-                </select>
-                {payBtn("Proceed to Bank →", handleNetBankProceed, !selectedBank)}
+                <p className="text-xs font-semibold mb-2" style={{ color: "#8aa3be" }}>Other Banks</p>
+                <div className="flex gap-2">
+                  <select className={sel} value={selectedBank} onChange={e => setSelectedBank(e.target.value)}
+                    style={{ background: "#0a1628", border: "1px solid rgba(255,255,255,0.1)", color: selectedBank ? "#fff" : "#8aa3be", flex: 1 }}>
+                    <option value="">Select your bank</option>
+                    {ALL_BANKS.map(b => <option key={b}>{b}</option>)}
+                  </select>
+                  <button onClick={handleNetBankProceed} disabled={!selectedBank}
+                    className="px-4 rounded-xl text-xs font-black flex-shrink-0 transition-all hover:opacity-90 disabled:opacity-40"
+                    style={{ background: "linear-gradient(135deg,#22c48a,#1d9e75)", color: "#fff" }}>
+                    Open →
+                  </button>
+                </div>
               </>
             )}
           </div>
@@ -1337,8 +1360,22 @@ export default function EnrollPage() {
           <p>🖥 Access your course at <strong style={{ color: "#1d9e75" }}>portal.geovisionpro.com</strong></p>
         </div>
 
+        {/* Redirect countdown */}
+        <div className="rounded-xl p-3 mb-4 flex items-center justify-between gap-3"
+          style={{ background: "rgba(29,158,117,0.08)", border: "1px solid rgba(29,158,117,0.2)" }}>
+          <p className="text-xs" style={{ color: "#8aa3be" }}>
+            Returning to <strong className="text-white">GeoVisionPro</strong> in{" "}
+            <strong style={{ color: "#1d9e75" }}>{redirectCount}s</strong>…
+          </p>
+          <button onClick={() => router.push("/")}
+            className="text-xs font-black px-3 py-1.5 rounded-lg flex-shrink-0 transition-all hover:opacity-90"
+            style={{ background: "linear-gradient(135deg,#22c48a,#1d9e75)", color: "#fff" }}>
+            Go Now →
+          </button>
+        </div>
+
         <Link href="/learn/academy"
-          className="w-full block py-3.5 rounded-2xl font-black text-base text-white transition-all hover:opacity-90"
+          className="w-full block py-3.5 rounded-2xl font-black text-base text-white text-center transition-all hover:opacity-90"
           style={{ background: "linear-gradient(135deg,#22c48a,#1d9e75)", boxShadow: "0 4px 20px rgba(29,158,117,0.3)" }}>
           Explore More Courses →
         </Link>
