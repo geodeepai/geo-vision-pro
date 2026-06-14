@@ -471,7 +471,7 @@ export default function EnrollPage() {
             <div>
               <Label req>Full Name</Label>
               <input className={inp} value={form.name} onChange={e => upd("name", e.target.value)}
-                placeholder="As on Aadhaar / Passport" style={inpStyle("name")} />
+                placeholder="Enter your full name" style={inpStyle("name")} />
               <Err k="name" />
             </div>
 
