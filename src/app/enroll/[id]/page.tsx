@@ -117,7 +117,7 @@ function cardBrand(num: string) {
 
 /* ─── Student form type ─────────────────────────────────────────── */
 interface StudentForm {
-  name: string; email: string; mobile: string; dob: string; gender: string;
+  name: string; email: string; mobile: string;
   organization: string;
   city: string; state: string; pincode: string;
   hearAbout: string;
@@ -125,7 +125,7 @@ interface StudentForm {
 }
 
 const FORM_INIT: StudentForm = {
-  name: "", email: "", mobile: "", dob: "", gender: "",
+  name: "", email: "", mobile: "",
   organization: "",
   city: "", state: "", pincode: "",
   hearAbout: "",
@@ -281,8 +281,6 @@ export default function EnrollPage() {
       e.email = "Enter a valid email address";
     if (!form.mobile || !/^[6-9]\d{9}$/.test(form.mobile.replace(/\D/g, "")))
       e.mobile = "Enter a valid 10-digit Indian mobile number";
-    if (!form.dob)            e.dob        = "Date of birth is required";
-    if (!form.gender)         e.gender     = "Please select your gender";
     if (!form.city.trim())    e.city       = "Enter your city";
     if (!form.state)          e.state      = "Please select your state";
     if (!form.pincode.trim() || form.pincode.trim().length < 4) e.pincode = "Enter a valid postal / ZIP code";
@@ -462,9 +460,6 @@ export default function EnrollPage() {
           <h2 className="text-white font-black text-xl mb-5">Your Details</h2>
 
           <div className="space-y-4">
-            {/* Personal */}
-            <p className="text-xs font-black uppercase tracking-widest" style={{ color: "#1d9e75" }}>Personal Information</p>
-
             <div>
               <Label req>Full Name</Label>
               <input className={inp} value={form.name} onChange={e => upd("name", e.target.value)}
@@ -489,23 +484,6 @@ export default function EnrollPage() {
                     placeholder="10-digit number" style={{ ...inpStyle("mobile"), flex: 1 }} />
                 </div>
                 <Err k="mobile" />
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <Label req>Date of Birth</Label>
-                <input className={inp} type="date" value={form.dob} onChange={e => upd("dob", e.target.value)}
-                  style={inpStyle("dob")} />
-                <Err k="dob" />
-              </div>
-              <div>
-                <Label req>Gender</Label>
-                <select className={sel} value={form.gender} onChange={e => upd("gender", e.target.value)} style={selStyle("gender")}>
-                  <option value="">Select gender</option>
-                  <option>Male</option><option>Female</option><option>Non-binary</option><option>Prefer not to say</option>
-                </select>
-                <Err k="gender" />
               </div>
             </div>
 
