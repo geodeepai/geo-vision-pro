@@ -1,99 +1,219 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ArrowLeft, GraduationCap, BookOpen, CalendarDays, Home } from "lucide-react";
+import { GraduationCap, BookOpen, CalendarDays, ChevronRight, ArrowUpRight } from "lucide-react";
 
 const LEARN_NAV = [
-  { label: "Academy",   href: "/learn/academy",   Icon: GraduationCap },
-  { label: "Tutorials", href: "/learn/tutorials", Icon: BookOpen       },
-  { label: "Events",    href: "/learn/events",    Icon: CalendarDays   },
+  {
+    label: "Academy",
+    href:  "/learn/academy",
+    Icon:  GraduationCap,
+    desc:  "Courses & Certifications",
+    color: "#1d9e75",
+  },
+  {
+    label: "Tutorials",
+    href:  "/learn/tutorials",
+    Icon:  BookOpen,
+    desc:  "Step-by-step guides",
+    color: "#3b82f6",
+  },
+  {
+    label: "Events",
+    href:  "/learn/events",
+    Icon:  CalendarDays,
+    desc:  "Workshops & Conferences",
+    color: "#8b5cf6",
+  },
 ];
 
+/* ── Inline GeoVisionPro logo mark ──────────────────────────────── */
+function LogoMark({ size = 28 }: { size?: number }) {
+  return (
+    <div
+      style={{
+        width:        size,
+        height:       size,
+        borderRadius: size * 0.3,
+        background:   "linear-gradient(135deg,#3b82f6,#4f46e5)",
+        display:      "flex",
+        alignItems:   "center",
+        justifyContent: "center",
+        flexShrink:   0,
+        boxShadow:    "0 0 12px rgba(59,130,246,0.35)",
+      }}
+    >
+      <svg viewBox="0 0 24 24" fill="none" style={{ width: size * 0.56, height: size * 0.56 }}>
+        <circle cx="12" cy="12" r="9" stroke="white" strokeWidth="1.6" />
+        <path d="M4 12 Q8 6 12 12 Q16 18 20 12" stroke="white" strokeWidth="1.8" fill="none" strokeLinecap="round" />
+        <circle cx="12" cy="12" r="2.2" fill="white" />
+      </svg>
+    </div>
+  );
+}
+
+/* ══════════════════════════════════════════════════════════════════ */
 export default function LearnLayout({ children }: { children: React.ReactNode }) {
-  const path = usePathname();
+  const path   = usePathname();
   const active = LEARN_NAV.find(n => path.startsWith(n.href));
 
   return (
     <>
-      {/* Spacer for the fixed main Navbar (h-16 = 64px) */}
+      {/* Spacer for fixed main Navbar (h-16 = 64 px) */}
       <div className="h-16" aria-hidden="true" />
 
-      {/* ── Learn sub-header ── */}
+      {/* ══ Premium Learn sub-header ══ */}
       <nav
         className="sticky top-16 z-40"
         style={{
-          background:    "rgba(10,22,40,0.97)",
-          borderBottom:  "1px solid rgba(29,158,117,0.22)",
-          backdropFilter:"blur(18px)",
-          WebkitBackdropFilter: "blur(18px)",
+          background:          "linear-gradient(180deg,rgba(8,18,35,0.98) 0%,rgba(10,22,40,0.96) 100%)",
+          backdropFilter:      "blur(24px) saturate(180%)",
+          WebkitBackdropFilter:"blur(24px) saturate(180%)",
+          borderBottom:        "1px solid transparent",
+          /* layered borders: faint white top + green bottom via box-shadow */
+          boxShadow:           "inset 0 1px 0 rgba(255,255,255,0.06), 0 1px 0 rgba(29,158,117,0.28), 0 4px 24px rgba(0,0,0,0.4)",
         }}
       >
-        <div className="max-w-7xl mx-auto px-4 h-12 flex items-center gap-0">
+        {/* Green glow gradient line at very bottom */}
+        <div
+          aria-hidden="true"
+          style={{
+            position:   "absolute",
+            bottom:     0,
+            left:       "50%",
+            transform:  "translateX(-50%)",
+            width:      "60%",
+            height:     "1px",
+            background: "linear-gradient(90deg,transparent,rgba(29,158,117,0.7),transparent)",
+            pointerEvents: "none",
+          }}
+        />
 
-          {/* ── Back to main site ── */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-14 flex items-center gap-0">
+
+          {/* ── Brand / Back link ── */}
           <Link
             href="/"
-            className="flex items-center gap-2 pr-4 mr-4 flex-shrink-0 transition-all group"
-            style={{
-              color:       "#b0c4d8",
-              borderRight: "1px solid rgba(255,255,255,0.08)",
-            }}
-            onMouseEnter={e => (e.currentTarget.style.color = "#fff")}
-            onMouseLeave={e => (e.currentTarget.style.color = "#b0c4d8")}
+            className="group flex items-center gap-2.5 pr-5 mr-5 flex-shrink-0 transition-all duration-200"
+            style={{ borderRight: "1px solid rgba(255,255,255,0.07)" }}
           >
-            <ArrowLeft size={15} className="group-hover:-translate-x-0.5 transition-transform duration-150" />
-            <Home size={13} className="opacity-70" />
-            <span className="text-sm font-semibold hidden sm:inline">Main Site</span>
-            <span className="text-sm font-semibold sm:hidden">Home</span>
+            <LogoMark size={28} />
+            <div className="hidden sm:block leading-none">
+              <span
+                className="text-[13px] font-black tracking-tight transition-colors duration-200 group-hover:text-white"
+                style={{ color: "#d4e2f0" }}
+              >
+                GeoVision<span style={{ color: "#3b82f6" }}>Pro</span>
+              </span>
+              <div className="flex items-center gap-0.5 mt-0.5">
+                <span className="text-[9px] font-semibold uppercase tracking-widest transition-colors duration-200"
+                  style={{ color: "rgba(255,255,255,0.28)" }}>
+                  Main Site
+                </span>
+                <ArrowUpRight size={8} style={{ color: "rgba(255,255,255,0.25)" }}
+                  className="group-hover:text-[#1d9e75] group-hover:-translate-y-px group-hover:translate-x-px transition-all duration-150" />
+              </div>
+            </div>
           </Link>
 
-          {/* ── Breadcrumb (md+) ── */}
-          <div className="hidden md:flex items-center gap-1.5 mr-4 flex-shrink-0 text-xs"
-            style={{ color: "#8aa3be" }}>
-            <span className="font-semibold text-white">Learn</span>
+          {/* ── "Learn" label + breadcrumb (md+) ── */}
+          <div className="hidden md:flex items-center gap-1.5 mr-5 flex-shrink-0">
+            <span
+              className="text-[11px] font-black uppercase tracking-[0.14em] px-2 py-0.5 rounded-md"
+              style={{
+                background: "rgba(29,158,117,0.12)",
+                border:     "1px solid rgba(29,158,117,0.22)",
+                color:      "#1d9e75",
+              }}
+            >
+              Learn
+            </span>
             {active && (
               <>
-                <span style={{ color: "rgba(255,255,255,0.25)" }}>›</span>
-                <span style={{ color: "#1d9e75" }} className="font-semibold">{active.label}</span>
+                <ChevronRight size={12} style={{ color: "rgba(255,255,255,0.2)" }} />
+                <span
+                  className="text-[12px] font-bold"
+                  style={{ color: active.color }}
+                >
+                  {active.label}
+                </span>
               </>
             )}
           </div>
-          <div className="hidden md:block w-px h-5 mr-4 flex-shrink-0"
-            style={{ background: "rgba(255,255,255,0.08)" }} />
 
-          {/* ── Section links ── */}
-          <div className="flex items-center gap-0.5 overflow-x-auto" style={{ scrollbarWidth: "none" }}>
-            {LEARN_NAV.map(({ label, href, Icon }) => {
+          {/* vertical rule */}
+          <div className="hidden md:block w-px h-6 mr-5 flex-shrink-0"
+            style={{ background: "linear-gradient(180deg,transparent,rgba(255,255,255,0.1),transparent)" }} />
+
+          {/* ── Section tabs ── */}
+          <div
+            className="flex items-center gap-1 overflow-x-auto"
+            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+          >
+            {LEARN_NAV.map(({ label, href, Icon, desc, color }) => {
               const isActive = path.startsWith(href);
               return (
                 <Link
                   key={href}
                   href={href}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold whitespace-nowrap transition-all duration-150 relative"
+                  className="group relative flex items-center gap-2 px-3.5 py-2 rounded-xl whitespace-nowrap transition-all duration-200"
                   style={{
-                    color:      isActive ? "#1d9e75" : "#b0c4d8",
-                    background: isActive ? "rgba(29,158,117,0.1)" : "transparent",
+                    background: isActive
+                      ? `${color}18`
+                      : "transparent",
+                    border: isActive
+                      ? `1px solid ${color}35`
+                      : "1px solid transparent",
                   }}
                   onMouseEnter={e => {
                     if (!isActive) {
-                      e.currentTarget.style.color      = "#fff";
                       e.currentTarget.style.background = "rgba(255,255,255,0.05)";
+                      e.currentTarget.style.border     = "1px solid rgba(255,255,255,0.08)";
                     }
                   }}
                   onMouseLeave={e => {
                     if (!isActive) {
-                      e.currentTarget.style.color      = "#b0c4d8";
                       e.currentTarget.style.background = "transparent";
+                      e.currentTarget.style.border     = "1px solid transparent";
                     }
                   }}
                 >
-                  <Icon size={13} />
-                  {label}
-                  {/* Active underline */}
+                  {/* Icon bubble */}
+                  <div
+                    className="flex-shrink-0 w-6 h-6 rounded-lg flex items-center justify-center transition-all duration-200"
+                    style={{
+                      background: isActive ? `${color}22` : "rgba(255,255,255,0.06)",
+                      border:     isActive ? `1px solid ${color}44` : "1px solid rgba(255,255,255,0.08)",
+                    }}
+                  >
+                    <Icon
+                      size={12}
+                      style={{ color: isActive ? color : "#8aa3be" }}
+                      className="transition-colors duration-200 group-hover:text-white"
+                    />
+                  </div>
+
+                  {/* Label */}
+                  <div className="leading-none">
+                    <p
+                      className="text-[13px] font-bold leading-none transition-colors duration-200"
+                      style={{ color: isActive ? "#fff" : "#b0c4d8" }}
+                    >
+                      {label}
+                    </p>
+                    <p
+                      className="text-[9px] mt-0.5 hidden sm:block transition-colors duration-200"
+                      style={{ color: isActive ? color : "rgba(255,255,255,0.28)" }}
+                    >
+                      {desc}
+                    </p>
+                  </div>
+
+                  {/* Active bottom accent line */}
                   {isActive && (
                     <span
-                      className="absolute bottom-0 left-3 right-3 h-[2px] rounded-full"
-                      style={{ background: "#1d9e75" }}
+                      className="absolute bottom-0 left-3.5 right-3.5 h-[2px] rounded-full"
+                      style={{ background: `linear-gradient(90deg,transparent,${color},transparent)` }}
                     />
                   )}
                 </Link>
@@ -101,17 +221,29 @@ export default function LearnLayout({ children }: { children: React.ReactNode })
             })}
           </div>
 
-          {/* ── Right: academy CTA (lg+) ── */}
-          <div className="ml-auto flex-shrink-0 hidden lg:flex items-center gap-3">
-            <span className="text-xs" style={{ color: "#8aa3be" }}>
-              10,000+ students enrolled
-            </span>
+          {/* ── Right: stat pill + CTA ── */}
+          <div className="ml-auto flex-shrink-0 hidden lg:flex items-center gap-3 pl-4"
+            style={{ borderLeft: "1px solid rgba(255,255,255,0.07)" }}>
+
+            {/* Live stat */}
+            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full"
+              style={{ background: "rgba(29,158,117,0.08)", border: "1px solid rgba(29,158,117,0.18)" }}>
+              <span className="w-1.5 h-1.5 rounded-full bg-[#1d9e75] animate-pulse flex-shrink-0" />
+              <span className="text-[11px] font-bold" style={{ color: "#1d9e75" }}>10,000+</span>
+              <span className="text-[11px]" style={{ color: "#8aa3be" }}>enrolled</span>
+            </div>
+
+            {/* CTA */}
             <Link
               href="/learn/academy"
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-white transition-all hover:opacity-90"
-              style={{ background: "#1d9e75" }}
+              className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-[12px] font-black text-white transition-all duration-200 hover:opacity-90 hover:-translate-y-px"
+              style={{
+                background: "linear-gradient(135deg,#1d9e75,#16856200)",
+                backgroundImage: "linear-gradient(135deg,#22c48a,#1d9e75)",
+                boxShadow:  "0 2px 12px rgba(29,158,117,0.35), inset 0 1px 0 rgba(255,255,255,0.15)",
+              }}
             >
-              <GraduationCap size={12} />
+              <GraduationCap size={13} />
               Enroll Now
             </Link>
           </div>
