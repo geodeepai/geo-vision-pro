@@ -352,7 +352,7 @@ export default function AcademyPage() {
                     Details
                   </button>
                   <Link href={`/enroll/${course.id}`}
-                    className="col-span-1 py-2 rounded-lg text-xs font-bold text-white transition-all text-center"
+                    className="col-span-1 py-2 rounded-lg text-xs font-bold text-white transition-all text-center block"
                     style={{ background: "#1d9e75" }}>
                     Enroll
                   </Link>

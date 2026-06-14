@@ -279,8 +279,8 @@ export default function EnrollPage() {
       e.name = "Enter your full name (min 3 characters)";
     if (!form.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email))
       e.email = "Enter a valid email address";
-    if (!form.mobile || !/^[6-9]\d{9}$/.test(form.mobile.replace(/\D/g, "")))
-      e.mobile = "Enter a valid 10-digit Indian mobile number";
+    if (!form.mobile || form.mobile.replace(/\D/g, "").length < 6)
+      e.mobile = "Enter a valid phone number";
     if (!form.city.trim())    e.city       = "Enter your city";
     if (!form.state)          e.state      = "Please select your state";
     if (!form.pincode.trim() || form.pincode.trim().length < 4) e.pincode = "Enter a valid postal / ZIP code";
@@ -475,14 +475,10 @@ export default function EnrollPage() {
                 <Err k="email" />
               </div>
               <div>
-                <Label req>Mobile Number</Label>
-                <div className="flex gap-2">
-                  <span className="flex items-center px-3 rounded-xl text-sm font-bold flex-shrink-0"
-                    style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", color: "#b0c4d8" }}>+91</span>
-                  <input className={inp} type="tel" maxLength={10} value={form.mobile}
-                    onChange={e => upd("mobile", e.target.value.replace(/\D/g, ""))}
-                    placeholder="10-digit number" style={{ ...inpStyle("mobile"), flex: 1 }} />
-                </div>
+                <Label req>Phone Number</Label>
+                <input className={inp} type="tel" value={form.mobile}
+                  onChange={e => upd("mobile", e.target.value)}
+                  placeholder="+1 234 567 8900" style={inpStyle("mobile")} />
                 <Err k="mobile" />
               </div>
             </div>
@@ -1302,7 +1298,7 @@ export default function EnrollPage() {
           </div>
 
           <p className="text-sm mb-4" style={{ color: "#b0c4d8" }}>
-            OTP sent to your registered mobile <strong className="text-white">+91 XXXXXX{form.mobile.slice(-4)}</strong>
+            OTP sent to your registered mobile ending in <strong className="text-white">••••{form.mobile.replace(/\D/g,"").slice(-4)}</strong>
           </p>
 
           <div className="flex gap-2 justify-center mb-2">
