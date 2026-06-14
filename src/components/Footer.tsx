@@ -11,7 +11,7 @@ const footerLinks = {
   ],
   "Quick Links": [
     "About Us", "Our Process", "Contact",
-    "Privacy Policy", "Terms & Conditions", "Careers",
+    "Privacy Policy", "Careers",
   ],
 };
 
@@ -19,6 +19,7 @@ const anchors: Record<string, string> = {
   "About Us": "#about",
   "Our Process": "#process",
   Contact: "#contact",
+
 };
 
 export default function Footer() {
@@ -37,7 +38,7 @@ export default function Footer() {
                 </svg>
               </div>
               <span className="text-white font-bold text-lg">
-                GeoVision<span className="text-blue-400">Pro</span>
+                GeoVision<span className="text-blue-500">Pro</span>
               </span>
             </a>
             <p className="text-slate-400 text-sm leading-relaxed mb-5">

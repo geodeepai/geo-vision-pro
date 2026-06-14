@@ -108,7 +108,7 @@ function SiteNavDrawer({ open, onClose }: { open: boolean; onClose: () => void }
                   </svg>
                 </div>
                 <span className="font-bold text-slate-900" style={{ fontSize: 17 }}>
-                  GeoVision<span className="text-blue-600">Pro</span>
+                  GeoVision<span className="text-blue-500">Pro</span>
                 </span>
               </a>
               <button
@@ -312,10 +312,8 @@ export default function ServiceTopBar({ color, gradientTo, title, navLinks }: Pr
 
           {/* ── Brand mark ── */}
           <div className="flex items-center gap-2.5 flex-shrink-0">
-            <div
-              className="w-8 h-8 rounded-xl flex items-center justify-center shadow-md"
-              style={{ background: `linear-gradient(135deg,${color},${gradientTo})`, boxShadow: `0 3px 12px ${color}55` }}
-            >
+            <div className="w-8 h-8 rounded-xl flex items-center justify-center shadow-md shadow-blue-200/50"
+              style={{ background: "linear-gradient(135deg,#3b82f6,#4f46e5)" }}>
               <svg viewBox="0 0 24 24" fill="none" className="w-4 h-4">
                 <circle cx="12" cy="12" r="9" stroke="white" strokeWidth="1.5" />
                 <path d="M4 12 Q8 6 12 12 Q16 18 20 12" stroke="white" strokeWidth="1.8" fill="none" strokeLinecap="round" />
@@ -323,7 +321,9 @@ export default function ServiceTopBar({ color, gradientTo, title, navLinks }: Pr
               </svg>
             </div>
             <div className="hidden sm:block">
-              <p className="font-black leading-none" style={{ fontSize: 14, color: "#0f172a" }}>GeoVision Pro</p>
+              <p className="font-black leading-none" style={{ fontSize: 14, color: "#0f172a" }}>
+                GeoVision<span style={{ color: "#3b82f6" }}>Pro</span>
+              </p>
               <p className="font-semibold leading-none mt-0.5 truncate max-w-[180px]" style={{ fontSize: 11, color }}>
                 {title}
               </p>
