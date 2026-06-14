@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import Link from "next/link";
 import { downloadCourseBrochure, downloadCertBrochure } from "@/lib/gvpPDF";
 
 /* ── Types ───────────────────────────────────────────────────────── */
@@ -350,10 +351,11 @@ export default function AcademyPage() {
                     style={{ background: "rgba(29,158,117,0.12)", color: "#1d9e75", border: "1px solid rgba(29,158,117,0.25)" }}>
                     Details
                   </button>
-                  <button className="col-span-1 py-2 rounded-lg text-xs font-bold text-white transition-all"
+                  <Link href={`/enroll/${course.id}`}
+                    className="col-span-1 py-2 rounded-lg text-xs font-bold text-white transition-all text-center"
                     style={{ background: "#1d9e75" }}>
                     Enroll
-                  </button>
+                  </Link>
                   <button
                     onClick={() => downloadCourseBrochure(
                       course.title, course.level, `${course.weeks} Weeks | ${course.hours} Hours`,
@@ -399,9 +401,11 @@ export default function AcademyPage() {
                   <span className="font-black text-white text-base">{c.fee}</span>
                 </div>
                 <div className="grid grid-cols-2 gap-2 mt-auto">
-                  <button className="py-2 rounded-lg text-xs font-bold text-white" style={{ background: "#1d9e75" }}>
+                  <Link href="/learn/academy#courses"
+                    className="py-2 rounded-lg text-xs font-bold text-white text-center block"
+                    style={{ background: "#1d9e75" }}>
                     Enroll Now
-                  </button>
+                  </Link>
                   <button
                     onClick={() => downloadCertBrochure(c.title, c.courses, c.duration, c.fee, c.id)}
                     className="py-2 rounded-lg text-xs font-bold transition-all"
@@ -481,9 +485,11 @@ export default function AcademyPage() {
             {/* Modal footer */}
             <div className="sticky bottom-0 px-6 py-4 flex gap-3"
               style={{ background: "#0f2035", borderTop: "1px solid rgba(255,255,255,0.07)" }}>
-              <button className="flex-1 py-2.5 rounded-xl font-bold text-sm text-white" style={{ background: "#1d9e75" }}>
+              <Link href={`/enroll/${modal.id}`}
+                className="flex-1 py-2.5 rounded-xl font-bold text-sm text-white text-center block"
+                style={{ background: "#1d9e75" }}>
                 Enroll Now
-              </button>
+              </Link>
               <button
                 onClick={() => downloadCourseBrochure(
                   modal.title, modal.level, `${modal.weeks} Weeks | ${modal.hours} Hours`,

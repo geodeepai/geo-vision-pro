@@ -1680,6 +1680,294 @@ export async function downloadCertBrochure(
   doc.save(`${ref}.pdf`);
 }
 
+/* ── 14. Payment Receipt ─────────────────────────────────────────── */
+export interface ReceiptData {
+  receiptNo: string;
+  enrollmentId: string;
+  transactionId: string;
+  studentName: string;
+  studentEmail: string;
+  studentMobile: string;
+  studentCity: string;
+  studentState: string;
+  courseName: string;
+  courseRef: string;
+  courseLevel: string;
+  courseDuration: string;
+  courseBatch: string;
+  fee: number;
+  gst: number;
+  discount: number;
+  total: number;
+  paymentMethod: string;
+  paymentDate: string;
+}
+
+export async function downloadPaymentReceipt(data: ReceiptData) {
+  const JsPDF = await getJsPDF();
+  const doc   = new JsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
+  const W     = doc.internal.pageSize.getWidth();
+  const H     = doc.internal.pageSize.getHeight();
+
+  addHeader(doc, {
+    ref:   data.receiptNo,
+    type:  "Payment Receipt",
+    left:  ["Student",   data.studentName],
+    right: [
+      ["Enrollment ID", data.enrollmentId],
+      ["Payment Date",  data.paymentDate],
+    ],
+  });
+
+  let y = CY;
+
+  tagBadge(doc, "PAYMENT RECEIPT", 10, y);
+  tagBadge(doc, "PAID",            75, y);
+  y += 10;
+
+  /* Success strip */
+  setFill(doc, [10, 48, 35] as RGB);
+  doc.roundedRect(10, y, W - 20, 13, 2, 2, "F");
+  setFill(doc, GREEN);
+  doc.rect(10, y, 3, 13, "F");
+  setTextColor(doc, GREEN);
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(10);
+  doc.text("✓  Payment Successful", 17, y + 5);
+  setTextColor(doc, LIGHT);
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(8);
+  doc.text(`Txn ID: ${data.transactionId}   ·   Method: ${data.paymentMethod}`, 17, y + 10.5);
+  y += 19;
+
+  /* Two-column info boxes */
+  const colW = (W - 30) / 2;
+
+  /* Left: Student info */
+  y = secHead(doc, "Student Information", y);
+  setFill(doc, META_BG);
+  doc.roundedRect(10, y, colW, 32, 1.5, 1.5, "F");
+  const sRows: [string, string][] = [
+    ["Name",   data.studentName],
+    ["Email",  data.studentEmail],
+    ["Mobile", data.studentMobile],
+    ["City",   `${data.studentCity}, ${data.studentState}`],
+  ];
+  sRows.forEach(([lbl, val], i) => {
+    setTextColor(doc, META_LBL);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(7.5);
+    doc.text(`${lbl}:`, 14, y + 7 + i * 7);
+    setTextColor(doc, NAVY);
+    doc.setFont("helvetica", "normal");
+    const v = val.length > 26 ? val.substring(0, 26) + "…" : val;
+    doc.text(v, 30, y + 7 + i * 7);
+  });
+
+  /* Right: Course info */
+  const cx = 10 + colW + 10;
+  setFill(doc, DARK);
+  doc.roundedRect(cx, y, colW, 32, 1.5, 1.5, "F");
+  const cRows: [string, string][] = [
+    ["Course", data.courseName.length > 24 ? data.courseName.substring(0, 24) + "…" : data.courseName],
+    ["Ref",    data.courseRef],
+    ["Level",  data.courseLevel],
+    ["Batch",  data.courseBatch],
+  ];
+  cRows.forEach(([lbl, val], i) => {
+    setTextColor(doc, LIGHT);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(7.5);
+    doc.text(`${lbl}:`, cx + 4, y + 7 + i * 7);
+    setTextColor(doc, WHITE);
+    doc.setFont("helvetica", "normal");
+    doc.text(val, cx + 20, y + 7 + i * 7);
+  });
+  y += 38;
+
+  /* Amount breakdown */
+  y = secHead(doc, "Payment Breakdown", y);
+  const amtRows: [string, string, boolean][] = [
+    ["Course Fee",           `INR ${data.fee.toLocaleString("en-IN")}`,      false],
+    ["GST @ 18%",            `INR ${data.gst.toLocaleString("en-IN")}`,      false],
+    ...(data.discount > 0
+      ? [["Discount Applied", `- INR ${data.discount.toLocaleString("en-IN")}`, false] as [string, string, boolean]]
+      : []),
+    ["Total Amount Paid",    `INR ${data.total.toLocaleString("en-IN")}`,    true],
+  ];
+  amtRows.forEach(([lbl, val, bold], i) => {
+    const rowY = y + i * 9;
+    if (bold) {
+      setFill(doc, [10, 48, 35] as RGB);
+      doc.roundedRect(10, rowY - 4.5, W - 20, 10, 1.5, 1.5, "F");
+      setFill(doc, GREEN);
+      doc.rect(10, rowY - 4.5, 3, 10, "F");
+    } else {
+      setFill(doc, i % 2 === 0 ? META_BG : ([230, 240, 250] as RGB));
+      doc.rect(10, rowY - 4.5, W - 20, 9, "F");
+    }
+    setTextColor(doc, bold ? WHITE : BODY_TXT);
+    doc.setFont("helvetica", bold ? "bold" : "normal");
+    doc.setFontSize(9);
+    doc.text(lbl, bold ? 17 : 15, rowY);
+    doc.text(val, W - 15, rowY, { align: "right" });
+  });
+  y += amtRows.length * 9 + 8;
+
+  /* Note */
+  if (y < H - 35) {
+    setFill(doc, META_BG);
+    doc.roundedRect(10, y, W - 20, 18, 2, 2, "F");
+    setTextColor(doc, META_LBL);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(8);
+    doc.text("Note:", 14, y + 6);
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(8);
+    const note = "Please retain this receipt for your records. Present this at the time of course commencement. For support: academy@geovisionpro.com  |  +91-98765-43210";
+    wrappedText(doc, note, 14, y + 12, W - 28, 4.5);
+  }
+
+  addFooter(doc, 1, 1, data.receiptNo, "GeoVisionPro Academy");
+  doc.save(`${data.receiptNo}.pdf`);
+}
+
+/* ── 15. Enrollment Confirmation Letter ──────────────────────────── */
+export interface EnrollLetterData {
+  enrollmentId: string;
+  studentName: string;
+  studentEmail: string;
+  studentMobile: string;
+  courseName: string;
+  courseRef: string;
+  courseDuration: string;
+  courseBatch: string;
+  courseLevel: string;
+  enrollDate: string;
+}
+
+export async function downloadEnrollmentLetter(data: EnrollLetterData) {
+  const JsPDF = await getJsPDF();
+  const doc   = new JsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
+  const W     = doc.internal.pageSize.getWidth();
+  const H     = doc.internal.pageSize.getHeight();
+
+  addHeader(doc, {
+    ref:   data.enrollmentId,
+    type:  "Enrollment Confirmation",
+    left:  ["Student", data.studentName],
+    right: [["Course", data.courseName.length > 25 ? data.courseName.substring(0, 25) + "…" : data.courseName]],
+  });
+
+  let y = CY;
+
+  setTextColor(doc, NAVY);
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(13);
+  doc.text("ENROLLMENT CONFIRMATION LETTER", W / 2, y, { align: "center" });
+  y += 4;
+  setFill(doc, GREEN);
+  doc.rect(W / 2 - 40, y, 80, 0.8, "F");
+  y += 8;
+
+  setTextColor(doc, META_LBL);
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(8.5);
+  doc.text(`Date: ${data.enrollDate}`, 10, y);
+  y += 8;
+
+  setTextColor(doc, BODY_TXT);
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(9);
+  y = wrappedText(doc, `Dear ${data.studentName},`, 10, y, W - 20, 5); y += 5;
+
+  const para = "We are delighted to confirm your enrollment at GeoVisionPro Academy. Your application has been successfully processed and you are now officially enrolled in the course detailed below. We look forward to supporting your journey in the field of Geospatial Technology and Remote Sensing.";
+  y = wrappedText(doc, para, 10, y, W - 20, 5); y += 8;
+
+  /* Enrollment details table */
+  y = secHead(doc, "Enrollment Details", y);
+  const details: [string, string][] = [
+    ["Enrollment ID",  data.enrollmentId],
+    ["Student Name",   data.studentName],
+    ["Email Address",  data.studentEmail],
+    ["Mobile Number",  data.studentMobile],
+    ["Course Name",    data.courseName],
+    ["Course Ref No",  data.courseRef],
+    ["Level",          data.courseLevel],
+    ["Duration",       data.courseDuration],
+    ["Batch / Start",  data.courseBatch],
+  ];
+  details.forEach(([lbl, val], i) => {
+    const rowY = y + i * 8;
+    setFill(doc, i % 2 === 0 ? META_BG : ([240, 246, 252] as RGB));
+    doc.rect(10, rowY - 4, W - 20, 8, "F");
+    setTextColor(doc, META_LBL);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(8);
+    doc.text(lbl, 14, rowY);
+    setTextColor(doc, NAVY);
+    doc.setFont("helvetica", "normal");
+    doc.text(val, 62, rowY);
+  });
+  y += details.length * 8 + 8;
+
+  /* Getting started */
+  if (y < H - 70) {
+    y = secHead(doc, "Getting Started", y);
+    const steps = [
+      "Access your course materials via the GeoVisionPro Learning Portal at portal.geovisionpro.com",
+      "Log in using your registered email. Your temporary password has been sent separately.",
+      "Join your batch’s dedicated WhatsApp group — link shared in your welcome email.",
+      "Attend the orientation session on the first day of your batch — details emailed separately.",
+      "For any queries: academy@geovisionpro.com  ·  +91-98765-43210 (Mon–Sat, 9 AM–6 PM IST)",
+    ];
+    steps.forEach((s, i) => {
+      if (y > H - 40) return;
+      setTextColor(doc, BODY_TXT);
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(8.5);
+      y = wrappedText(doc, `${i + 1}.  ${s}`, 14, y, W - 24, 4.5); y += 3;
+    });
+    y += 5;
+  }
+
+  /* Closing */
+  if (y < H - 40) {
+    setTextColor(doc, BODY_TXT);
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(9);
+    y = wrappedText(doc, "Congratulations and welcome to the GeoVisionPro Academy family. We wish you great success in your studies!", 10, y, W - 20, 5);
+    y += 8;
+    doc.text("Warm regards,", 10, y); y += 6;
+    doc.setFont("helvetica", "bold");
+    setTextColor(doc, NAVY);
+    doc.text("Dr. Arun Sharma", 10, y); y += 5;
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(8.5);
+    setTextColor(doc, META_LBL);
+    doc.text("Director, GeoVisionPro Academy", 10, y); y += 4;
+    doc.text("academy@geovisionpro.com  ·  +91-98765-43210", 10, y);
+
+    /* Official stamp */
+    const sx = W - 55;
+    const sy = y - 24;
+    setFill(doc, META_BG);
+    doc.roundedRect(sx, sy, 45, 28, 2, 2, "F");
+    setDrawColor(doc, GREEN);
+    doc.setLineWidth(1.5);
+    doc.roundedRect(sx + 1, sy + 1, 43, 26, 2, 2, "S");
+    setTextColor(doc, GREEN);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(7.5);
+    doc.text("OFFICIAL SEAL", sx + 22.5, sy + 8,  { align: "center" });
+    doc.text("GeoVisionPro",  sx + 22.5, sy + 15, { align: "center" });
+    doc.text("Academy",       sx + 22.5, sy + 22, { align: "center" });
+  }
+
+  addFooter(doc, 1, 1, data.enrollmentId, "GeoVisionPro Academy");
+  doc.save(`${data.enrollmentId}-Enrollment-Letter.pdf`);
+}
+
 /* ── ICS calendar file ───────────────────────────────────────────── */
 export function downloadICS(name: string, dateStr: string, location: string, desc: string) {
   const d     = new Date(dateStr);
