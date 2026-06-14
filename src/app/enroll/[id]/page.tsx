@@ -118,17 +118,17 @@ function cardBrand(num: string) {
 /* ─── Student form type ─────────────────────────────────────────── */
 interface StudentForm {
   name: string; email: string; mobile: string; dob: string; gender: string;
-  qualification: string; occupation: string; organization: string;
+  organization: string;
   city: string; state: string; pincode: string;
-  batch: string; hearAbout: string;
+  hearAbout: string;
   agreeTerms: boolean; agreeUpdates: boolean;
 }
 
 const FORM_INIT: StudentForm = {
   name: "", email: "", mobile: "", dob: "", gender: "",
-  qualification: "", occupation: "", organization: "",
+  organization: "",
   city: "", state: "", pincode: "",
-  batch: "", hearAbout: "",
+  hearAbout: "",
   agreeTerms: false, agreeUpdates: false,
 };
 
@@ -281,15 +281,12 @@ export default function EnrollPage() {
       e.email = "Enter a valid email address";
     if (!form.mobile || !/^[6-9]\d{9}$/.test(form.mobile.replace(/\D/g, "")))
       e.mobile = "Enter a valid 10-digit Indian mobile number";
-    if (!form.dob)            e.dob           = "Date of birth is required";
-    if (!form.gender)         e.gender        = "Please select your gender";
-    if (!form.qualification)  e.qualification = "Please select your qualification";
-    if (!form.occupation)     e.occupation    = "Please select your occupation";
-    if (!form.city.trim())    e.city          = "Enter your city";
-    if (!form.state)          e.state         = "Please select your state";
-    if (!/^\d{6}$/.test(form.pincode)) e.pincode = "Enter a valid 6-digit PIN code";
-    if (!form.batch)          e.batch         = "Please select a batch";
-    if (!form.agreeTerms)     e.agreeTerms    = "You must agree to the Terms & Conditions to proceed";
+    if (!form.dob)            e.dob        = "Date of birth is required";
+    if (!form.gender)         e.gender     = "Please select your gender";
+    if (!form.city.trim())    e.city       = "Enter your city";
+    if (!form.state)          e.state      = "Please select your state";
+    if (!form.pincode.trim() || form.pincode.trim().length < 4) e.pincode = "Enter a valid postal / ZIP code";
+    if (!form.agreeTerms)     e.agreeTerms = "You must agree to the Terms & Conditions to proceed";
     setErrors(e);
     return Object.keys(e).length === 0;
   }
@@ -462,7 +459,7 @@ export default function EnrollPage() {
     return (
       <div>
         <div className={card} style={cardStyle}>
-          <h2 className="text-white font-black text-xl mb-5">Student Registration</h2>
+          <h2 className="text-white font-black text-xl mb-5">Your Details</h2>
 
           <div className="space-y-4">
             {/* Personal */}
@@ -512,30 +509,8 @@ export default function EnrollPage() {
               </div>
             </div>
 
-            {/* Academic */}
-            <p className="text-xs font-black uppercase tracking-widest pt-2" style={{ color: "#1d9e75" }}>Academic & Professional</p>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <Label req>Highest Qualification</Label>
-                <select className={sel} value={form.qualification} onChange={e => upd("qualification", e.target.value)} style={selStyle("qualification")}>
-                  <option value="">Select qualification</option>
-                  {["10th / SSC","12th / HSC","Diploma","B.Sc / B.Tech","B.Arch / B.Plan","M.Sc / M.Tech","MBA / MCA","Ph.D","Other"].map(q => <option key={q}>{q}</option>)}
-                </select>
-                <Err k="qualification" />
-              </div>
-              <div>
-                <Label req>Current Occupation</Label>
-                <select className={sel} value={form.occupation} onChange={e => upd("occupation", e.target.value)} style={selStyle("occupation")}>
-                  <option value="">Select occupation</option>
-                  {["Student","GIS Professional","Remote Sensing Analyst","Surveyor","Urban Planner","Researcher","Software Engineer","Defence / Govt","Other"].map(o => <option key={o}>{o}</option>)}
-                </select>
-                <Err k="occupation" />
-              </div>
-            </div>
-
             <div>
-              <Label>College / Organization</Label>
+              <Label>Organization / Institution</Label>
               <input className={inp} value={form.organization} onChange={e => upd("organization", e.target.value)}
                 placeholder="Optional" style={inpStyle("organization", false)} />
             </div>
@@ -551,9 +526,9 @@ export default function EnrollPage() {
                 <Err k="city" />
               </div>
               <div>
-                <Label req>State / UT</Label>
+                <Label req>State / Region</Label>
                 <select className={sel} value={form.state} onChange={e => upd("state", e.target.value)} style={selStyle("state")}>
-                  <option value="">Select state</option>
+                  <option value="">Select state / region</option>
                   {STATES.map(s => <option key={s}>{s}</option>)}
                 </select>
                 <Err k="state" />
@@ -562,37 +537,18 @@ export default function EnrollPage() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <Label req>PIN Code</Label>
-                <input className={inp} type="text" maxLength={6} value={form.pincode}
+                <Label req>PIN / ZIP Code</Label>
+                <input className={inp} type="text" maxLength={10} value={form.pincode}
                   onChange={e => upd("pincode", e.target.value.replace(/\D/g, ""))}
-                  placeholder="6-digit PIN" style={inpStyle("pincode")} />
+                  placeholder="Postal code" style={inpStyle("pincode")} />
                 <Err k="pincode" />
-              </div>
-              <div>
-                <Label>Country</Label>
-                <input className={inp} value="India" readOnly
-                  style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)", color: "#8aa3be" }} />
-              </div>
-            </div>
-
-            {/* Batch */}
-            <p className="text-xs font-black uppercase tracking-widest pt-2" style={{ color: "#1d9e75" }}>Batch & Preferences</p>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <Label req>Batch Preference</Label>
-                <select className={sel} value={form.batch} onChange={e => upd("batch", e.target.value)} style={selStyle("batch")}>
-                  <option value="">Select batch</option>
-                  {BATCHES.map(b => <option key={b}>{b}</option>)}
-                </select>
-                <Err k="batch" />
               </div>
               <div>
                 <Label>How did you hear about us?</Label>
                 <select className={sel} value={form.hearAbout} onChange={e => upd("hearAbout", e.target.value)}
                   style={{ ...selStyle("hearAbout"), color: form.hearAbout ? "#fff" : "#8aa3be" }}>
                   <option value="">Select (optional)</option>
-                  {["Google Search","Social Media (Instagram/LinkedIn)","WhatsApp","YouTube","Friend / Colleague","College / University","Job Portal","Other"].map(h => <option key={h}>{h}</option>)}
+                  {["Google Search","Social Media","YouTube","Friend / Colleague","University / Institution","Job Portal","Other"].map(h => <option key={h}>{h}</option>)}
                 </select>
               </div>
             </div>
@@ -652,7 +608,7 @@ export default function EnrollPage() {
           <div>
             <p className="text-xs" style={{ color: "#8aa3be" }}>Enrolling in</p>
             <p className="text-white font-bold text-sm leading-snug">{course.title}</p>
-            <p className="text-xs mt-0.5" style={{ color: "#8aa3be" }}>{course.ref}  ·  {form.batch}</p>
+            <p className="text-xs mt-0.5" style={{ color: "#8aa3be" }}>{course.ref}</p>
           </div>
           <div className="text-right flex-shrink-0">
             <p className="text-xs" style={{ color: "#8aa3be" }}>Total</p>
@@ -1200,7 +1156,7 @@ export default function EnrollPage() {
         studentName: form.name, studentEmail: form.email,
         studentMobile: `+91 ${form.mobile}`, studentCity: form.city, studentState: form.state,
         courseName: course.title, courseRef: course.ref, courseLevel: course.level,
-        courseDuration: course.duration, courseBatch: form.batch,
+        courseDuration: course.duration, courseBatch: "Flexible / Self-paced",
         fee: course.fee, gst, discount, total,
         paymentMethod: PAY_METHODS.find(p => p.id === payMethod)?.label ?? payMethod,
         paymentDate: dateStr,
@@ -1213,7 +1169,7 @@ export default function EnrollPage() {
         studentName: form.name, studentEmail: form.email,
         studentMobile: `+91 ${form.mobile}`,
         courseName: course.title, courseRef: course.ref,
-        courseLevel: course.level, courseDuration: course.duration, courseBatch: form.batch,
+        courseLevel: course.level, courseDuration: course.duration, courseBatch: "Flexible / Self-paced",
         enrollDate: dateStr,
       });
     }
@@ -1238,7 +1194,6 @@ export default function EnrollPage() {
             ["Transaction ID",  enrollIds.transactionId],
             ["Receipt No",      enrollIds.receiptNo],
             ["Course",          course.title],
-            ["Batch",           form.batch],
             ["Amount Paid",     fmt(total)],
           ].map(([l, v]) => (
             <div key={l} className="flex items-center justify-between text-sm gap-3">
