@@ -248,7 +248,7 @@ export default function AcademyPage() {
 
       {/* ── Hero ── */}
       <section style={{ background: "linear-gradient(135deg,#0a1628 0%,#0f2035 60%,#0a1628 100%)" }}
-        className="pt-24 pb-10 px-4 text-center">
+        className="pt-8 pb-10 px-4 text-center">
         <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-4 text-xs font-bold uppercase tracking-widest"
           style={{ background: "rgba(29,158,117,0.12)", border: "1px solid rgba(29,158,117,0.3)", color: "#1d9e75" }}>
           <span className="w-1.5 h-1.5 rounded-full bg-[#1d9e75] animate-pulse inline-block" />
