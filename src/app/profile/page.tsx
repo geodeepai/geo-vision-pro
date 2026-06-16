@@ -10,6 +10,7 @@ import {
   Users, BarChart2, GraduationCap, LayoutDashboard, Compass, UserCog,
   Crown, ChevronDown, Sparkles, Camera, Loader2,
   History, LogIn, UserPlus, KeyRound, Image as ImageIcon,
+  Shield, Eye, EyeOff,
 } from "lucide-react";
 import CertificateModal from "@/components/CertificateModal";
 import { createClient } from "@/lib/supabase/client";
@@ -140,7 +141,7 @@ const SOFT_BLUE = { background:"linear-gradient(135deg,#f3f7ff,#f1f0fe)", border
 const PRIMARY_BTN = "linear-gradient(135deg,#4f7df3,#6366f1)";
 const PRIMARY_SHADOW = "0 4px 14px rgba(79,125,243,0.28)";
 
-type TabKey = "dashboard" | "my courses" | "explore" | "certificates" | "profile" | "activity";
+type TabKey = "dashboard" | "my courses" | "explore" | "certificates" | "profile" | "security" | "activity";
 const NAV_GROUPS: { label: string; items: { key: TabKey; label: string; icon: typeof LayoutDashboard }[] }[] = [
   { label: "Learning", items: [
     { key: "dashboard",    label: "Dashboard",       icon: LayoutDashboard },
@@ -150,7 +151,8 @@ const NAV_GROUPS: { label: string; items: { key: TabKey; label: string; icon: ty
   ]},
   { label: "Account", items: [
     { key: "profile",  label: "Edit Profile", icon: UserCog },
-    { key: "activity", label: "Activity Log",  icon: History },
+    { key: "security", label: "Security",     icon: Shield },
+    { key: "activity", label: "Activity Log", icon: History },
   ]},
 ];
 const NAV_ITEMS = NAV_GROUPS.flatMap((g) => g.items);
@@ -200,6 +202,12 @@ export default function ProfilePage() {
   const [activity, setActivity]           = useState<{ id: string; type: string; description: string; createdAt: string }[]>([]);
   const [activityLoading, setActivityLoading] = useState(false);
   const [activityLoaded, setActivityLoaded] = useState(false);
+
+  /* ── Security / change password ── */
+  const [pwForm, setPwForm]               = useState({ current: "", next: "", confirm: "" });
+  const [pwShow, setPwShow]               = useState(false);
+  const [pwSaving, setPwSaving]           = useState(false);
+  const [pwError, setPwError]             = useState("");
 
   /* load persisted state */
   useEffect(() => {
@@ -274,7 +282,41 @@ export default function ProfilePage() {
   function selectTab(key: TabKey) {
     if (key === "profile") { goToEditProfile(); return; }
     if (key === "activity" && !activityLoaded) loadActivity();
+    if (key === "security") { setPwForm({ current: "", next: "", confirm: "" }); setPwError(""); }
     setActiveTab(key);
+  }
+
+  async function handleChangePassword(e: React.FormEvent) {
+    e.preventDefault();
+    setPwError("");
+    if (pwForm.next.length < 6) { setPwError("New password must be at least 6 characters."); return; }
+    if (pwForm.next !== pwForm.confirm) { setPwError("New passwords do not match."); return; }
+
+    setPwSaving(true);
+    try {
+      const supabase = createClient();
+      const { data: { user: authUser } } = await supabase.auth.getUser();
+      if (!authUser || !user.email) throw new Error("Not signed in");
+
+      const { error: verifyError } = await supabase.auth.signInWithPassword({
+        email: user.email,
+        password: pwForm.current,
+      });
+      if (verifyError) throw new Error("Current password is incorrect.");
+
+      const { error: updateError } = await supabase.auth.updateUser({ password: pwForm.next });
+      if (updateError) throw updateError;
+
+      await logActivity(supabase, authUser.id, "password_changed", "Password changed");
+
+      setPwForm({ current: "", next: "", confirm: "" });
+      setToast("Password changed successfully!");
+      setTimeout(() => setToast(null), 4000);
+    } catch (err) {
+      setPwError(err instanceof Error ? err.message : "Could not change password. Please try again.");
+    } finally {
+      setPwSaving(false);
+    }
   }
 
   async function loadActivity() {
@@ -1311,6 +1353,70 @@ export default function ProfilePage() {
                   </div>
                 </form>
               </div>
+            </div>
+          )}
+
+          {/* ══════════ SECURITY ══════════ */}
+          {activeTab === "security" && (
+            <div className="max-w-2xl pb-8">
+              <div className="rounded-2xl border p-7 md:p-8" style={CARD}>
+                <div className="flex items-center gap-3 mb-1">
+                  <span className="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center"><Shield size={16} className="text-indigo-600" /></span>
+                  <h2 className="text-lg font-black text-slate-900">Security</h2>
+                </div>
+                <p className="text-sm text-slate-500 mb-6 ml-11">Change your password. You&apos;ll need your current password to confirm.</p>
+
+                <form onSubmit={handleChangePassword} className="space-y-4 max-w-md">
+                  {pwError && (
+                    <p className="px-4 py-3 rounded-xl text-sm font-medium bg-red-50 text-red-600 border border-red-200">
+                      {pwError}
+                    </p>
+                  )}
+
+                  <div>
+                    <label className={labelCls}>Current Password</label>
+                    <input type={pwShow ? "text" : "password"} value={pwForm.current}
+                      onChange={(e) => setPwForm((f) => ({ ...f, current: e.target.value }))}
+                      className={inputCls} style={inputStyle} autoComplete="current-password" />
+                  </div>
+                  <div>
+                    <label className={labelCls}>New Password</label>
+                    <input type={pwShow ? "text" : "password"} value={pwForm.next}
+                      onChange={(e) => setPwForm((f) => ({ ...f, next: e.target.value }))}
+                      className={inputCls} style={inputStyle} autoComplete="new-password" placeholder="Minimum 6 characters" />
+                  </div>
+                  <div>
+                    <label className={labelCls}>Confirm New Password</label>
+                    <input type={pwShow ? "text" : "password"} value={pwForm.confirm}
+                      onChange={(e) => setPwForm((f) => ({ ...f, confirm: e.target.value }))}
+                      className={inputCls} style={inputStyle} autoComplete="new-password" />
+                  </div>
+
+                  <button type="button" onClick={() => setPwShow((s) => !s)}
+                    className="flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-slate-700 transition-colors">
+                    {pwShow ? <EyeOff size={13} /> : <Eye size={13} />}
+                    {pwShow ? "Hide passwords" : "Show passwords"}
+                  </button>
+
+                  <div className="flex items-center justify-end pt-2" style={{ borderTop: "1px solid rgba(15,23,42,0.06)" }}>
+                    <button type="submit" disabled={pwSaving}
+                      className="flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl font-bold text-sm text-white disabled:opacity-70 transition-all hover:opacity-90 hover:-translate-y-0.5"
+                      style={{ background:PRIMARY_BTN, boxShadow:PRIMARY_SHADOW }}>
+                      {pwSaving ? "Updating…" : "Update Password"}
+                    </button>
+                  </div>
+                </form>
+              </div>
+
+              <button onClick={() => selectTab("activity")}
+                className="mt-4 w-full flex items-center justify-between rounded-2xl p-5 hover:shadow-md transition-all group border"
+                style={SOFT_BLUE}>
+                <div className="text-left flex items-center gap-3">
+                  <History size={16} className="text-indigo-600" />
+                  <p className="text-sm font-semibold text-slate-900">Review your recent logins and account activity</p>
+                </div>
+                <ChevronRight size={18} className="text-indigo-600 group-hover:translate-x-1 transition-transform" />
+              </button>
             </div>
           )}
 
