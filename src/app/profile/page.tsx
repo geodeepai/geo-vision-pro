@@ -6,8 +6,8 @@ import { useRouter } from "next/navigation";
 import {
   LogOut, Bell, BookOpen, Clock, Award, TrendingUp, Play,
   CheckCircle, Star, ChevronRight, Download, Lock, ShoppingCart,
-  Zap, Target, Edit3, Mail, Phone, MapPin, Calendar, X,
-  Users, BarChart2, GraduationCap,
+  Zap, Target, Mail, Phone, MapPin, Calendar, X,
+  Users, BarChart2, GraduationCap, LayoutDashboard, Compass, UserCog,
 } from "lucide-react";
 import CertificateModal from "@/components/CertificateModal";
 import { createClient } from "@/lib/supabase/client";
@@ -122,8 +122,17 @@ function Ring({ pct, color, size = 56 }: { pct: number; color: string; size?: nu
   );
 }
 
-const CARD = { background:"rgba(255,255,255,0.93)", borderColor:"rgba(0,0,0,0.06)", boxShadow:"0 2px 20px rgba(0,0,0,0.05)" } as const;
-const tabs = ["dashboard","my courses","explore","certificates"] as const;
+const CARD = { background:"#ffffff", borderColor:"#e9edf3", boxShadow:"0 2px 14px rgba(15,23,42,0.04)" } as const;
+const SOFT_BLUE = { background:"linear-gradient(135deg,#eff6ff,#eef2ff)", borderColor:"#dbeafe" } as const;
+
+type TabKey = "dashboard" | "my courses" | "explore" | "certificates" | "profile";
+const NAV_ITEMS: { key: TabKey; label: string; icon: typeof LayoutDashboard }[] = [
+  { key: "dashboard",    label: "Dashboard",      icon: LayoutDashboard },
+  { key: "my courses",   label: "My Courses",     icon: BookOpen },
+  { key: "explore",      label: "Explore Courses",icon: Compass },
+  { key: "certificates", label: "Certificates",   icon: Award },
+  { key: "profile",      label: "Edit Profile",   icon: UserCog },
+];
 
 /* ─── page ───────────────────────────────────────────────────── */
 const PROFILE_FIELDS_INIT = { full_name: "", dob: "", phone: "", organization: "", city: "", state: "", pincode: "" };
@@ -132,7 +141,7 @@ type ProfileFields = typeof PROFILE_FIELDS_INIT;
 export default function ProfilePage() {
   const router = useRouter();
   const [user, setUser]               = useState(MOCK_USER);
-  const [activeTab, setActiveTab]     = useState<typeof tabs[number]>("dashboard");
+  const [activeTab, setActiveTab]     = useState<TabKey>("dashboard");
   const [enrolledIds, setEnrolledIds] = useState<number[]>([1, 2, 6]);
   const [enrollModal, setEnrollModal] = useState<typeof ALL_COURSES[0] | null>(null);
   const [toast, setToast]             = useState<string | null>(null);
@@ -141,7 +150,6 @@ export default function ProfilePage() {
 
   /* ── Editable profile ── */
   const [profile, setProfile]         = useState<ProfileFields>(PROFILE_FIELDS_INIT);
-  const [editOpen, setEditOpen]       = useState(false);
   const [editForm, setEditForm]       = useState<ProfileFields & { email: string }>({ ...PROFILE_FIELDS_INIT, email: "" });
   const [saving, setSaving]           = useState(false);
   const [saveError, setSaveError]     = useState("");
@@ -180,10 +188,20 @@ export default function ProfilePage() {
     });
   }, []);
 
-  function openEditProfile() {
+  function goToEditProfile() {
     setEditForm({ ...profile, full_name: profile.full_name || user.name, email: user.email });
     setSaveError("");
-    setEditOpen(true);
+    setActiveTab("profile");
+  }
+
+  function selectTab(key: TabKey) {
+    if (key === "profile") { goToEditProfile(); return; }
+    setActiveTab(key);
+  }
+
+  function resetEditForm() {
+    setEditForm({ ...profile, full_name: profile.full_name || user.name, email: user.email });
+    setSaveError("");
   }
 
   async function handleSaveProfile(e: React.FormEvent) {
@@ -231,7 +249,6 @@ export default function ProfilePage() {
         phone: phone || u.phone,
         location: city || state ? [city, state].filter(Boolean).join(", ") : u.location,
       }));
-      setEditOpen(false);
       setToast("Profile updated successfully!");
       setTimeout(() => setToast(null), 4000);
     } catch (err) {
@@ -278,8 +295,11 @@ export default function ProfilePage() {
   const hour         = new Date().getHours();
   const greeting     = hour < 12 ? "Good morning" : hour < 17 ? "Good afternoon" : "Good evening";
 
+  const inputCls = "w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm text-slate-800 bg-slate-50 focus:bg-white focus:border-blue-500 focus:ring-3 focus:ring-blue-100 transition-all";
+  const labelCls = "block text-xs font-semibold text-slate-600 mb-1.5";
+
   return (
-    <div className="min-h-screen" style={{ background:"#f0f4f8" }}>
+    <div className="min-h-screen" style={{ background:"#f8fafc" }}>
 
       {/* ── Success toast ─────────────────────────────────── */}
       {toast && (
@@ -287,95 +307,6 @@ export default function ProfilePage() {
           style={{ background:"linear-gradient(135deg,#10b981,#059669)", boxShadow:"0 8px 32px rgba(16,185,129,0.45)" }}>
           <CheckCircle size={18} />
           <span>{toast}</span>
-        </div>
-      )}
-
-      {/* ── Edit profile modal ────────────────────────────── */}
-      {editOpen && (
-        <div className="fixed inset-0 z-[90] flex items-center justify-center p-4"
-          style={{ background:"rgba(0,0,0,0.55)", backdropFilter:"blur(6px)" }}
-          onClick={(e) => { if (e.target === e.currentTarget) setEditOpen(false); }}>
-          <div className="w-full max-w-lg rounded-3xl overflow-hidden shadow-2xl max-h-[90vh] overflow-y-auto" style={{ background:"#fff" }}>
-            <div className="h-2" style={{ background:"linear-gradient(90deg,#3b82f6,#6366f1)" }} />
-            <div className="p-7">
-              <div className="flex items-start justify-between mb-5">
-                <h2 className="text-xl font-black text-slate-900">Edit Profile</h2>
-                <button onClick={() => setEditOpen(false)} className="w-8 h-8 rounded-xl flex items-center justify-center text-slate-400 hover:bg-slate-100 transition-all flex-shrink-0">
-                  <X size={18} />
-                </button>
-              </div>
-
-              <form onSubmit={handleSaveProfile} className="space-y-4">
-                {saveError && (
-                  <p className="px-4 py-3 rounded-xl text-sm font-medium bg-red-50 text-red-600 border border-red-200">
-                    {saveError}
-                  </p>
-                )}
-
-                <div>
-                  <label className="block text-xs font-semibold text-slate-600 mb-1.5">Full Name</label>
-                  <input value={editForm.full_name} onChange={(e) => setEditForm((f) => ({ ...f, full_name: e.target.value }))}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm text-slate-800 bg-slate-50 focus:bg-white focus:border-blue-500 focus:ring-3 focus:ring-blue-100 transition-all" />
-                </div>
-
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-600 mb-1.5">Email Address</label>
-                    <input type="email" value={editForm.email} onChange={(e) => setEditForm((f) => ({ ...f, email: e.target.value }))}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm text-slate-800 bg-slate-50 focus:bg-white focus:border-blue-500 focus:ring-3 focus:ring-blue-100 transition-all" />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-600 mb-1.5">Date of Birth</label>
-                    <input type="date" value={editForm.dob} onChange={(e) => setEditForm((f) => ({ ...f, dob: e.target.value }))}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm text-slate-800 bg-slate-50 focus:bg-white focus:border-blue-500 focus:ring-3 focus:ring-blue-100 transition-all" />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-600 mb-1.5">Phone</label>
-                    <input value={editForm.phone} onChange={(e) => setEditForm((f) => ({ ...f, phone: e.target.value }))}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm text-slate-800 bg-slate-50 focus:bg-white focus:border-blue-500 focus:ring-3 focus:ring-blue-100 transition-all" />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-600 mb-1.5">Organization</label>
-                    <input value={editForm.organization} onChange={(e) => setEditForm((f) => ({ ...f, organization: e.target.value }))}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm text-slate-800 bg-slate-50 focus:bg-white focus:border-blue-500 focus:ring-3 focus:ring-blue-100 transition-all" />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-3 gap-3">
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-600 mb-1.5">City</label>
-                    <input value={editForm.city} onChange={(e) => setEditForm((f) => ({ ...f, city: e.target.value }))}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm text-slate-800 bg-slate-50 focus:bg-white focus:border-blue-500 focus:ring-3 focus:ring-blue-100 transition-all" />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-600 mb-1.5">State</label>
-                    <input value={editForm.state} onChange={(e) => setEditForm((f) => ({ ...f, state: e.target.value }))}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm text-slate-800 bg-slate-50 focus:bg-white focus:border-blue-500 focus:ring-3 focus:ring-blue-100 transition-all" />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-600 mb-1.5">Pincode</label>
-                    <input value={editForm.pincode} onChange={(e) => setEditForm((f) => ({ ...f, pincode: e.target.value }))}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm text-slate-800 bg-slate-50 focus:bg-white focus:border-blue-500 focus:ring-3 focus:ring-blue-100 transition-all" />
-                  </div>
-                </div>
-
-                <div className="flex gap-3 pt-2">
-                  <button type="button" onClick={() => setEditOpen(false)}
-                    className="flex-1 py-3 rounded-xl font-semibold text-sm text-slate-600 border border-slate-200 hover:bg-slate-50 transition-all">
-                    Cancel
-                  </button>
-                  <button type="submit" disabled={saving}
-                    className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-sm text-white disabled:opacity-70 transition-all hover:opacity-90"
-                    style={{ background:"linear-gradient(135deg,#3b82f6,#6366f1)" }}>
-                    {saving ? "Saving…" : "Save Changes"}
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
         </div>
       )}
 
@@ -475,9 +406,9 @@ export default function ProfilePage() {
         </div>
       )}
 
-      {/* ── Navbar ───────────────────────────────────────── */}
-      <header className="sticky top-0 z-50" style={{ background:"rgba(255,255,255,0.9)", backdropFilter:"blur(20px)", borderBottom:"1px solid rgba(0,0,0,0.07)" }}>
-        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+      {/* ── Header ───────────────────────────────────────── */}
+      <header className="sticky top-0 z-50" style={{ background:"rgba(255,255,255,0.95)", backdropFilter:"blur(20px)", borderBottom:"1px solid #e9edf3" }}>
+        <div className="px-5 md:px-7 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-md shadow-blue-200">
               <svg viewBox="0 0 24 24" fill="none" className="w-4 h-4">
@@ -504,441 +435,544 @@ export default function ProfilePage() {
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto px-6 py-7">
+      {/* ── Mobile nav (sidebar replacement on small screens) ── */}
+      <div className="md:hidden sticky z-40 flex gap-1 px-3 py-2 overflow-x-auto"
+        style={{ top: 64, background:"rgba(255,255,255,0.97)", borderBottom:"1px solid #e9edf3" }}>
+        {NAV_ITEMS.map(({ key, label, icon: Icon }) => (
+          <button key={key} onClick={() => selectTab(key)}
+            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all flex-shrink-0"
+            style={activeTab===key ? { background:"#eff6ff", color:"#2563eb" } : { color:"#64748b" }}>
+            <Icon size={14} /> {label}
+          </button>
+        ))}
+      </div>
 
-        {/* ── Welcome banner ─────────────────────────────── */}
-        <div className="rounded-2xl p-7 mb-6 flex flex-wrap items-center justify-between gap-5 overflow-hidden relative"
-          style={{ background:"linear-gradient(135deg,#060d1f 0%,#0f2044 55%,#060d1f 100%)", boxShadow:"0 8px 40px rgba(15,23,42,0.25)" }}>
-          <div className="absolute inset-0 opacity-[0.055]" style={{ backgroundImage:`linear-gradient(rgba(148,198,255,1) 1px,transparent 1px),linear-gradient(90deg,rgba(148,198,255,1) 1px,transparent 1px)`, backgroundSize:"40px 40px" }} />
-          <div className="absolute top-0 left-1/3 w-64 h-64 rounded-full pointer-events-none" style={{ background:"radial-gradient(circle,#3b82f6,transparent 70%)", filter:"blur(70px)", opacity:0.18 }} />
-          <div className="relative z-10 flex items-center gap-5">
-            <Avatar name={user.name} size={64} />
-            <div>
-              <p className="text-blue-300 text-sm font-medium">{greeting},</p>
-              <h1 className="text-2xl font-black text-white tracking-tight">{user.name} 👋</h1>
-              <div className="flex flex-wrap items-center gap-3 mt-1.5">
-                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-blue-500/20 text-blue-300 border border-blue-400/20">
-                  <Zap size={10} /> {user.plan} Plan
-                </span>
-                <span className="inline-flex items-center gap-1 text-xs text-slate-400">
-                  <Target size={11} /> {user.streak}-day streak 🔥
-                </span>
-                <span className="text-xs text-slate-400">{enrolledCourses.length}/{ALL_COURSES.length} courses enrolled</span>
-              </div>
-            </div>
-          </div>
-          <div className="relative z-10">
-            <button onClick={() => setActiveTab("explore")}
-              className="flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm text-white hover:opacity-90 transition-all shadow-lg"
-              style={{ background:"linear-gradient(135deg,#3b82f6,#6366f1)", boxShadow:"0 4px 16px rgba(99,102,241,0.4)" }}>
-              <ShoppingCart size={15} /> Browse All Courses
-            </button>
-          </div>
-        </div>
+      <div className="flex">
 
-        {/* ── Stats ──────────────────────────────────────── */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-          {[
-            { label:"Enrolled Courses",    value:enrolledCourses.length, sub:`of ${ALL_COURSES.length} available`, icon:<BookOpen size={17}/>,   grad:"#3b82f6,#2563eb",  bg:"bg-blue-50",    tc:"text-blue-600" },
-            { label:"Hours Learned",        value:"62",                   sub:"Total hrs so far",              icon:<Clock size={17}/>,        grad:"#6366f1,#7c3aed",  bg:"bg-indigo-50",  tc:"text-indigo-600" },
-            { label:"Certificates Earned",  value:certCourses.length,     sub:"Completed courses",             icon:<Award size={17}/>,        grad:"#f59e0b,#ea580c",  bg:"bg-amber-50",   tc:"text-amber-600" },
-            { label:"Avg. Completion",      value:`${avgPct}%`,           sub:"Across enrolled courses",       icon:<TrendingUp size={17}/>,   grad:"#10b981,#059669",  bg:"bg-emerald-50", tc:"text-emerald-600" },
-          ].map(({ label, value, sub, icon, grad, bg, tc }) => (
-            <div key={label} className="rounded-2xl border p-5 hover:-translate-y-0.5 transition-all" style={CARD}>
-              <div className={`w-9 h-9 rounded-xl ${bg} ${tc} flex items-center justify-center mb-3`}>{icon}</div>
-              <p className="text-2xl font-black mb-0.5" style={{ background:`linear-gradient(135deg,${grad})`, WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent", backgroundClip:"text" }}>{value}</p>
-              <p className="text-xs font-semibold text-slate-700">{label}</p>
-              <p className="text-[11px] text-slate-400">{sub}</p>
-            </div>
-          ))}
-        </div>
-
-        {/* ── Tabs ─────────────────────────────────────── */}
-        <div className="flex gap-1 mb-6 p-1 rounded-xl w-fit border relative" style={{ background:"rgba(255,255,255,0.9)", borderColor:"rgba(0,0,0,0.07)", boxShadow:"0 2px 8px rgba(0,0,0,0.04)" }}>
-          {tabs.map((tab) => (
-            <button key={tab} onClick={() => setActiveTab(tab)}
-              className="px-4 py-2 rounded-lg text-sm font-semibold capitalize transition-all whitespace-nowrap relative"
-              style={activeTab===tab ? { background:"linear-gradient(135deg,#3b82f6,#6366f1)", color:"#fff", boxShadow:"0 4px 12px rgba(99,102,241,0.35)" } : { color:"#64748b" }}>
-              {tab}
-              {tab === "explore" && notEnrolled.length > 0 && (
-                <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-blue-500 text-white text-[9px] font-bold flex items-center justify-center">{notEnrolled.length}</span>
-              )}
-            </button>
-          ))}
-        </div>
-
-        {/* ══════════ DASHBOARD ══════════ */}
-        {activeTab === "dashboard" && (
-          <div className="grid lg:grid-cols-3 gap-5">
-            <div className="lg:col-span-2 space-y-5">
-
-              {/* Continue learning */}
-              {enrolledCourses.filter((c)=>c.progress<100).length > 0 && (
-                <div className="rounded-2xl border p-6" style={CARD}>
-                  <h2 className="text-base font-bold text-slate-900 mb-4 flex items-center gap-2">
-                    <span className="w-7 h-7 rounded-lg bg-blue-50 flex items-center justify-center"><Play size={13} className="text-blue-600" /></span>
-                    Continue Learning
-                  </h2>
-                  <div className="space-y-3">
-                    {enrolledCourses.filter((c)=>c.progress<100).map((c) => (
-                      <div key={c.id} className="flex items-center gap-4 p-4 rounded-xl border hover:shadow-md transition-all group" style={{ borderColor:"rgba(0,0,0,0.06)", background:"#fafbff" }}>
-                        <Ring pct={c.progress} color={c.color} size={56} />
-                        <div className="flex-1 min-w-0">
-                          <p className="font-bold text-slate-800 text-sm truncate">{c.title}</p>
-                          <p className="text-xs text-slate-400 mt-0.5">Next: <span className="text-slate-600 font-medium">{c.nextLesson}</span></p>
-                          <div className="flex items-center gap-2 mt-1.5">
-                            <span className="text-[11px] text-slate-400">{c.completed}/{c.lessons} lessons</span>
-                            <span className="text-[11px] px-2 py-0.5 rounded-full font-bold" style={{ background:`${c.color}15`, color:c.color }}>{c.tag}</span>
-                          </div>
-                        </div>
-                        <Link href={`/course/${c.id}`}
-                          className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold text-white opacity-0 group-hover:opacity-100 translate-x-2 group-hover:translate-x-0 flex-shrink-0 transition-all"
-                          style={{ background:`linear-gradient(135deg,${c.color},${c.color}cc)`, boxShadow:`0 4px 12px ${c.color}44` }}>
-                          <Play size={13} /> {c.progress===0 ? "Start" : "Resume"}
-                        </Link>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Available to enroll */}
-              {notEnrolled.length > 0 && (
-                <div className="rounded-2xl border p-6" style={CARD}>
-                  <div className="flex items-center justify-between mb-4">
-                    <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
-                      <span className="w-7 h-7 rounded-lg bg-amber-50 flex items-center justify-center"><ShoppingCart size={13} className="text-amber-500" /></span>
-                      Enroll in More Courses
-                      <span className="ml-1 text-xs font-bold px-2 py-0.5 rounded-full bg-blue-100 text-blue-600">{notEnrolled.length} available</span>
-                    </h2>
-                    <button onClick={() => setActiveTab("explore")} className="text-xs font-semibold text-blue-600 hover:text-blue-700 flex items-center gap-0.5">
-                      See all <ChevronRight size={13} />
-                    </button>
-                  </div>
-                  <div className="grid sm:grid-cols-3 gap-3">
-                    {notEnrolled.map((c) => (
-                      <div key={c.id} className="rounded-xl border p-4 hover:shadow-md transition-all flex flex-col gap-2 cursor-pointer group" style={{ borderColor:"rgba(0,0,0,0.07)", background:"#fafbff" }}
-                        onClick={() => setEnrollModal(c)}>
-                        <div className="flex items-center justify-between">
-                          <span className="px-2 py-0.5 rounded-full text-[11px] font-bold" style={{ background:`${c.color}15`, color:c.color }}>{c.tag}</span>
-                          <span className="text-[11px] text-slate-400 flex items-center gap-0.5"><Star size={9} className="text-amber-400 fill-amber-400" /> {c.rating}</span>
-                        </div>
-                        <p className="font-bold text-slate-800 text-xs leading-snug">{c.title}</p>
-                        <p className="text-[11px] text-slate-400">{c.duration}</p>
-                        <div className="flex items-center justify-between mt-auto">
-                          <span className="text-sm font-black" style={{ color:c.color }}>{c.price}</span>
-                          <span className="text-[11px] font-bold px-2.5 py-1 rounded-lg text-white group-hover:scale-105 transition-transform"
-                            style={{ background:`linear-gradient(135deg,${c.color},${c.color}cc)` }}>
-                            Enroll
-                          </span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* All enrolled success */}
-              {notEnrolled.length === 0 && (
-                <div className="rounded-2xl border p-6 text-center" style={CARD}>
-                  <div className="w-14 h-14 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-3">
-                    <CheckCircle size={28} className="text-green-500" />
-                  </div>
-                  <p className="font-bold text-slate-900 text-lg">You're enrolled in all courses! 🎉</p>
-                  <p className="text-sm text-slate-400 mt-1">Complete your courses to earn certificates.</p>
-                </div>
-              )}
-            </div>
-
-            {/* Right column */}
-            <div className="space-y-5">
-              {/* Profile card */}
-              <div className="rounded-2xl border p-6" style={CARD}>
-                <div className="flex items-center gap-3 mb-4">
-                  <Avatar name={user.name} size={48} />
-                  <div>
-                    <p className="font-bold text-slate-900">{user.name}</p>
-                    <p className="text-xs text-slate-400">{user.interest}</p>
-                  </div>
-                </div>
-                {[
-                  { icon:<Mail size={12} className="text-blue-400"/>,     v:user.email||"—" },
-                  { icon:<Phone size={12} className="text-blue-400"/>,    v:user.phone },
-                  { icon:<MapPin size={12} className="text-blue-400"/>,   v:user.location },
-                  { icon:<Calendar size={12} className="text-blue-400"/>, v:`Since ${user.memberSince}` },
-                ].map(({ icon, v }) => (
-                  <div key={v} className="flex items-center gap-2 text-xs text-slate-500 py-1">{icon}<span className="truncate">{v}</span></div>
-                ))}
-                <button onClick={openEditProfile}
-                  className="mt-4 w-full flex items-center justify-center gap-1.5 py-2.5 rounded-xl border border-slate-200 text-sm font-semibold text-slate-600 hover:bg-slate-50 transition-all">
-                  <Edit3 size={13} /> Edit Profile
-                </button>
-              </div>
-
-              {/* Streak */}
-              <div className="rounded-2xl border p-6" style={CARD}>
-                <p className="text-sm font-bold text-slate-900 mb-2 flex items-center gap-2"><span className="text-base">🔥</span> Learning Streak</p>
-                <p className="text-3xl font-black text-orange-500 mb-0.5">{user.streak} <span className="text-base font-semibold text-slate-400">days</span></p>
-                <p className="text-xs text-slate-400 mb-3">Keep it going!</p>
-                <div className="grid grid-cols-7 gap-1">
-                  {["M","T","W","T","F","S","S"].map((d,i) => (
-                    <div key={i} className={`h-7 rounded-md flex items-center justify-center text-[10px] font-bold ${i<user.streak?"bg-orange-400 text-white":"bg-slate-100 text-slate-300"}`}>{d}</div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Plan */}
-              <div className="rounded-2xl p-5 relative overflow-hidden"
-                style={{ background:"linear-gradient(135deg,#060d1f,#0f2044)", boxShadow:"0 8px 28px rgba(15,23,42,0.22)" }}>
-                <div className="absolute top-0 right-0 w-24 h-24 rounded-full" style={{ background:"radial-gradient(circle,#3b82f6,transparent 70%)", filter:"blur(30px)", opacity:0.3 }} />
-                <p className="text-blue-300 text-xs font-semibold mb-0.5 relative z-10">Current Plan</p>
-                <p className="text-white text-xl font-black relative z-10">{user.plan} <span className="text-blue-400">Member</span></p>
-                <p className="text-slate-400 text-xs mt-1 mb-4 relative z-10">{enrolledCourses.length}/{ALL_COURSES.length} courses enrolled</p>
-                {notEnrolled.length > 0 && (
-                  <button onClick={() => setActiveTab("explore")}
-                    className="relative z-10 w-full py-2.5 rounded-xl text-sm font-semibold text-white hover:opacity-90 transition-all"
-                    style={{ background:"linear-gradient(135deg,#3b82f6,#6366f1)" }}>
-                    Enroll in {notEnrolled.length} More Course{notEnrolled.length!==1?"s":""}
-                  </button>
-                )}
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* ══════════ MY COURSES ══════════ */}
-        {activeTab === "my courses" && (
-          <div className="space-y-4 pb-8">
-            <p className="text-sm text-slate-500">{enrolledCourses.length} enrolled · {notEnrolled.length} more available</p>
-            {enrolledCourses.map((c) => (
-              <div key={c.id} className="rounded-2xl border p-6 hover:shadow-lg transition-all" style={CARD}>
-                <div className="flex flex-wrap items-start gap-5">
-                  <Ring pct={c.progress} color={c.color} size={72} />
-                  <div className="flex-1 min-w-0">
-                    <div className="flex flex-wrap items-start justify-between gap-3">
-                      <div>
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold mb-2" style={{ background:`${c.color}15`, color:c.color }}>{c.tag}</span>
-                        <h3 className="font-black text-slate-900 text-lg leading-snug">{c.title}</h3>
-                        <p className="text-sm text-slate-400 mt-0.5">{c.duration} · Enrolled {c.enrolledDate} · <span className="font-semibold" style={{ color:c.color }}>{c.price}</span></p>
-                      </div>
-                      {c.progress === 100 ? (
-                        <button onClick={() => setCertModal({ courseId: c.id })}
-                          className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold text-white flex-shrink-0 hover:opacity-90 hover:-translate-y-0.5 transition-all"
-                          style={{ background:"linear-gradient(135deg,#f59e0b,#ea580c)", boxShadow:"0 4px 16px rgba(245,158,11,0.35)" }}>
-                          <Download size={14} /> View &amp; Download Certificate
-                        </button>
-                      ) : (
-                        <Link href={`/course/${c.id}`}
-                          className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold text-white hover:opacity-90 hover:-translate-y-0.5 transition-all flex-shrink-0"
-                          style={{ background:`linear-gradient(135deg,${c.color},${c.color}cc)`, boxShadow:`0 4px 16px ${c.color}44` }}>
-                          <Play size={14} /> {c.progress===0 ? "Start Learning" : "Resume"}
-                        </Link>
-                      )}
-                    </div>
-                    <div className="mt-4 grid sm:grid-cols-3 gap-3">
-                      {[
-                        { label:"Lessons Done",  value:`${c.completed}/${c.lessons}` },
-                        { label:"Next Up",        value:c.nextLesson },
-                        { label:"Status",         value:c.progress===100?"✅ Completed":c.progress===0?"⏳ Not Started":"▶ In Progress" },
-                      ].map(({ label, value }) => (
-                        <div key={label} className="p-3 rounded-xl bg-slate-50 border border-slate-100">
-                          <p className="text-[10px] text-slate-400 font-semibold uppercase tracking-wide">{label}</p>
-                          <p className="text-sm font-bold text-slate-700 mt-0.5 truncate">{value}</p>
-                        </div>
-                      ))}
-                    </div>
-                    <div className="mt-3 w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
-                      <div className="h-full rounded-full" style={{ width:`${c.progress}%`, background:`linear-gradient(90deg,${c.color},${c.color}88)` }} />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
-
-            {notEnrolled.length > 0 && (
-              <button onClick={() => setActiveTab("explore")}
-                className="w-full flex items-center justify-between rounded-2xl p-6 text-white hover:opacity-95 hover:-translate-y-0.5 transition-all group"
-                style={{ background:"linear-gradient(135deg,#060d1f,#0f2044)", boxShadow:"0 8px 28px rgba(15,23,42,0.2)" }}>
-                <div className="text-left">
-                  <p className="font-bold text-base">Enroll in {notEnrolled.length} More Course{notEnrolled.length!==1?"s":""}</p>
-                  <p className="text-blue-300 text-sm mt-0.5">Prices starting from ₹299 · Certificate on completion</p>
-                </div>
-                <ChevronRight size={22} className="text-blue-400 group-hover:translate-x-1 transition-transform" />
-              </button>
-            )}
-          </div>
-        )}
-
-        {/* ══════════ EXPLORE ══════════ */}
-        {activeTab === "explore" && (
-          <div className="pb-8">
-            <div className="flex flex-wrap items-end justify-between mb-5 gap-3">
-              <div>
-                <p className="font-bold text-slate-900 text-lg">All Courses <span className="text-slate-400 font-normal text-base">({ALL_COURSES.length} total)</span></p>
-                <p className="text-sm text-slate-500 mt-0.5">Click any course to view details &amp; enroll · Prices ₹299–₹499 · Certificate included</p>
-              </div>
-              <div className="flex items-center gap-2 text-xs">
-                <span className="flex items-center gap-1 px-3 py-1.5 rounded-full bg-green-50 text-green-700 border border-green-200 font-semibold"><CheckCircle size={11} /> {enrolledCourses.length} Enrolled</span>
-                <span className="flex items-center gap-1 px-3 py-1.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200 font-semibold"><ShoppingCart size={11} /> {notEnrolled.length} Available</span>
+        {/* ── Sidebar ──────────────────────────────────────── */}
+        <aside className="hidden md:block w-64 flex-shrink-0" style={{ borderRight:"1px solid #e9edf3", background:"#fff" }}>
+          <div className="sticky p-5" style={{ top: 64 }}>
+            <div className="flex items-center gap-3 mb-5 p-3 rounded-xl" style={{ background:"#f8fafc" }}>
+              <Avatar name={user.name} size={42} />
+              <div className="min-w-0">
+                <p className="font-bold text-slate-900 text-sm truncate">{user.name}</p>
+                <p className="text-xs text-slate-400 truncate">{user.email || "—"}</p>
               </div>
             </div>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-              {ALL_COURSES.map((c) => {
-                const enrolled = enrolledIds.includes(c.id);
+            <nav className="space-y-1">
+              {NAV_ITEMS.map(({ key, label, icon: Icon }) => {
+                const active = activeTab === key;
                 return (
-                  <div key={c.id}
-                    className="rounded-2xl border flex flex-col overflow-hidden hover:-translate-y-1 hover:shadow-xl transition-all group cursor-pointer relative"
-                    style={CARD}
-                    onClick={() => !enrolled && setEnrollModal(c)}>
-                    {enrolled && (
-                      <div className="absolute top-3 right-3 z-10 flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-green-100 text-green-700 border border-green-200">
-                        <CheckCircle size={10} /> Enrolled
-                      </div>
+                  <button key={key} onClick={() => selectTab(key)}
+                    className="w-full flex items-center gap-3 pl-4 pr-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all text-left relative"
+                    style={active ? { background:"#eff6ff", color:"#2563eb" } : { color:"#64748b" }}>
+                    {active && <span className="absolute left-0 top-1.5 bottom-1.5 w-1 rounded-full bg-blue-600" />}
+                    <Icon size={17} />
+                    {label}
+                    {key === "explore" && notEnrolled.length > 0 && (
+                      <span className="ml-auto text-[10px] font-bold w-5 h-5 rounded-full bg-blue-600 text-white flex items-center justify-center">{notEnrolled.length}</span>
                     )}
-                    <div className="h-1.5" style={{ background:`linear-gradient(90deg,${c.color},${c.color}55)` }} />
-                    <div className="p-5 flex flex-col flex-1">
-                      <div className="flex items-center gap-2 mb-3">
-                        <span className="px-2.5 py-1 rounded-lg text-xs font-bold" style={{ background:`${c.color}15`, color:c.color }}>{c.tag}</span>
-                        {c.badge && <span className="text-xs font-bold px-2.5 py-0.5 rounded-full" style={c.badgeStyle??{}}>{c.badge}</span>}
-                        <span className="ml-auto text-xs text-slate-400 bg-slate-100 px-2 py-0.5 rounded-full">{c.level}</span>
-                      </div>
-                      <h3 className="font-black text-slate-900 text-base leading-snug mb-2">{c.title}</h3>
-                      <p className="text-xs text-slate-500 leading-relaxed mb-3 flex-1">{c.desc}</p>
-                      <div className="flex flex-wrap gap-1 mb-3">
-                        {c.topics.slice(0,3).map((t) => (
-                          <span key={t} className="text-[10px] px-2 py-0.5 rounded-full border border-slate-200 bg-slate-50 text-slate-400">{t}</span>
-                        ))}
-                        {c.topics.length>3 && <span className="text-[10px] px-2 py-0.5 rounded-full border border-slate-200 bg-slate-50 text-slate-400">+{c.topics.length-3} more</span>}
-                      </div>
-                      <div className="flex items-center gap-3 text-xs text-slate-400 mb-4">
-                        <span className="flex items-center gap-1"><Star size={11} className="text-amber-400 fill-amber-400" />{c.rating}</span>
-                        <span className="flex items-center gap-1"><Clock size={11} />{c.duration}</span>
-                        <span>{c.lessons} lessons</span>
-                        <span>{c.students.toLocaleString()} students</span>
-                      </div>
-                      <div className="flex items-center justify-between pt-3 border-t border-slate-100">
-                        <div>
-                          <p className="text-xl font-black" style={{ color:c.color }}>{c.price}</p>
-                          <p className="text-[10px] text-slate-400">📜 Certificate included</p>
-                        </div>
-                        {enrolled ? (
-                          <button onClick={(e)=>{ e.stopPropagation(); setActiveTab("my courses"); }}
-                            className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-bold text-white"
-                            style={{ background:"linear-gradient(135deg,#10b981,#059669)" }}>
-                            <Play size={13} /> Continue
-                          </button>
-                        ) : (
-                          <button onClick={(e)=>{ e.stopPropagation(); setEnrollModal(c); }}
-                            className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-bold text-white hover:opacity-90 hover:-translate-y-0.5 transition-all group-hover:shadow-lg"
-                            style={{ background:`linear-gradient(135deg,${c.color},${c.color}bb)`, boxShadow:`0 4px 12px ${c.color}33` }}>
-                            <ShoppingCart size={13} /> Enroll Now
-                          </button>
-                        )}
-                      </div>
-                    </div>
-                  </div>
+                  </button>
                 );
               })}
-            </div>
-
-            {/* Help */}
-            <div className="mt-6 rounded-2xl border p-5 flex flex-wrap items-center justify-between gap-4" style={CARD}>
-              <div>
-                <p className="text-sm font-bold text-slate-900">Not sure which course to pick?</p>
-                <p className="text-xs text-slate-500 mt-0.5">Our experts will guide you to the right course for your career goals.</p>
-              </div>
-              <Link href="/#contact"
-                className="flex items-center gap-1.5 px-5 py-2.5 rounded-xl text-sm font-bold text-white whitespace-nowrap"
-                style={{ background:"linear-gradient(135deg,#3b82f6,#6366f1)" }}>
-                Talk to an Expert
-              </Link>
-            </div>
+            </nav>
           </div>
-        )}
+        </aside>
 
-        {/* ══════════ CERTIFICATES ══════════ */}
-        {activeTab === "certificates" && (
-          <div className="pb-8 space-y-5">
-            {certCourses.length > 0 ? certCourses.map((c) => {
-              const cert = CERTIFICATES[c.id]!;
-              return (
-                <div key={c.id} className="rounded-2xl border p-6 flex flex-wrap items-center justify-between gap-5" style={CARD}>
-                  <div className="flex items-center gap-5">
-                    <div className="w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0"
-                      style={{ background:"linear-gradient(135deg,#f59e0b,#ea580c)", boxShadow:"0 6px 20px rgba(245,158,11,0.35)" }}>
-                      <Award size={26} className="text-white" />
-                    </div>
-                    <div>
-                      <h3 className="font-black text-slate-900 text-base">{c.title}</h3>
-                      <p className="text-sm text-slate-400 mt-0.5">Issued {cert.date} · <span className="font-semibold text-slate-600">{cert.id}</span></p>
-                      <span className="inline-flex items-center gap-1 mt-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-50 text-amber-700 border border-amber-200">
-                        <CheckCircle size={10} /> {cert.grade}
+        {/* ── Main content (single active view) ─────────────── */}
+        <main className="flex-1 min-w-0 px-5 md:px-8 py-6 md:py-7">
+
+          {/* ══════════ DASHBOARD ══════════ */}
+          {activeTab === "dashboard" && (
+            <>
+              {/* Welcome banner */}
+              <div className="rounded-2xl p-7 mb-6 flex flex-wrap items-center justify-between gap-5 border" style={SOFT_BLUE}>
+                <div className="flex items-center gap-5">
+                  <Avatar name={user.name} size={64} />
+                  <div>
+                    <p className="text-blue-600 text-sm font-medium">{greeting},</p>
+                    <h1 className="text-2xl font-black text-slate-900 tracking-tight">{user.name} 👋</h1>
+                    <div className="flex flex-wrap items-center gap-3 mt-1.5">
+                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-blue-100 text-blue-700 border border-blue-200">
+                        <Zap size={10} /> {user.plan} Plan
                       </span>
+                      <span className="inline-flex items-center gap-1 text-xs text-slate-500">
+                        <Target size={11} /> {user.streak}-day streak 🔥
+                      </span>
+                      <span className="text-xs text-slate-500">{enrolledCourses.length}/{ALL_COURSES.length} courses enrolled</span>
                     </div>
                   </div>
-                  <button
-                    onClick={() => setCertModal({ courseId: c.id })}
-                    className="flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm text-white hover:opacity-90 hover:-translate-y-0.5 transition-all"
-                    style={{ background:"linear-gradient(135deg,#f59e0b,#ea580c)", boxShadow:"0 4px 16px rgba(245,158,11,0.35)" }}>
-                    <Download size={15} /> View &amp; Download
-                  </button>
                 </div>
-              );
-            }) : (
-              <div className="rounded-2xl border p-10 text-center" style={CARD}>
-                <div className="w-16 h-16 rounded-full bg-slate-100 flex items-center justify-center mx-auto mb-4">
-                  <Award size={28} className="text-slate-300" />
-                </div>
-                <p className="font-bold text-slate-700 text-lg">No certificates yet</p>
-                <p className="text-sm text-slate-400 mt-1 mb-5">Complete a course to earn your certificate.</p>
-                <button onClick={() => setActiveTab("my courses")}
-                  className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-bold text-white"
-                  style={{ background:"linear-gradient(135deg,#3b82f6,#6366f1)" }}>
-                  <Play size={14} /> Go to My Courses
+                <button onClick={() => setActiveTab("explore")}
+                  className="flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm text-white hover:opacity-90 transition-all shadow-lg"
+                  style={{ background:"linear-gradient(135deg,#3b82f6,#6366f1)", boxShadow:"0 4px 16px rgba(99,102,241,0.4)" }}>
+                  <ShoppingCart size={15} /> Browse All Courses
                 </button>
               </div>
-            )}
 
-            {/* In progress */}
-            {enrolledCourses.filter((c)=>c.progress<100).length > 0 && (
-              <div className="rounded-2xl border p-6" style={CARD}>
-                <h3 className="text-sm font-bold text-slate-700 mb-3 flex items-center gap-2">
-                  <Lock size={14} className="text-slate-400" /> Certificates in Progress
-                </h3>
-                {enrolledCourses.filter((c)=>c.progress<100).map((c) => (
-                  <div key={c.id} className="flex items-center justify-between py-3 border-t border-slate-100 first:border-0">
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background:`${c.color}15` }}>
-                        <BookOpen size={14} style={{ color:c.color }} />
-                      </div>
-                      <div>
-                        <p className="text-sm font-semibold text-slate-700">{c.title}</p>
-                        <p className="text-xs text-slate-400">{c.progress}% complete · {c.completed}/{c.lessons} lessons</p>
-                      </div>
-                    </div>
-                    <div className="w-24 h-1.5 bg-slate-100 rounded-full overflow-hidden">
-                      <div className="h-full rounded-full" style={{ width:`${c.progress}%`, background:c.color }} />
-                    </div>
+              {/* Stats */}
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                {[
+                  { label:"Enrolled Courses",    value:enrolledCourses.length, sub:`of ${ALL_COURSES.length} available`, icon:<BookOpen size={17}/>,   grad:"#3b82f6,#2563eb",  bg:"bg-blue-50",    tc:"text-blue-600" },
+                  { label:"Hours Learned",        value:"62",                   sub:"Total hrs so far",              icon:<Clock size={17}/>,        grad:"#6366f1,#7c3aed",  bg:"bg-indigo-50",  tc:"text-indigo-600" },
+                  { label:"Certificates Earned",  value:certCourses.length,     sub:"Completed courses",             icon:<Award size={17}/>,        grad:"#f59e0b,#ea580c",  bg:"bg-amber-50",   tc:"text-amber-600" },
+                  { label:"Avg. Completion",      value:`${avgPct}%`,           sub:"Across enrolled courses",       icon:<TrendingUp size={17}/>,   grad:"#10b981,#059669",  bg:"bg-emerald-50", tc:"text-emerald-600" },
+                ].map(({ label, value, sub, icon, grad, bg, tc }) => (
+                  <div key={label} className="rounded-2xl border p-5 hover:-translate-y-0.5 transition-all" style={CARD}>
+                    <div className={`w-9 h-9 rounded-xl ${bg} ${tc} flex items-center justify-center mb-3`}>{icon}</div>
+                    <p className="text-2xl font-black mb-0.5" style={{ background:`linear-gradient(135deg,${grad})`, WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent", backgroundClip:"text" }}>{value}</p>
+                    <p className="text-xs font-semibold text-slate-700">{label}</p>
+                    <p className="text-[11px] text-slate-400">{sub}</p>
                   </div>
                 ))}
               </div>
-            )}
 
-            {notEnrolled.length > 0 && (
-              <button onClick={() => setActiveTab("explore")}
-                className="w-full flex items-center justify-between rounded-2xl p-6 text-white hover:opacity-95 transition-all group"
-                style={{ background:"linear-gradient(135deg,#060d1f,#0f2044)", boxShadow:"0 8px 28px rgba(15,23,42,0.2)" }}>
-                <div className="text-left">
-                  <p className="font-bold">Earn More Certificates</p>
-                  <p className="text-blue-300 text-sm mt-0.5">Enroll in {notEnrolled.length} more courses — from ₹299</p>
+              <div className="grid lg:grid-cols-3 gap-5">
+                <div className="lg:col-span-2 space-y-5">
+
+                  {/* Continue learning */}
+                  {enrolledCourses.filter((c)=>c.progress<100).length > 0 && (
+                    <div className="rounded-2xl border p-6" style={CARD}>
+                      <h2 className="text-base font-bold text-slate-900 mb-4 flex items-center gap-2">
+                        <span className="w-7 h-7 rounded-lg bg-blue-50 flex items-center justify-center"><Play size={13} className="text-blue-600" /></span>
+                        Continue Learning
+                      </h2>
+                      <div className="space-y-3">
+                        {enrolledCourses.filter((c)=>c.progress<100).map((c) => (
+                          <div key={c.id} className="flex items-center gap-4 p-4 rounded-xl border hover:shadow-md transition-all group" style={{ borderColor:"#e9edf3", background:"#fafbff" }}>
+                            <Ring pct={c.progress} color={c.color} size={56} />
+                            <div className="flex-1 min-w-0">
+                              <p className="font-bold text-slate-800 text-sm truncate">{c.title}</p>
+                              <p className="text-xs text-slate-400 mt-0.5">Next: <span className="text-slate-600 font-medium">{c.nextLesson}</span></p>
+                              <div className="flex items-center gap-2 mt-1.5">
+                                <span className="text-[11px] text-slate-400">{c.completed}/{c.lessons} lessons</span>
+                                <span className="text-[11px] px-2 py-0.5 rounded-full font-bold" style={{ background:`${c.color}15`, color:c.color }}>{c.tag}</span>
+                              </div>
+                            </div>
+                            <Link href={`/course/${c.id}`}
+                              className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold text-white opacity-0 group-hover:opacity-100 translate-x-2 group-hover:translate-x-0 flex-shrink-0 transition-all"
+                              style={{ background:`linear-gradient(135deg,${c.color},${c.color}cc)`, boxShadow:`0 4px 12px ${c.color}44` }}>
+                              <Play size={13} /> {c.progress===0 ? "Start" : "Resume"}
+                            </Link>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Available to enroll */}
+                  {notEnrolled.length > 0 && (
+                    <div className="rounded-2xl border p-6" style={CARD}>
+                      <div className="flex items-center justify-between mb-4">
+                        <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
+                          <span className="w-7 h-7 rounded-lg bg-amber-50 flex items-center justify-center"><ShoppingCart size={13} className="text-amber-500" /></span>
+                          Enroll in More Courses
+                          <span className="ml-1 text-xs font-bold px-2 py-0.5 rounded-full bg-blue-100 text-blue-600">{notEnrolled.length} available</span>
+                        </h2>
+                        <button onClick={() => setActiveTab("explore")} className="text-xs font-semibold text-blue-600 hover:text-blue-700 flex items-center gap-0.5">
+                          See all <ChevronRight size={13} />
+                        </button>
+                      </div>
+                      <div className="grid sm:grid-cols-3 gap-3">
+                        {notEnrolled.map((c) => (
+                          <div key={c.id} className="rounded-xl border p-4 hover:shadow-md transition-all flex flex-col gap-2 cursor-pointer group" style={{ borderColor:"#e9edf3", background:"#fafbff" }}
+                            onClick={() => setEnrollModal(c)}>
+                            <div className="flex items-center justify-between">
+                              <span className="px-2 py-0.5 rounded-full text-[11px] font-bold" style={{ background:`${c.color}15`, color:c.color }}>{c.tag}</span>
+                              <span className="text-[11px] text-slate-400 flex items-center gap-0.5"><Star size={9} className="text-amber-400 fill-amber-400" /> {c.rating}</span>
+                            </div>
+                            <p className="font-bold text-slate-800 text-xs leading-snug">{c.title}</p>
+                            <p className="text-[11px] text-slate-400">{c.duration}</p>
+                            <div className="flex items-center justify-between mt-auto">
+                              <span className="text-sm font-black" style={{ color:c.color }}>{c.price}</span>
+                              <span className="text-[11px] font-bold px-2.5 py-1 rounded-lg text-white group-hover:scale-105 transition-transform"
+                                style={{ background:`linear-gradient(135deg,${c.color},${c.color}cc)` }}>
+                                Enroll
+                              </span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* All enrolled success */}
+                  {notEnrolled.length === 0 && (
+                    <div className="rounded-2xl border p-6 text-center" style={CARD}>
+                      <div className="w-14 h-14 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-3">
+                        <CheckCircle size={28} className="text-green-500" />
+                      </div>
+                      <p className="font-bold text-slate-900 text-lg">You're enrolled in all courses! 🎉</p>
+                      <p className="text-sm text-slate-400 mt-1">Complete your courses to earn certificates.</p>
+                    </div>
+                  )}
                 </div>
-                <ChevronRight size={20} className="text-blue-400 group-hover:translate-x-1 transition-transform" />
-              </button>
-            )}
-          </div>
-        )}
 
+                {/* Right column */}
+                <div className="space-y-5">
+                  {/* Profile card */}
+                  <div className="rounded-2xl border p-6" style={CARD}>
+                    <div className="flex items-center gap-3 mb-4">
+                      <Avatar name={user.name} size={48} />
+                      <div>
+                        <p className="font-bold text-slate-900">{user.name}</p>
+                        <p className="text-xs text-slate-400">{user.interest}</p>
+                      </div>
+                    </div>
+                    {[
+                      { icon:<Mail size={12} className="text-blue-400"/>,     v:user.email||"—" },
+                      { icon:<Phone size={12} className="text-blue-400"/>,    v:user.phone },
+                      { icon:<MapPin size={12} className="text-blue-400"/>,   v:user.location },
+                      { icon:<Calendar size={12} className="text-blue-400"/>, v:`Since ${user.memberSince}` },
+                    ].map(({ icon, v }) => (
+                      <div key={v} className="flex items-center gap-2 text-xs text-slate-500 py-1">{icon}<span className="truncate">{v}</span></div>
+                    ))}
+                    <button onClick={goToEditProfile}
+                      className="mt-4 w-full flex items-center justify-center gap-1.5 py-2.5 rounded-xl border border-slate-200 text-sm font-semibold text-slate-600 hover:bg-slate-50 transition-all">
+                      <UserCog size={13} /> Edit Profile
+                    </button>
+                  </div>
+
+                  {/* Streak */}
+                  <div className="rounded-2xl border p-6" style={CARD}>
+                    <p className="text-sm font-bold text-slate-900 mb-2 flex items-center gap-2"><span className="text-base">🔥</span> Learning Streak</p>
+                    <p className="text-3xl font-black text-orange-500 mb-0.5">{user.streak} <span className="text-base font-semibold text-slate-400">days</span></p>
+                    <p className="text-xs text-slate-400 mb-3">Keep it going!</p>
+                    <div className="grid grid-cols-7 gap-1">
+                      {["M","T","W","T","F","S","S"].map((d,i) => (
+                        <div key={i} className={`h-7 rounded-md flex items-center justify-center text-[10px] font-bold ${i<user.streak?"bg-orange-400 text-white":"bg-slate-100 text-slate-300"}`}>{d}</div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Plan */}
+                  <div className="rounded-2xl p-5 border" style={SOFT_BLUE}>
+                    <p className="text-blue-600 text-xs font-semibold mb-0.5">Current Plan</p>
+                    <p className="text-slate-900 text-xl font-black">{user.plan} <span className="text-blue-600">Member</span></p>
+                    <p className="text-slate-500 text-xs mt-1 mb-4">{enrolledCourses.length}/{ALL_COURSES.length} courses enrolled</p>
+                    {notEnrolled.length > 0 && (
+                      <button onClick={() => setActiveTab("explore")}
+                        className="w-full py-2.5 rounded-xl text-sm font-semibold text-white hover:opacity-90 transition-all"
+                        style={{ background:"linear-gradient(135deg,#3b82f6,#6366f1)" }}>
+                        Enroll in {notEnrolled.length} More Course{notEnrolled.length!==1?"s":""}
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
+
+          {/* ══════════ MY COURSES ══════════ */}
+          {activeTab === "my courses" && (
+            <div className="space-y-4 pb-8">
+              <p className="text-sm text-slate-500">{enrolledCourses.length} enrolled · {notEnrolled.length} more available</p>
+              {enrolledCourses.map((c) => (
+                <div key={c.id} className="rounded-2xl border p-6 hover:shadow-lg transition-all" style={CARD}>
+                  <div className="flex flex-wrap items-start gap-5">
+                    <Ring pct={c.progress} color={c.color} size={72} />
+                    <div className="flex-1 min-w-0">
+                      <div className="flex flex-wrap items-start justify-between gap-3">
+                        <div>
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold mb-2" style={{ background:`${c.color}15`, color:c.color }}>{c.tag}</span>
+                          <h3 className="font-black text-slate-900 text-lg leading-snug">{c.title}</h3>
+                          <p className="text-sm text-slate-400 mt-0.5">{c.duration} · Enrolled {c.enrolledDate} · <span className="font-semibold" style={{ color:c.color }}>{c.price}</span></p>
+                        </div>
+                        {c.progress === 100 ? (
+                          <button onClick={() => setCertModal({ courseId: c.id })}
+                            className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold text-white flex-shrink-0 hover:opacity-90 hover:-translate-y-0.5 transition-all"
+                            style={{ background:"linear-gradient(135deg,#f59e0b,#ea580c)", boxShadow:"0 4px 16px rgba(245,158,11,0.35)" }}>
+                            <Download size={14} /> View &amp; Download Certificate
+                          </button>
+                        ) : (
+                          <Link href={`/course/${c.id}`}
+                            className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold text-white hover:opacity-90 hover:-translate-y-0.5 transition-all flex-shrink-0"
+                            style={{ background:`linear-gradient(135deg,${c.color},${c.color}cc)`, boxShadow:`0 4px 16px ${c.color}44` }}>
+                            <Play size={14} /> {c.progress===0 ? "Start Learning" : "Resume"}
+                          </Link>
+                        )}
+                      </div>
+                      <div className="mt-4 grid sm:grid-cols-3 gap-3">
+                        {[
+                          { label:"Lessons Done",  value:`${c.completed}/${c.lessons}` },
+                          { label:"Next Up",        value:c.nextLesson },
+                          { label:"Status",         value:c.progress===100?"✅ Completed":c.progress===0?"⏳ Not Started":"▶ In Progress" },
+                        ].map(({ label, value }) => (
+                          <div key={label} className="p-3 rounded-xl bg-slate-50 border border-slate-100">
+                            <p className="text-[10px] text-slate-400 font-semibold uppercase tracking-wide">{label}</p>
+                            <p className="text-sm font-bold text-slate-700 mt-0.5 truncate">{value}</p>
+                          </div>
+                        ))}
+                      </div>
+                      <div className="mt-3 w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                        <div className="h-full rounded-full" style={{ width:`${c.progress}%`, background:`linear-gradient(90deg,${c.color},${c.color}88)` }} />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+
+              {notEnrolled.length > 0 && (
+                <button onClick={() => setActiveTab("explore")}
+                  className="w-full flex items-center justify-between rounded-2xl p-6 hover:-translate-y-0.5 hover:shadow-md transition-all group border"
+                  style={SOFT_BLUE}>
+                  <div className="text-left">
+                    <p className="font-bold text-base text-slate-900">Enroll in {notEnrolled.length} More Course{notEnrolled.length!==1?"s":""}</p>
+                    <p className="text-blue-600 text-sm mt-0.5">Prices starting from ₹299 · Certificate on completion</p>
+                  </div>
+                  <ChevronRight size={22} className="text-blue-600 group-hover:translate-x-1 transition-transform" />
+                </button>
+              )}
+            </div>
+          )}
+
+          {/* ══════════ EXPLORE ══════════ */}
+          {activeTab === "explore" && (
+            <div className="pb-8">
+              <div className="flex flex-wrap items-end justify-between mb-5 gap-3">
+                <div>
+                  <p className="font-bold text-slate-900 text-lg">All Courses <span className="text-slate-400 font-normal text-base">({ALL_COURSES.length} total)</span></p>
+                  <p className="text-sm text-slate-500 mt-0.5">Click any course to view details &amp; enroll · Prices ₹299–₹499 · Certificate included</p>
+                </div>
+                <div className="flex items-center gap-2 text-xs">
+                  <span className="flex items-center gap-1 px-3 py-1.5 rounded-full bg-green-50 text-green-700 border border-green-200 font-semibold"><CheckCircle size={11} /> {enrolledCourses.length} Enrolled</span>
+                  <span className="flex items-center gap-1 px-3 py-1.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200 font-semibold"><ShoppingCart size={11} /> {notEnrolled.length} Available</span>
+                </div>
+              </div>
+
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+                {ALL_COURSES.map((c) => {
+                  const enrolled = enrolledIds.includes(c.id);
+                  return (
+                    <div key={c.id}
+                      className="rounded-2xl border flex flex-col overflow-hidden hover:-translate-y-1 hover:shadow-xl transition-all group cursor-pointer relative"
+                      style={CARD}
+                      onClick={() => !enrolled && setEnrollModal(c)}>
+                      {enrolled && (
+                        <div className="absolute top-3 right-3 z-10 flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-green-100 text-green-700 border border-green-200">
+                          <CheckCircle size={10} /> Enrolled
+                        </div>
+                      )}
+                      <div className="h-1.5" style={{ background:`linear-gradient(90deg,${c.color},${c.color}55)` }} />
+                      <div className="p-5 flex flex-col flex-1">
+                        <div className="flex items-center gap-2 mb-3">
+                          <span className="px-2.5 py-1 rounded-lg text-xs font-bold" style={{ background:`${c.color}15`, color:c.color }}>{c.tag}</span>
+                          {c.badge && <span className="text-xs font-bold px-2.5 py-0.5 rounded-full" style={c.badgeStyle??{}}>{c.badge}</span>}
+                          <span className="ml-auto text-xs text-slate-400 bg-slate-100 px-2 py-0.5 rounded-full">{c.level}</span>
+                        </div>
+                        <h3 className="font-black text-slate-900 text-base leading-snug mb-2">{c.title}</h3>
+                        <p className="text-xs text-slate-500 leading-relaxed mb-3 flex-1">{c.desc}</p>
+                        <div className="flex flex-wrap gap-1 mb-3">
+                          {c.topics.slice(0,3).map((t) => (
+                            <span key={t} className="text-[10px] px-2 py-0.5 rounded-full border border-slate-200 bg-slate-50 text-slate-400">{t}</span>
+                          ))}
+                          {c.topics.length>3 && <span className="text-[10px] px-2 py-0.5 rounded-full border border-slate-200 bg-slate-50 text-slate-400">+{c.topics.length-3} more</span>}
+                        </div>
+                        <div className="flex items-center gap-3 text-xs text-slate-400 mb-4">
+                          <span className="flex items-center gap-1"><Star size={11} className="text-amber-400 fill-amber-400" />{c.rating}</span>
+                          <span className="flex items-center gap-1"><Clock size={11} />{c.duration}</span>
+                          <span>{c.lessons} lessons</span>
+                          <span>{c.students.toLocaleString()} students</span>
+                        </div>
+                        <div className="flex items-center justify-between pt-3 border-t border-slate-100">
+                          <div>
+                            <p className="text-xl font-black" style={{ color:c.color }}>{c.price}</p>
+                            <p className="text-[10px] text-slate-400">📜 Certificate included</p>
+                          </div>
+                          {enrolled ? (
+                            <button onClick={(e)=>{ e.stopPropagation(); setActiveTab("my courses"); }}
+                              className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-bold text-white"
+                              style={{ background:"linear-gradient(135deg,#10b981,#059669)" }}>
+                              <Play size={13} /> Continue
+                            </button>
+                          ) : (
+                            <button onClick={(e)=>{ e.stopPropagation(); setEnrollModal(c); }}
+                              className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-bold text-white hover:opacity-90 hover:-translate-y-0.5 transition-all group-hover:shadow-lg"
+                              style={{ background:`linear-gradient(135deg,${c.color},${c.color}bb)`, boxShadow:`0 4px 12px ${c.color}33` }}>
+                              <ShoppingCart size={13} /> Enroll Now
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Help */}
+              <div className="mt-6 rounded-2xl border p-5 flex flex-wrap items-center justify-between gap-4" style={CARD}>
+                <div>
+                  <p className="text-sm font-bold text-slate-900">Not sure which course to pick?</p>
+                  <p className="text-xs text-slate-500 mt-0.5">Our experts will guide you to the right course for your career goals.</p>
+                </div>
+                <Link href="/#contact"
+                  className="flex items-center gap-1.5 px-5 py-2.5 rounded-xl text-sm font-bold text-white whitespace-nowrap"
+                  style={{ background:"linear-gradient(135deg,#3b82f6,#6366f1)" }}>
+                  Talk to an Expert
+                </Link>
+              </div>
+            </div>
+          )}
+
+          {/* ══════════ CERTIFICATES ══════════ */}
+          {activeTab === "certificates" && (
+            <div className="pb-8 space-y-5">
+              {certCourses.length > 0 ? certCourses.map((c) => {
+                const cert = CERTIFICATES[c.id]!;
+                return (
+                  <div key={c.id} className="rounded-2xl border p-6 flex flex-wrap items-center justify-between gap-5" style={CARD}>
+                    <div className="flex items-center gap-5">
+                      <div className="w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0"
+                        style={{ background:"linear-gradient(135deg,#f59e0b,#ea580c)", boxShadow:"0 6px 20px rgba(245,158,11,0.35)" }}>
+                        <Award size={26} className="text-white" />
+                      </div>
+                      <div>
+                        <h3 className="font-black text-slate-900 text-base">{c.title}</h3>
+                        <p className="text-sm text-slate-400 mt-0.5">Issued {cert.date} · <span className="font-semibold text-slate-600">{cert.id}</span></p>
+                        <span className="inline-flex items-center gap-1 mt-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-50 text-amber-700 border border-amber-200">
+                          <CheckCircle size={10} /> {cert.grade}
+                        </span>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => setCertModal({ courseId: c.id })}
+                      className="flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm text-white hover:opacity-90 hover:-translate-y-0.5 transition-all"
+                      style={{ background:"linear-gradient(135deg,#f59e0b,#ea580c)", boxShadow:"0 4px 16px rgba(245,158,11,0.35)" }}>
+                      <Download size={15} /> View &amp; Download
+                    </button>
+                  </div>
+                );
+              }) : (
+                <div className="rounded-2xl border p-10 text-center" style={CARD}>
+                  <div className="w-16 h-16 rounded-full bg-slate-100 flex items-center justify-center mx-auto mb-4">
+                    <Award size={28} className="text-slate-300" />
+                  </div>
+                  <p className="font-bold text-slate-700 text-lg">No certificates yet</p>
+                  <p className="text-sm text-slate-400 mt-1 mb-5">Complete a course to earn your certificate.</p>
+                  <button onClick={() => setActiveTab("my courses")}
+                    className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-bold text-white"
+                    style={{ background:"linear-gradient(135deg,#3b82f6,#6366f1)" }}>
+                    <Play size={14} /> Go to My Courses
+                  </button>
+                </div>
+              )}
+
+              {/* In progress */}
+              {enrolledCourses.filter((c)=>c.progress<100).length > 0 && (
+                <div className="rounded-2xl border p-6" style={CARD}>
+                  <h3 className="text-sm font-bold text-slate-700 mb-3 flex items-center gap-2">
+                    <Lock size={14} className="text-slate-400" /> Certificates in Progress
+                  </h3>
+                  {enrolledCourses.filter((c)=>c.progress<100).map((c) => (
+                    <div key={c.id} className="flex items-center justify-between py-3 border-t border-slate-100 first:border-0">
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background:`${c.color}15` }}>
+                          <BookOpen size={14} style={{ color:c.color }} />
+                        </div>
+                        <div>
+                          <p className="text-sm font-semibold text-slate-700">{c.title}</p>
+                          <p className="text-xs text-slate-400">{c.progress}% complete · {c.completed}/{c.lessons} lessons</p>
+                        </div>
+                      </div>
+                      <div className="w-24 h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                        <div className="h-full rounded-full" style={{ width:`${c.progress}%`, background:c.color }} />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {notEnrolled.length > 0 && (
+                <button onClick={() => setActiveTab("explore")}
+                  className="w-full flex items-center justify-between rounded-2xl p-6 hover:shadow-md transition-all group border"
+                  style={SOFT_BLUE}>
+                  <div className="text-left">
+                    <p className="font-bold text-slate-900">Earn More Certificates</p>
+                    <p className="text-blue-600 text-sm mt-0.5">Enroll in {notEnrolled.length} more courses — from ₹299</p>
+                  </div>
+                  <ChevronRight size={20} className="text-blue-600 group-hover:translate-x-1 transition-transform" />
+                </button>
+              )}
+            </div>
+          )}
+
+          {/* ══════════ EDIT PROFILE ══════════ */}
+          {activeTab === "profile" && (
+            <div className="max-w-2xl pb-8">
+              <div className="rounded-2xl border p-7" style={CARD}>
+                <div className="flex items-center gap-3 mb-1">
+                  <span className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center"><UserCog size={16} className="text-blue-600" /></span>
+                  <h2 className="text-lg font-black text-slate-900">Edit Profile</h2>
+                </div>
+                <p className="text-sm text-slate-500 mb-6 ml-11">Update your personal details. Changes save straight to your account.</p>
+
+                <form onSubmit={handleSaveProfile} className="space-y-4">
+                  {saveError && (
+                    <p className="px-4 py-3 rounded-xl text-sm font-medium bg-red-50 text-red-600 border border-red-200">
+                      {saveError}
+                    </p>
+                  )}
+
+                  <div>
+                    <label className={labelCls}>Full Name</label>
+                    <input value={editForm.full_name} onChange={(e) => setEditForm((f) => ({ ...f, full_name: e.target.value }))} className={inputCls} />
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className={labelCls}>Email Address</label>
+                      <input type="email" value={editForm.email} onChange={(e) => setEditForm((f) => ({ ...f, email: e.target.value }))} className={inputCls} />
+                    </div>
+                    <div>
+                      <label className={labelCls}>Date of Birth</label>
+                      <input type="date" value={editForm.dob} onChange={(e) => setEditForm((f) => ({ ...f, dob: e.target.value }))} className={inputCls} />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className={labelCls}>Phone</label>
+                      <input value={editForm.phone} onChange={(e) => setEditForm((f) => ({ ...f, phone: e.target.value }))} className={inputCls} />
+                    </div>
+                    <div>
+                      <label className={labelCls}>Organization</label>
+                      <input value={editForm.organization} onChange={(e) => setEditForm((f) => ({ ...f, organization: e.target.value }))} className={inputCls} />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-3 gap-3">
+                    <div>
+                      <label className={labelCls}>City</label>
+                      <input value={editForm.city} onChange={(e) => setEditForm((f) => ({ ...f, city: e.target.value }))} className={inputCls} />
+                    </div>
+                    <div>
+                      <label className={labelCls}>State</label>
+                      <input value={editForm.state} onChange={(e) => setEditForm((f) => ({ ...f, state: e.target.value }))} className={inputCls} />
+                    </div>
+                    <div>
+                      <label className={labelCls}>Pincode</label>
+                      <input value={editForm.pincode} onChange={(e) => setEditForm((f) => ({ ...f, pincode: e.target.value }))} className={inputCls} />
+                    </div>
+                  </div>
+
+                  <div className="flex gap-3 pt-2">
+                    <button type="button" onClick={resetEditForm}
+                      className="flex-1 py-3 rounded-xl font-semibold text-sm text-slate-600 border border-slate-200 hover:bg-slate-50 transition-all">
+                      Reset
+                    </button>
+                    <button type="submit" disabled={saving}
+                      className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-sm text-white disabled:opacity-70 transition-all hover:opacity-90"
+                      style={{ background:"linear-gradient(135deg,#3b82f6,#6366f1)" }}>
+                      {saving ? "Saving…" : "Save Changes"}
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          )}
+
+        </main>
       </div>
     </div>
   );
