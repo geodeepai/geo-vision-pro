@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Eye, EyeOff, ArrowLeft, Loader2 } from "lucide-react";
 import AuthPanel from "@/components/AuthPanel";
 import { createClient } from "@/lib/supabase/client";
@@ -30,6 +31,16 @@ type Fields = {
 type Errors = Partial<Record<keyof Fields, string>> & { form?: string };
 
 export default function RegisterPage() {
+  return (
+    <Suspense fallback={null}>
+      <RegisterForm />
+    </Suspense>
+  );
+}
+
+function RegisterForm() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const [f, setF] = useState<Fields>({
     name: "", email: "", phone: "", interest: "", password: "", confirm: "", agree: false,
   });
@@ -66,7 +77,7 @@ export default function RegisterPage() {
     setErrors({});
     setLoading(true);
     const supabase = createClient();
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email: f.email,
       password: f.password,
       options: { data: { full_name: f.name, phone: f.phone, interest: f.interest } },
@@ -74,6 +85,10 @@ export default function RegisterPage() {
     setLoading(false);
     if (error) {
       setErrors({ form: error.message });
+      return;
+    }
+    if (data.session) {
+      router.push(searchParams.get("redirect") || "/profile");
       return;
     }
     setSubmitted(true);
@@ -97,6 +112,9 @@ export default function RegisterPage() {
         ? "border-red-400 focus:border-red-500 focus:ring-3 focus:ring-red-100"
         : "border-slate-200 focus:border-blue-500 focus:ring-3 focus:ring-blue-100"
     }`;
+
+  const redirect = searchParams.get("redirect");
+  const loginHref = redirect ? `/login?redirect=${encodeURIComponent(redirect)}` : "/login";
 
   return (
     <div className="min-h-screen grid lg:grid-cols-[1fr_1.1fr]">
@@ -122,7 +140,7 @@ export default function RegisterPage() {
           </Link>
           <span className="text-sm text-slate-500">
             Already have an account?{" "}
-            <Link href="/login" className="text-blue-600 font-semibold hover:text-blue-700 transition-colors">Sign In</Link>
+            <Link href={loginHref} className="text-blue-600 font-semibold hover:text-blue-700 transition-colors">Sign In</Link>
           </span>
         </div>
 
@@ -140,7 +158,7 @@ export default function RegisterPage() {
                 <h2 className="text-2xl font-bold text-slate-900 mb-2">Account Created!</h2>
                 <p className="text-slate-500 mb-2">Welcome to GeoVision Pro, {f.name.split(" ")[0]}.</p>
                 <p className="text-sm text-slate-400 mb-6">Check your inbox to verify your email address.</p>
-                <Link href="/login" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold hover:opacity-90 transition-all">
+                <Link href={loginHref} className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold hover:opacity-90 transition-all">
                   Sign In Now
                 </Link>
               </div>
@@ -266,7 +284,7 @@ export default function RegisterPage() {
 
                 <p className="text-center text-sm text-slate-500 mt-6">
                   Already have an account?{" "}
-                  <Link href="/login" className="text-blue-600 font-semibold hover:text-blue-700 transition-colors">Sign In</Link>
+                  <Link href={loginHref} className="text-blue-600 font-semibold hover:text-blue-700 transition-colors">Sign In</Link>
                 </p>
               </>
             )}

@@ -62,6 +62,9 @@ function LoginForm() {
     router.push(redirect || "/profile");
   }
 
+  const redirectParam = searchParams.get("redirect");
+  const registerHref = redirectParam ? `/register?redirect=${encodeURIComponent(redirectParam)}` : "/register";
+
   return (
     <div className="min-h-screen grid lg:grid-cols-[1fr_1.1fr]">
 
@@ -93,7 +96,7 @@ function LoginForm() {
           </Link>
           <span className="text-sm text-slate-500">
             New here?{" "}
-            <Link href="/register" className="text-blue-600 font-semibold hover:text-blue-700 transition-colors">
+            <Link href={registerHref} className="text-blue-600 font-semibold hover:text-blue-700 transition-colors">
               Create an account
             </Link>
           </span>
@@ -250,7 +253,7 @@ function LoginForm() {
                 <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
                   <p className="text-sm font-semibold text-slate-700 mb-4">Not a registered user yet?</p>
                   <Link
-                    href="/register"
+                    href={registerHref}
                     className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border-2 border-blue-600 text-blue-600 font-semibold text-sm hover:bg-blue-600 hover:text-white transition-all"
                   >
                     Create an account
