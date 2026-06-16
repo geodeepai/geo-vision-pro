@@ -11,6 +11,7 @@ import {
   Crown, ChevronDown, Sparkles, Camera, Loader2,
   History, LogIn, UserPlus, KeyRound, Image as ImageIcon,
   Shield, Eye, EyeOff,
+  Globe, Map, Layers, Plane, Cpu, Building2, ArrowLeft, ExternalLink,
 } from "lucide-react";
 import CertificateModal from "@/components/CertificateModal";
 import { createClient } from "@/lib/supabase/client";
@@ -96,6 +97,40 @@ const CERTIFICATES: Record<number, { date: string; id: string; grade: string; in
   6: { date: "April 2025", id: "GVP-RS-2025-001",  grade: "Distinction", instructor: "Dr. Priya Sharma" },
 };
 
+/* ─── explore topics (mirrors the site's 6 service pillars) ──── */
+const TOPICS = [
+  {
+    key: "remote-sensing", label: "Remote Sensing & Earth Observation", icon: Globe, color: "#0d9488",
+    desc: "Satellite and aerial imagery analysis, data acquisition, classification, and change detection.",
+    href: "/consultancy", tags: ["GEE", "RS"],
+  },
+  {
+    key: "lulc", label: "LULC Analysis & Mapping", icon: Map, color: "#059669",
+    desc: "Multi-temporal land use & land cover classification for urban planning, agriculture, and environment.",
+    href: "/lulc", tags: ["RS"],
+  },
+  {
+    key: "gis", label: "GIS & Spatial Analysis", icon: Layers, color: "#2563eb",
+    desc: "Geodatabase design, network analysis, spatial modelling, and custom cartography.",
+    href: "/gis", tags: ["GIS"],
+  },
+  {
+    key: "drone", label: "Drone & UAV Mapping", icon: Plane, color: "#d97706",
+    desc: "Survey-grade UAV mapping delivering orthomosaics, DEMs, and volumetric reports.",
+    href: "/drone", tags: [],
+  },
+  {
+    key: "ai-geo", label: "AI-Powered Geo-Analytics", icon: Cpu, color: "#0891b2",
+    desc: "Deep learning and big-data geoprocessing for automated feature extraction and predictive modelling.",
+    href: "/ai-geo", tags: ["AI/ML"],
+  },
+  {
+    key: "structural", label: "Structural & Civil Engineering", icon: Building2, color: "#7c3aed",
+    desc: "Structural analysis, design review, and civil engineering consultancy for infrastructure.",
+    href: "/structural", tags: ["CAD", "STAAD"],
+  },
+];
+
 /* ─── helpers ────────────────────────────────────────────────── */
 function Avatar({ name, size = 72, ring = true, src }: { name: string; size?: number; ring?: boolean; src?: string | null }) {
   const initials = name.split(" ").map((n) => n[0]).slice(0, 2).join("").toUpperCase();
@@ -141,12 +176,13 @@ const SOFT_BLUE = { background:"linear-gradient(135deg,#f3f7ff,#f1f0fe)", border
 const PRIMARY_BTN = "linear-gradient(135deg,#4f7df3,#6366f1)";
 const PRIMARY_SHADOW = "0 4px 14px rgba(79,125,243,0.28)";
 
-type TabKey = "dashboard" | "my courses" | "explore" | "certificates" | "profile" | "security" | "activity";
+type TabKey = "dashboard" | "my courses" | "explore" | "topics" | "certificates" | "profile" | "security" | "activity";
 const NAV_GROUPS: { label: string; items: { key: TabKey; label: string; icon: typeof LayoutDashboard }[] }[] = [
   { label: "Learning", items: [
     { key: "dashboard",    label: "Dashboard",       icon: LayoutDashboard },
     { key: "my courses",   label: "My Courses",      icon: BookOpen },
     { key: "explore",      label: "Explore Courses", icon: Compass },
+    { key: "topics",       label: "Explore Topics",  icon: Globe },
     { key: "certificates", label: "Certificates",    icon: Award },
   ]},
   { label: "Account", items: [
@@ -208,6 +244,9 @@ export default function ProfilePage() {
   const [pwShow, setPwShow]               = useState(false);
   const [pwSaving, setPwSaving]           = useState(false);
   const [pwError, setPwError]             = useState("");
+
+  /* ── Explore topics ── */
+  const [selectedTopic, setSelectedTopic] = useState<typeof TOPICS[number] | null>(null);
 
   /* load persisted state */
   useEffect(() => {
@@ -283,6 +322,7 @@ export default function ProfilePage() {
     if (key === "profile") { goToEditProfile(); return; }
     if (key === "activity" && !activityLoaded) loadActivity();
     if (key === "security") { setPwForm({ current: "", next: "", confirm: "" }); setPwError(""); }
+    if (key === "topics") { setSelectedTopic(null); }
     setActiveTab(key);
   }
 
@@ -1155,6 +1195,103 @@ export default function ProfilePage() {
                   Talk to an Expert
                 </Link>
               </div>
+            </div>
+          )}
+
+          {/* ══════════ EXPLORE TOPICS ══════════ */}
+          {activeTab === "topics" && (
+            <div className="pb-8">
+              {!selectedTopic ? (
+                <>
+                  <div className="mb-5">
+                    <p className="font-bold text-slate-900 text-lg">Explore Topics</p>
+                    <p className="text-sm text-slate-500 mt-0.5">Browse by subject area to find related courses and learn more about our services.</p>
+                  </div>
+                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+                    {TOPICS.map((t) => {
+                      const Icon = t.icon;
+                      const matchCount = ALL_COURSES.filter((c) => t.tags.includes(c.tag)).length;
+                      return (
+                        <button key={t.key} onClick={() => setSelectedTopic(t)}
+                          className="text-left rounded-2xl border p-5 hover:-translate-y-1 hover:shadow-xl transition-all flex flex-col gap-3"
+                          style={CARD}>
+                          <div className="w-11 h-11 rounded-xl flex items-center justify-center" style={{ background: `${t.color}15`, color: t.color }}>
+                            <Icon size={20} />
+                          </div>
+                          <div>
+                            <h3 className="font-black text-slate-900 text-base leading-snug">{t.label}</h3>
+                            <p className="text-xs text-slate-500 mt-1.5 leading-relaxed">{t.desc}</p>
+                          </div>
+                          {matchCount > 0 && (
+                            <span className="text-[11px] font-bold px-2 py-0.5 rounded-full w-fit" style={{ background: `${t.color}15`, color: t.color }}>
+                              {matchCount} course{matchCount !== 1 ? "s" : ""}
+                            </span>
+                          )}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </>
+              ) : (
+                <div>
+                  <button onClick={() => setSelectedTopic(null)}
+                    className="flex items-center gap-1.5 text-sm font-semibold text-slate-500 hover:text-slate-700 transition-colors mb-5">
+                    <ArrowLeft size={15} /> Back to Topics
+                  </button>
+
+                  <div className="rounded-2xl border p-7 mb-5" style={CARD}>
+                    <div className="flex items-start gap-4">
+                      <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: `${selectedTopic.color}15`, color: selectedTopic.color }}>
+                        <selectedTopic.icon size={22} />
+                      </div>
+                      <div className="flex-1">
+                        <h2 className="text-xl font-black text-slate-900">{selectedTopic.label}</h2>
+                        <p className="text-sm text-slate-500 mt-1.5 leading-relaxed">{selectedTopic.desc}</p>
+                        <Link href={selectedTopic.href}
+                          className="inline-flex items-center gap-1.5 mt-4 text-sm font-bold transition-colors hover:opacity-80"
+                          style={{ color: selectedTopic.color }}>
+                          Learn more on our website <ExternalLink size={13} />
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+
+                  {(() => {
+                    const related = ALL_COURSES.filter((c) => selectedTopic.tags.includes(c.tag));
+                    if (related.length === 0) {
+                      return (
+                        <div className="rounded-2xl border p-8 text-center" style={CARD}>
+                          <p className="text-sm text-slate-500">No courses tagged for this topic in your dashboard yet — visit the link above for our full {selectedTopic.label} services.</p>
+                        </div>
+                      );
+                    }
+                    return (
+                      <div className="grid md:grid-cols-2 gap-4">
+                        {related.map((c) => {
+                          const enrolled = enrolledIds.includes(c.id);
+                          return (
+                            <div key={c.id} className="rounded-2xl border p-5 flex flex-col gap-2" style={CARD}>
+                              <div className="flex items-center justify-between">
+                                <span className="px-2 py-0.5 rounded-full text-[11px] font-bold" style={{ background:`${c.color}15`, color:c.color }}>{c.tag}</span>
+                                {enrolled && <span className="text-[11px] font-bold text-green-600 flex items-center gap-1"><CheckCircle size={11}/> Enrolled</span>}
+                              </div>
+                              <p className="font-bold text-slate-800 text-sm">{c.title}</p>
+                              <p className="text-xs text-slate-400">{c.duration} · {c.price}</p>
+                              {!enrolled && (
+                                <button onClick={() => setEnrollModal(c)}
+                                  className="mt-2 self-start flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-bold text-white"
+                                  style={{ background:`linear-gradient(135deg,${c.color},${c.color}cc)` }}>
+                                  <ShoppingCart size={12} /> Enroll Now
+                                </button>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    );
+                  })()}
+                </div>
+              )}
             </div>
           )}
 
