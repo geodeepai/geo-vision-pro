@@ -126,6 +126,9 @@ const CARD = { background:"rgba(255,255,255,0.93)", borderColor:"rgba(0,0,0,0.06
 const tabs = ["dashboard","my courses","explore","certificates"] as const;
 
 /* ─── page ───────────────────────────────────────────────────── */
+const PROFILE_FIELDS_INIT = { full_name: "", dob: "", phone: "", organization: "", city: "", state: "", pincode: "" };
+type ProfileFields = typeof PROFILE_FIELDS_INIT;
+
 export default function ProfilePage() {
   const router = useRouter();
   const [user, setUser]               = useState(MOCK_USER);
@@ -136,6 +139,13 @@ export default function ProfilePage() {
   const [confirming, setConfirming]   = useState(false);
   const [certModal, setCertModal]     = useState<null | { courseId: number }>(null);
 
+  /* ── Editable profile ── */
+  const [profile, setProfile]         = useState<ProfileFields>(PROFILE_FIELDS_INIT);
+  const [editOpen, setEditOpen]       = useState(false);
+  const [editForm, setEditForm]       = useState<ProfileFields & { email: string }>({ ...PROFILE_FIELDS_INIT, email: "" });
+  const [saving, setSaving]           = useState(false);
+  const [saveError, setSaveError]     = useState("");
+
   /* load persisted state */
   useEffect(() => {
     const ids = localStorage.getItem("gvp_enrolled_ids");
@@ -144,13 +154,92 @@ export default function ProfilePage() {
     if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) return;
 
     const supabase = createClient();
-    supabase.auth.getUser().then(({ data }) => {
+    supabase.auth.getUser().then(async ({ data }) => {
       const authUser = data.user;
       if (!authUser) return;
       const fullName = (authUser.user_metadata?.full_name as string) || MOCK_USER.name;
       setUser((u) => ({ ...u, name: fullName, email: authUser.email ?? "" }));
+
+      const { data: row } = await supabase.from("profiles").select("*").eq("id", authUser.id).maybeSingle();
+      const loaded: ProfileFields = {
+        full_name: row?.full_name || fullName,
+        dob: row?.dob || "",
+        phone: row?.phone || "",
+        organization: row?.organization || "",
+        city: row?.city || "",
+        state: row?.state || "",
+        pincode: row?.pincode || "",
+      };
+      setProfile(loaded);
+      setUser((u) => ({
+        ...u,
+        name: loaded.full_name || u.name,
+        phone: loaded.phone || u.phone,
+        location: loaded.city || loaded.state ? [loaded.city, loaded.state].filter(Boolean).join(", ") : u.location,
+      }));
     });
   }, []);
+
+  function openEditProfile() {
+    setEditForm({ ...profile, full_name: profile.full_name || user.name, email: user.email });
+    setSaveError("");
+    setEditOpen(true);
+  }
+
+  async function handleSaveProfile(e: React.FormEvent) {
+    e.preventDefault();
+    setSaving(true);
+    setSaveError("");
+    try {
+      const supabase = createClient();
+      const { data: { user: authUser } } = await supabase.auth.getUser();
+      if (!authUser) throw new Error("Not signed in");
+
+      const { error: upsertError } = await supabase.from("profiles").upsert({
+        id: authUser.id,
+        full_name: editForm.full_name,
+        dob: editForm.dob || null,
+        phone: editForm.phone,
+        organization: editForm.organization,
+        city: editForm.city,
+        state: editForm.state,
+        pincode: editForm.pincode,
+        updated_at: new Date().toISOString(),
+      });
+      if (upsertError) throw upsertError;
+
+      await supabase.auth.updateUser({ data: { full_name: editForm.full_name } });
+
+      if (editForm.email && editForm.email !== user.email) {
+        const res = await fetch("/api/profile/email", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: editForm.email }),
+        });
+        if (!res.ok) {
+          const body = await res.json().catch(() => ({}));
+          throw new Error(body.error || "Could not update email address");
+        }
+      }
+
+      const { full_name, dob, phone, organization, city, state, pincode } = editForm;
+      setProfile({ full_name, dob, phone, organization, city, state, pincode });
+      setUser((u) => ({
+        ...u,
+        name: full_name || u.name,
+        email: editForm.email || u.email,
+        phone: phone || u.phone,
+        location: city || state ? [city, state].filter(Boolean).join(", ") : u.location,
+      }));
+      setEditOpen(false);
+      setToast("Profile updated successfully!");
+      setTimeout(() => setToast(null), 4000);
+    } catch (err) {
+      setSaveError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
+    } finally {
+      setSaving(false);
+    }
+  }
 
   /* enroll action */
   async function handleEnroll(courseId: number) {
@@ -162,7 +251,7 @@ export default function ProfilePage() {
     setConfirming(false);
     setEnrollModal(null);
     const name = ALL_COURSES.find((c) => c.id === courseId)?.title ?? "";
-    setToast(name);
+    setToast(`Enrolled in "${name}" successfully!`);
     setTimeout(() => setToast(null), 4000);
     setActiveTab("my courses");
   }
@@ -197,7 +286,96 @@ export default function ProfilePage() {
         <div className="fixed top-5 right-5 z-[100] flex items-center gap-3 px-5 py-3.5 rounded-2xl shadow-2xl text-white text-sm font-semibold animate-bounce-in"
           style={{ background:"linear-gradient(135deg,#10b981,#059669)", boxShadow:"0 8px 32px rgba(16,185,129,0.45)" }}>
           <CheckCircle size={18} />
-          <span>Enrolled in <span className="font-black">"{toast}"</span> successfully!</span>
+          <span>{toast}</span>
+        </div>
+      )}
+
+      {/* ── Edit profile modal ────────────────────────────── */}
+      {editOpen && (
+        <div className="fixed inset-0 z-[90] flex items-center justify-center p-4"
+          style={{ background:"rgba(0,0,0,0.55)", backdropFilter:"blur(6px)" }}
+          onClick={(e) => { if (e.target === e.currentTarget) setEditOpen(false); }}>
+          <div className="w-full max-w-lg rounded-3xl overflow-hidden shadow-2xl max-h-[90vh] overflow-y-auto" style={{ background:"#fff" }}>
+            <div className="h-2" style={{ background:"linear-gradient(90deg,#3b82f6,#6366f1)" }} />
+            <div className="p-7">
+              <div className="flex items-start justify-between mb-5">
+                <h2 className="text-xl font-black text-slate-900">Edit Profile</h2>
+                <button onClick={() => setEditOpen(false)} className="w-8 h-8 rounded-xl flex items-center justify-center text-slate-400 hover:bg-slate-100 transition-all flex-shrink-0">
+                  <X size={18} />
+                </button>
+              </div>
+
+              <form onSubmit={handleSaveProfile} className="space-y-4">
+                {saveError && (
+                  <p className="px-4 py-3 rounded-xl text-sm font-medium bg-red-50 text-red-600 border border-red-200">
+                    {saveError}
+                  </p>
+                )}
+
+                <div>
+                  <label className="block text-xs font-semibold text-slate-600 mb-1.5">Full Name</label>
+                  <input value={editForm.full_name} onChange={(e) => setEditForm((f) => ({ ...f, full_name: e.target.value }))}
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm text-slate-800 bg-slate-50 focus:bg-white focus:border-blue-500 focus:ring-3 focus:ring-blue-100 transition-all" />
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-600 mb-1.5">Email Address</label>
+                    <input type="email" value={editForm.email} onChange={(e) => setEditForm((f) => ({ ...f, email: e.target.value }))}
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm text-slate-800 bg-slate-50 focus:bg-white focus:border-blue-500 focus:ring-3 focus:ring-blue-100 transition-all" />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-600 mb-1.5">Date of Birth</label>
+                    <input type="date" value={editForm.dob} onChange={(e) => setEditForm((f) => ({ ...f, dob: e.target.value }))}
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm text-slate-800 bg-slate-50 focus:bg-white focus:border-blue-500 focus:ring-3 focus:ring-blue-100 transition-all" />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-600 mb-1.5">Phone</label>
+                    <input value={editForm.phone} onChange={(e) => setEditForm((f) => ({ ...f, phone: e.target.value }))}
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm text-slate-800 bg-slate-50 focus:bg-white focus:border-blue-500 focus:ring-3 focus:ring-blue-100 transition-all" />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-600 mb-1.5">Organization</label>
+                    <input value={editForm.organization} onChange={(e) => setEditForm((f) => ({ ...f, organization: e.target.value }))}
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm text-slate-800 bg-slate-50 focus:bg-white focus:border-blue-500 focus:ring-3 focus:ring-blue-100 transition-all" />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-3 gap-3">
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-600 mb-1.5">City</label>
+                    <input value={editForm.city} onChange={(e) => setEditForm((f) => ({ ...f, city: e.target.value }))}
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm text-slate-800 bg-slate-50 focus:bg-white focus:border-blue-500 focus:ring-3 focus:ring-blue-100 transition-all" />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-600 mb-1.5">State</label>
+                    <input value={editForm.state} onChange={(e) => setEditForm((f) => ({ ...f, state: e.target.value }))}
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm text-slate-800 bg-slate-50 focus:bg-white focus:border-blue-500 focus:ring-3 focus:ring-blue-100 transition-all" />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-600 mb-1.5">Pincode</label>
+                    <input value={editForm.pincode} onChange={(e) => setEditForm((f) => ({ ...f, pincode: e.target.value }))}
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm text-slate-800 bg-slate-50 focus:bg-white focus:border-blue-500 focus:ring-3 focus:ring-blue-100 transition-all" />
+                  </div>
+                </div>
+
+                <div className="flex gap-3 pt-2">
+                  <button type="button" onClick={() => setEditOpen(false)}
+                    className="flex-1 py-3 rounded-xl font-semibold text-sm text-slate-600 border border-slate-200 hover:bg-slate-50 transition-all">
+                    Cancel
+                  </button>
+                  <button type="submit" disabled={saving}
+                    className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-sm text-white disabled:opacity-70 transition-all hover:opacity-90"
+                    style={{ background:"linear-gradient(135deg,#3b82f6,#6366f1)" }}>
+                    {saving ? "Saving…" : "Save Changes"}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
         </div>
       )}
 
@@ -491,7 +669,8 @@ export default function ProfilePage() {
                 ].map(({ icon, v }) => (
                   <div key={v} className="flex items-center gap-2 text-xs text-slate-500 py-1">{icon}<span className="truncate">{v}</span></div>
                 ))}
-                <button className="mt-4 w-full flex items-center justify-center gap-1.5 py-2.5 rounded-xl border border-slate-200 text-sm font-semibold text-slate-600 hover:bg-slate-50 transition-all">
+                <button onClick={openEditProfile}
+                  className="mt-4 w-full flex items-center justify-center gap-1.5 py-2.5 rounded-xl border border-slate-200 text-sm font-semibold text-slate-600 hover:bg-slate-50 transition-all">
                   <Edit3 size={13} /> Edit Profile
                 </button>
               </div>

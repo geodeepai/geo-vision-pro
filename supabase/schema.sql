@@ -41,3 +41,24 @@ create policy "Users view own enrollments"
   using (auth.uid() = user_id);
 
 create index enrollments_user_id_idx on public.enrollments (user_id);
+
+create table public.profiles (
+  id              uuid references auth.users on delete cascade primary key,
+
+  full_name       text,
+  dob             date,
+  phone           text,
+  organization    text,
+  city            text,
+  state           text,
+  pincode         text,
+
+  updated_at      timestamptz not null default now()
+);
+
+alter table public.profiles enable row level security;
+
+create policy "Users manage own profile"
+  on public.profiles for all
+  using (auth.uid() = id)
+  with check (auth.uid() = id);
