@@ -1047,6 +1047,19 @@ export default function ProfilePage() {
 
         </main>
       </div>
+
+      {/* ── Footer ─────────────────────────────────────────── */}
+      <footer className="px-5 md:px-9 py-5" style={{ borderTop: "1px solid rgba(15,23,42,0.06)" }}>
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-400">
+          <p>&copy; 2026 GeoVisionPro. All rights reserved.</p>
+          <div className="flex items-center gap-5">
+            <Link href="#" className="hover:text-slate-600 transition-colors">Help &amp; Support</Link>
+            <Link href="#" className="hover:text-slate-600 transition-colors">Privacy Policy</Link>
+            <Link href="#" className="hover:text-slate-600 transition-colors">Terms of Service</Link>
+            <Link href="/#contact" className="hover:text-slate-600 transition-colors">Contact Us</Link>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
