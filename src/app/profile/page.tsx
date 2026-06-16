@@ -8,7 +8,7 @@ import {
   CheckCircle, Star, ChevronRight, Download, Lock, ShoppingCart,
   Target, Mail, Phone, MapPin, Calendar, X,
   Users, BarChart2, GraduationCap, LayoutDashboard, Compass, UserCog,
-  Crown, ChevronDown, Sparkles,
+  Crown, ChevronDown, Sparkles, Camera, Loader2,
 } from "lucide-react";
 import CertificateModal from "@/components/CertificateModal";
 import { createClient } from "@/lib/supabase/client";
@@ -94,13 +94,23 @@ const CERTIFICATES: Record<number, { date: string; id: string; grade: string; in
 };
 
 /* ─── helpers ────────────────────────────────────────────────── */
-function Avatar({ name, size = 72, ring = true }: { name: string; size?: number; ring?: boolean }) {
+function Avatar({ name, size = 72, ring = true, src }: { name: string; size?: number; ring?: boolean; src?: string | null }) {
   const initials = name.split(" ").map((n) => n[0]).slice(0, 2).join("").toUpperCase();
+  const ringShadow = ring ? "0 0 0 3px #fff,0 0 0 5px rgba(99,102,241,0.35),0 6px 18px rgba(99,102,241,0.3)" : "none";
+
+  if (src) {
+    return (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img src={src} alt={name} className="rounded-full object-cover flex-shrink-0 select-none"
+        style={{ width: size, height: size, boxShadow: ringShadow }} />
+    );
+  }
+
   return (
     <div className="rounded-full flex items-center justify-center font-black text-white select-none flex-shrink-0"
       style={{ width: size, height: size, fontSize: size * 0.32,
         background: "linear-gradient(135deg,#3b82f6,#6366f1,#8b5cf6)",
-        boxShadow: ring ? "0 0 0 3px #fff,0 0 0 5px rgba(99,102,241,0.35),0 6px 18px rgba(99,102,241,0.3)" : "none" }}>
+        boxShadow: ringShadow }}>
       {initials}
     </div>
   );
@@ -164,6 +174,12 @@ export default function ProfilePage() {
   const [saving, setSaving]           = useState(false);
   const [saveError, setSaveError]     = useState("");
 
+  /* ── Profile picture ── */
+  const [avatarUrl, setAvatarUrl]         = useState<string | null>(null);
+  const [uploadingAvatar, setUploadingAvatar] = useState(false);
+  const [avatarError, setAvatarError]     = useState("");
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   /* load persisted state */
   useEffect(() => {
     const ids = localStorage.getItem("gvp_enrolled_ids");
@@ -179,6 +195,7 @@ export default function ProfilePage() {
       setUser((u) => ({ ...u, name: fullName, email: authUser.email ?? "" }));
 
       const { data: row } = await supabase.from("profiles").select("*").eq("id", authUser.id).maybeSingle();
+      if (row?.avatar_url) setAvatarUrl(row.avatar_url);
       const loaded: ProfileFields = {
         full_name: row?.full_name || fullName,
         dob: row?.dob || "",
@@ -223,6 +240,76 @@ export default function ProfilePage() {
   function resetEditForm() {
     setEditForm({ ...profile, full_name: profile.full_name || user.name, email: user.email });
     setSaveError("");
+  }
+
+  async function handleAvatarChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) { setAvatarError("Please choose an image file."); return; }
+    if (file.size > 3 * 1024 * 1024) { setAvatarError("Image must be smaller than 3MB."); return; }
+
+    setAvatarError("");
+    setUploadingAvatar(true);
+    try {
+      const supabase = createClient();
+      const { data: { user: authUser } } = await supabase.auth.getUser();
+      if (!authUser) throw new Error("Not signed in");
+
+      const path = `${authUser.id}/avatar`;
+      const { error: uploadError } = await supabase.storage.from("avatars").upload(path, file, {
+        upsert: true,
+        contentType: file.type,
+      });
+      if (uploadError) throw uploadError;
+
+      const { data: pub } = supabase.storage.from("avatars").getPublicUrl(path);
+      const freshUrl = `${pub.publicUrl}?t=${Date.now()}`;
+
+      const { error: upsertError } = await supabase.from("profiles").upsert({
+        id: authUser.id,
+        avatar_url: freshUrl,
+        updated_at: new Date().toISOString(),
+      });
+      if (upsertError) throw upsertError;
+
+      await supabase.auth.updateUser({ data: { avatar_url: freshUrl } });
+
+      setAvatarUrl(freshUrl);
+      setToast("Profile picture updated!");
+      setTimeout(() => setToast(null), 4000);
+    } catch (err) {
+      setAvatarError(err instanceof Error ? err.message : "Could not upload image. Please try again.");
+    } finally {
+      setUploadingAvatar(false);
+    }
+  }
+
+  async function handleRemoveAvatar() {
+    setAvatarError("");
+    setUploadingAvatar(true);
+    try {
+      const supabase = createClient();
+      const { data: { user: authUser } } = await supabase.auth.getUser();
+      if (!authUser) throw new Error("Not signed in");
+
+      await supabase.storage.from("avatars").remove([`${authUser.id}/avatar`]);
+
+      const { error: upsertError } = await supabase.from("profiles").upsert({
+        id: authUser.id,
+        avatar_url: null,
+        updated_at: new Date().toISOString(),
+      });
+      if (upsertError) throw upsertError;
+
+      await supabase.auth.updateUser({ data: { avatar_url: null } });
+      setAvatarUrl(null);
+    } catch (err) {
+      setAvatarError(err instanceof Error ? err.message : "Could not remove photo. Please try again.");
+    } finally {
+      setUploadingAvatar(false);
+    }
   }
 
   async function handleSaveProfile(e: React.FormEvent) {
@@ -452,7 +539,7 @@ export default function ProfilePage() {
             <div className="relative" ref={menuRef}>
               <button onClick={() => setMenuOpen((o) => !o)}
                 className="flex items-center gap-2 pl-1.5 pr-2.5 py-1.5 rounded-xl hover:bg-slate-100 transition-all">
-                <Avatar name={user.name} size={30} ring={false} />
+                <Avatar name={user.name} size={30} ring={false} src={avatarUrl} />
                 <span className="text-sm font-semibold text-slate-700 hidden sm:block">{user.name}</span>
                 <ChevronDown size={14} className="text-slate-400 hidden sm:block" />
               </button>
@@ -461,7 +548,7 @@ export default function ProfilePage() {
                 <div className="absolute right-0 top-[calc(100%+8px)] w-64 rounded-2xl overflow-hidden z-50"
                   style={{ background:"#fff", border:"1px solid rgba(15,23,42,0.08)", boxShadow:"0 16px 40px rgba(15,23,42,0.16)" }}>
                   <div className="p-4 flex items-center gap-3" style={{ borderBottom:"1px solid rgba(15,23,42,0.06)" }}>
-                    <Avatar name={user.name} size={40} />
+                    <Avatar name={user.name} size={40} src={avatarUrl} />
                     <div className="min-w-0">
                       <p className="font-bold text-slate-900 text-sm truncate">{user.name}</p>
                       <p className="text-xs text-slate-400 truncate">{user.email || "—"}</p>
@@ -563,7 +650,7 @@ export default function ProfilePage() {
               <div className="rounded-3xl p-7 md:p-8 mb-6 flex flex-wrap items-center justify-between gap-5 relative overflow-hidden border" style={SOFT_BLUE}>
                 <div className="absolute top-0 right-0 w-72 h-72 rounded-full pointer-events-none" style={{ background:"radial-gradient(circle,#a5b4fc,transparent 70%)", filter:"blur(50px)", opacity:0.35 }} />
                 <div className="relative z-10 flex items-center gap-5">
-                  <Avatar name={user.name} size={64} />
+                  <Avatar name={user.name} size={64} src={avatarUrl} />
                   <div>
                     <p className="text-indigo-500 text-sm font-semibold">{greeting},</p>
                     <h1 className="text-[26px] font-black text-slate-900 tracking-tight leading-tight">{user.name} 👋</h1>
@@ -688,7 +775,7 @@ export default function ProfilePage() {
                   {/* Profile card */}
                   <div className="rounded-2xl border p-6" style={CARD}>
                     <div className="flex items-center gap-3 mb-4">
-                      <Avatar name={user.name} size={48} />
+                      <Avatar name={user.name} size={48} src={avatarUrl} />
                       <div>
                         <p className="font-bold text-slate-900">{user.name}</p>
                         <p className="text-xs text-slate-400">{user.interest}</p>
@@ -962,11 +1049,40 @@ export default function ProfilePage() {
           {activeTab === "profile" && (
             <div className="max-w-2xl pb-8">
               <div className="rounded-2xl border p-7 md:p-8" style={CARD}>
-                <div className="flex items-center gap-4 mb-7">
-                  <Avatar name={editForm.full_name || user.name} size={56} />
+                <div className="flex items-center gap-5 mb-7">
+                  <div className="relative group flex-shrink-0">
+                    <Avatar name={editForm.full_name || user.name} size={72} src={avatarUrl} />
+                    <button type="button" onClick={() => fileInputRef.current?.click()}
+                      disabled={uploadingAvatar}
+                      className="absolute inset-0 rounded-full flex items-center justify-center transition-all"
+                      style={{ background: "rgba(15,23,42,0)" }}
+                      onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(15,23,42,0.45)"; }}
+                      onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(15,23,42,0)"; }}
+                      aria-label="Change profile picture">
+                      {uploadingAvatar ? (
+                        <Loader2 size={18} className="text-white animate-spin" />
+                      ) : (
+                        <Camera size={18} className="text-white opacity-0 group-hover:opacity-100 transition-opacity" />
+                      )}
+                    </button>
+                    <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleAvatarChange} />
+                  </div>
                   <div>
                     <h2 className="text-lg font-black text-slate-900">{editForm.full_name || user.name}</h2>
-                    <p className="text-sm text-slate-400">Update your personal details below</p>
+                    <p className="text-sm text-slate-400 mb-2">Update your personal details below</p>
+                    <div className="flex items-center gap-3">
+                      <button type="button" onClick={() => fileInputRef.current?.click()} disabled={uploadingAvatar}
+                        className="text-xs font-semibold text-indigo-600 hover:text-indigo-700 transition-colors disabled:opacity-50">
+                        {avatarUrl ? "Change Photo" : "Upload Photo"}
+                      </button>
+                      {avatarUrl && (
+                        <button type="button" onClick={handleRemoveAvatar} disabled={uploadingAvatar}
+                          className="text-xs font-semibold text-red-500 hover:text-red-600 transition-colors disabled:opacity-50">
+                          Remove
+                        </button>
+                      )}
+                    </div>
+                    {avatarError && <p className="text-xs text-red-500 mt-1.5">{avatarError}</p>}
                   </div>
                 </div>
 

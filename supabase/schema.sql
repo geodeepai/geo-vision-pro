@@ -52,6 +52,7 @@ create table public.profiles (
   city            text,
   state           text,
   pincode         text,
+  avatar_url      text,
 
   updated_at      timestamptz not null default now()
 );
@@ -62,3 +63,24 @@ create policy "Users manage own profile"
   on public.profiles for all
   using (auth.uid() = id)
   with check (auth.uid() = id);
+
+-- Profile picture storage
+insert into storage.buckets (id, name, public)
+values ('avatars', 'avatars', true)
+on conflict (id) do nothing;
+
+create policy "Public read access to avatars"
+on storage.objects for select
+using (bucket_id = 'avatars');
+
+create policy "Users upload own avatar"
+on storage.objects for insert
+with check (bucket_id = 'avatars' and (storage.foldername(name))[1] = auth.uid()::text);
+
+create policy "Users update own avatar"
+on storage.objects for update
+using (bucket_id = 'avatars' and (storage.foldername(name))[1] = auth.uid()::text);
+
+create policy "Users delete own avatar"
+on storage.objects for delete
+using (bucket_id = 'avatars' and (storage.foldername(name))[1] = auth.uid()::text);
