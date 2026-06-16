@@ -164,9 +164,9 @@ export default function ForgotPasswordPage() {
 
       <footer className="py-5 text-center text-xs text-slate-400">
         &copy; 2025 GeoVision Pro &nbsp;·&nbsp;
-        <Link href="#" className="hover:text-slate-600 transition-colors">Privacy</Link>
+        <Link href="/privacy" className="hover:text-slate-600 transition-colors">Privacy</Link>
         &nbsp;·&nbsp;
-        <Link href="#" className="hover:text-slate-600 transition-colors">Terms</Link>
+        <Link href="/terms" className="hover:text-slate-600 transition-colors">Terms</Link>
       </footer>
     </div>
   );

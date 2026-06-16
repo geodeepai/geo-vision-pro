@@ -266,9 +266,9 @@ function RegisterForm() {
                         className="mt-0.5 w-4 h-4 rounded border-slate-300 accent-blue-600 cursor-pointer flex-shrink-0" />
                       <span className="text-sm text-slate-600">
                         I agree to the{" "}
-                        <Link href="#" className="text-blue-600 hover:underline">Terms of Service</Link>
+                        <Link href="/terms" target="_blank" className="text-blue-600 hover:underline">Terms of Service</Link>
                         {" "}and{" "}
-                        <Link href="#" className="text-blue-600 hover:underline">Privacy Policy</Link>
+                        <Link href="/privacy" target="_blank" className="text-blue-600 hover:underline">Privacy Policy</Link>
                       </span>
                     </label>
                     {err("agree")}
@@ -294,8 +294,8 @@ function RegisterForm() {
         <div className="px-8 py-4 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-400">
           <span>&copy; 2025 GeoVision Pro</span>
           <div className="flex gap-4">
-            <Link href="#" className="hover:text-slate-600 transition-colors">Privacy Policy</Link>
-            <Link href="#" className="hover:text-slate-600 transition-colors">Terms of Service</Link>
+            <Link href="/privacy" className="hover:text-slate-600 transition-colors">Privacy Policy</Link>
+            <Link href="/terms" className="hover:text-slate-600 transition-colors">Terms of Service</Link>
           </div>
         </div>
       </div>

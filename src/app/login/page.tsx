@@ -269,9 +269,9 @@ function LoginForm() {
         <div className="px-8 py-4 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-400">
           <span>&copy; 2025 GeoVision Pro</span>
           <div className="flex gap-4">
-            <Link href="#" className="hover:text-slate-600 transition-colors">Privacy Policy</Link>
-            <Link href="#" className="hover:text-slate-600 transition-colors">Terms of Service</Link>
-            <Link href="#" className="hover:text-slate-600 transition-colors">Help</Link>
+            <Link href="/privacy" className="hover:text-slate-600 transition-colors">Privacy Policy</Link>
+            <Link href="/terms" className="hover:text-slate-600 transition-colors">Terms of Service</Link>
+            <Link href="/help" className="hover:text-slate-600 transition-colors">Help</Link>
           </div>
         </div>
 

@@ -19,7 +19,7 @@ const anchors: Record<string, string> = {
   "About Us": "#about",
   "Our Process": "#process",
   Contact: "#contact",
-
+  "Privacy Policy": "/privacy",
 };
 
 export default function Footer() {

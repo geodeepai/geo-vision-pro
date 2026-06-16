@@ -1053,9 +1053,9 @@ export default function ProfilePage() {
         <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-400">
           <p>&copy; 2026 GeoVisionPro. All rights reserved.</p>
           <div className="flex items-center gap-5">
-            <Link href="#" className="hover:text-slate-600 transition-colors">Help &amp; Support</Link>
-            <Link href="#" className="hover:text-slate-600 transition-colors">Privacy Policy</Link>
-            <Link href="#" className="hover:text-slate-600 transition-colors">Terms of Service</Link>
+            <Link href="/help" className="hover:text-slate-600 transition-colors">Help &amp; Support</Link>
+            <Link href="/privacy" className="hover:text-slate-600 transition-colors">Privacy Policy</Link>
+            <Link href="/terms" className="hover:text-slate-600 transition-colors">Terms of Service</Link>
             <Link href="/#contact" className="hover:text-slate-600 transition-colors">Contact Us</Link>
           </div>
         </div>
