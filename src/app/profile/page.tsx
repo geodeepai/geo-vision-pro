@@ -181,6 +181,8 @@ export default function ProfilePage() {
   const [certModal, setCertModal]     = useState<null | { courseId: number }>(null);
   const [menuOpen, setMenuOpen]       = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const [notifOpen, setNotifOpen]     = useState(false);
+  const notifRef = useRef<HTMLDivElement>(null);
 
   /* ── Editable profile ── */
   const [profile, setProfile]         = useState<ProfileFields>(PROFILE_FIELDS_INIT);
@@ -243,6 +245,24 @@ export default function ProfilePage() {
     document.addEventListener("mousedown", onClick);
     return () => document.removeEventListener("mousedown", onClick);
   }, [menuOpen]);
+
+  /* close notifications panel on outside click */
+  useEffect(() => {
+    if (!notifOpen) return;
+    function onClick(e: MouseEvent) {
+      if (notifRef.current && !notifRef.current.contains(e.target as Node)) setNotifOpen(false);
+    }
+    document.addEventListener("mousedown", onClick);
+    return () => document.removeEventListener("mousedown", onClick);
+  }, [notifOpen]);
+
+  function toggleNotifications() {
+    setNotifOpen((o) => {
+      const next = !o;
+      if (next && !activityLoaded) loadActivity();
+      return next;
+    });
+  }
 
   function goToEditProfile() {
     setEditForm({ ...profile, full_name: profile.full_name || user.name, email: user.email });
@@ -606,10 +626,67 @@ export default function ProfilePage() {
           </Link>
 
           <div className="flex items-center gap-2">
-            <button className="relative w-9 h-9 rounded-xl flex items-center justify-center text-slate-500 hover:bg-slate-100 transition-all">
-              <Bell size={17} />
-              {notEnrolled.length > 0 && <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-blue-500 ring-2 ring-white" />}
-            </button>
+            {/* Notifications */}
+            <div className="relative" ref={notifRef}>
+              <button onClick={toggleNotifications}
+                className="relative w-9 h-9 rounded-xl flex items-center justify-center text-slate-500 hover:bg-slate-100 transition-all">
+                <Bell size={17} />
+                {notEnrolled.length > 0 && <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-blue-500 ring-2 ring-white" />}
+              </button>
+
+              {notifOpen && (
+                <div className="absolute right-0 top-[calc(100%+8px)] w-80 rounded-2xl overflow-hidden z-50"
+                  style={{ background:"#fff", border:"1px solid rgba(15,23,42,0.08)", boxShadow:"0 16px 40px rgba(15,23,42,0.16)" }}>
+                  <div className="p-4" style={{ borderBottom:"1px solid rgba(15,23,42,0.06)" }}>
+                    <p className="font-bold text-slate-900 text-sm">Notifications</p>
+                  </div>
+
+                  <div className="max-h-80 overflow-y-auto">
+                    {notEnrolled.length > 0 && (
+                      <button onClick={() => { setActiveTab("explore"); setNotifOpen(false); }}
+                        className="w-full flex items-start gap-3 px-4 py-3 hover:bg-slate-50 transition-all text-left"
+                        style={{ borderBottom:"1px solid rgba(15,23,42,0.06)" }}>
+                        <span className="w-8 h-8 rounded-lg bg-amber-50 flex items-center justify-center flex-shrink-0 mt-0.5">
+                          <ShoppingCart size={14} className="text-amber-500" />
+                        </span>
+                        <div className="min-w-0">
+                          <p className="text-sm font-semibold text-slate-800">{notEnrolled.length} new course{notEnrolled.length !== 1 ? "s" : ""} available</p>
+                          <p className="text-xs text-slate-400 mt-0.5">Tap to explore and enroll</p>
+                        </div>
+                      </button>
+                    )}
+
+                    {activityLoading ? (
+                      <div className="flex items-center justify-center py-8">
+                        <Loader2 size={18} className="animate-spin text-indigo-400" />
+                      </div>
+                    ) : activity.length === 0 ? (
+                      <p className="text-center text-xs text-slate-400 py-8">No recent activity.</p>
+                    ) : (
+                      activity.slice(0, 6).map((item) => {
+                        const Icon = ACTIVITY_ICONS[item.type] ?? History;
+                        return (
+                          <div key={item.id} className="flex items-start gap-3 px-4 py-3" style={{ borderBottom:"1px solid rgba(15,23,42,0.06)" }}>
+                            <span className="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center flex-shrink-0 mt-0.5">
+                              <Icon size={14} className="text-slate-500" />
+                            </span>
+                            <div className="min-w-0">
+                              <p className="text-sm font-semibold text-slate-800">{item.description}</p>
+                              <p className="text-xs text-slate-400 mt-0.5">{timeAgo(item.createdAt)}</p>
+                            </div>
+                          </div>
+                        );
+                      })
+                    )}
+                  </div>
+
+                  <button onClick={() => { selectTab("activity"); setNotifOpen(false); }}
+                    className="w-full py-2.5 text-xs font-bold text-indigo-600 hover:bg-indigo-50 transition-all">
+                    View All Activity
+                  </button>
+                </div>
+              )}
+            </div>
 
             {/* Avatar menu */}
             <div className="relative" ref={menuRef}>
