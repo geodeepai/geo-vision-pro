@@ -1,13 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
   LogOut, Bell, BookOpen, Clock, Award, TrendingUp, Play,
   CheckCircle, Star, ChevronRight, Download, Lock, ShoppingCart,
-  Zap, Target, Mail, Phone, MapPin, Calendar, X,
+  Target, Mail, Phone, MapPin, Calendar, X,
   Users, BarChart2, GraduationCap, LayoutDashboard, Compass, UserCog,
+  Crown, ChevronDown, Sparkles,
 } from "lucide-react";
 import CertificateModal from "@/components/CertificateModal";
 import { createClient } from "@/lib/supabase/client";
@@ -93,13 +94,13 @@ const CERTIFICATES: Record<number, { date: string; id: string; grade: string; in
 };
 
 /* ─── helpers ────────────────────────────────────────────────── */
-function Avatar({ name, size = 72 }: { name: string; size?: number }) {
+function Avatar({ name, size = 72, ring = true }: { name: string; size?: number; ring?: boolean }) {
   const initials = name.split(" ").map((n) => n[0]).slice(0, 2).join("").toUpperCase();
   return (
     <div className="rounded-full flex items-center justify-center font-black text-white select-none flex-shrink-0"
       style={{ width: size, height: size, fontSize: size * 0.32,
         background: "linear-gradient(135deg,#3b82f6,#6366f1,#8b5cf6)",
-        boxShadow: "0 0 0 3px #fff,0 0 0 5px #6366f1,0 8px 24px rgba(99,102,241,0.4)" }}>
+        boxShadow: ring ? "0 0 0 3px #fff,0 0 0 5px rgba(99,102,241,0.35),0 6px 18px rgba(99,102,241,0.3)" : "none" }}>
       {initials}
     </div>
   );
@@ -110,7 +111,7 @@ function Ring({ pct, color, size = 56 }: { pct: number; color: string; size?: nu
   const circ = 2 * Math.PI * r;
   return (
     <svg width={size} height={size} className="flex-shrink-0">
-      <circle cx={size/2} cy={size/2} r={r} fill="none" stroke="#e2e8f0" strokeWidth="5" />
+      <circle cx={size/2} cy={size/2} r={r} fill="none" stroke="#eef1f6" strokeWidth="5" />
       <circle cx={size/2} cy={size/2} r={r} fill="none" stroke={pct===100?"#16a34a":color} strokeWidth="5"
         strokeDasharray={`${(pct/100)*circ} ${circ}`} strokeLinecap="round"
         transform={`rotate(-90 ${size/2} ${size/2})`} />
@@ -122,17 +123,24 @@ function Ring({ pct, color, size = 56 }: { pct: number; color: string; size?: nu
   );
 }
 
-const CARD = { background:"#ffffff", borderColor:"#e9edf3", boxShadow:"0 2px 14px rgba(15,23,42,0.04)" } as const;
-const SOFT_BLUE = { background:"linear-gradient(135deg,#eff6ff,#eef2ff)", borderColor:"#dbeafe" } as const;
+const CARD = { background:"#ffffff", borderColor:"rgba(15,23,42,0.07)", boxShadow:"0 1px 2px rgba(15,23,42,0.03)" } as const;
+const SOFT_BLUE = { background:"linear-gradient(135deg,#f3f7ff,#f1f0fe)", borderColor:"#e2e8ff" } as const;
+const PRIMARY_BTN = "linear-gradient(135deg,#4f7df3,#6366f1)";
+const PRIMARY_SHADOW = "0 4px 14px rgba(79,125,243,0.28)";
 
 type TabKey = "dashboard" | "my courses" | "explore" | "certificates" | "profile";
-const NAV_ITEMS: { key: TabKey; label: string; icon: typeof LayoutDashboard }[] = [
-  { key: "dashboard",    label: "Dashboard",      icon: LayoutDashboard },
-  { key: "my courses",   label: "My Courses",     icon: BookOpen },
-  { key: "explore",      label: "Explore Courses",icon: Compass },
-  { key: "certificates", label: "Certificates",   icon: Award },
-  { key: "profile",      label: "Edit Profile",   icon: UserCog },
+const NAV_GROUPS: { label: string; items: { key: TabKey; label: string; icon: typeof LayoutDashboard }[] }[] = [
+  { label: "Learning", items: [
+    { key: "dashboard",    label: "Dashboard",       icon: LayoutDashboard },
+    { key: "my courses",   label: "My Courses",      icon: BookOpen },
+    { key: "explore",      label: "Explore Courses", icon: Compass },
+    { key: "certificates", label: "Certificates",    icon: Award },
+  ]},
+  { label: "Account", items: [
+    { key: "profile", label: "Edit Profile", icon: UserCog },
+  ]},
 ];
+const NAV_ITEMS = NAV_GROUPS.flatMap((g) => g.items);
 
 /* ─── page ───────────────────────────────────────────────────── */
 const PROFILE_FIELDS_INIT = { full_name: "", dob: "", phone: "", organization: "", city: "", state: "", pincode: "" };
@@ -147,6 +155,8 @@ export default function ProfilePage() {
   const [toast, setToast]             = useState<string | null>(null);
   const [confirming, setConfirming]   = useState(false);
   const [certModal, setCertModal]     = useState<null | { courseId: number }>(null);
+  const [menuOpen, setMenuOpen]       = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
 
   /* ── Editable profile ── */
   const [profile, setProfile]         = useState<ProfileFields>(PROFILE_FIELDS_INIT);
@@ -188,10 +198,21 @@ export default function ProfilePage() {
     });
   }, []);
 
+  /* close avatar menu on outside click */
+  useEffect(() => {
+    if (!menuOpen) return;
+    function onClick(e: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) setMenuOpen(false);
+    }
+    document.addEventListener("mousedown", onClick);
+    return () => document.removeEventListener("mousedown", onClick);
+  }, [menuOpen]);
+
   function goToEditProfile() {
     setEditForm({ ...profile, full_name: profile.full_name || user.name, email: user.email });
     setSaveError("");
     setActiveTab("profile");
+    setMenuOpen(false);
   }
 
   function selectTab(key: TabKey) {
@@ -294,12 +315,14 @@ export default function ProfilePage() {
   const certCourses  = enrolledCourses.filter((c) => CERTIFICATES[c.id]);
   const hour         = new Date().getHours();
   const greeting     = hour < 12 ? "Good morning" : hour < 17 ? "Good afternoon" : "Good evening";
+  const activeLabel  = NAV_ITEMS.find((n) => n.key === activeTab)?.label ?? "Dashboard";
 
-  const inputCls = "w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm text-slate-800 bg-slate-50 focus:bg-white focus:border-blue-500 focus:ring-3 focus:ring-blue-100 transition-all";
-  const labelCls = "block text-xs font-semibold text-slate-600 mb-1.5";
+  const inputCls = "w-full px-3.5 py-2.5 rounded-xl border text-sm text-slate-800 bg-white focus:bg-white transition-all outline-none";
+  const inputStyle = { borderColor: "rgba(15,23,42,0.1)" } as const;
+  const labelCls = "block text-xs font-semibold text-slate-500 mb-1.5";
 
   return (
-    <div className="min-h-screen" style={{ background:"#f8fafc" }}>
+    <div className="min-h-screen" style={{ background:"#fafbfd" }}>
 
       {/* ── Success toast ─────────────────────────────────── */}
       {toast && (
@@ -333,13 +356,11 @@ export default function ProfilePage() {
       {/* ── Enroll modal ──────────────────────────────────── */}
       {enrollModal && (
         <div className="fixed inset-0 z-[90] flex items-center justify-center p-4"
-          style={{ background:"rgba(0,0,0,0.55)", backdropFilter:"blur(6px)" }}
+          style={{ background:"rgba(15,23,42,0.5)", backdropFilter:"blur(6px)" }}
           onClick={(e) => { if (e.target === e.currentTarget) setEnrollModal(null); }}>
           <div className="w-full max-w-lg rounded-3xl overflow-hidden shadow-2xl" style={{ background:"#fff" }}>
-            {/* Color header */}
             <div className="h-2" style={{ background:`linear-gradient(90deg,${enrollModal.color},${enrollModal.color}66)` }} />
             <div className="p-7">
-              {/* Top row */}
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-center gap-2 flex-wrap">
                   <span className="px-3 py-1 rounded-full text-xs font-bold" style={{ background:`${enrollModal.color}18`, color:enrollModal.color }}>{enrollModal.tag}</span>
@@ -352,7 +373,6 @@ export default function ProfilePage() {
 
               <h2 className="text-xl font-black text-slate-900 mb-1">{enrollModal.title}</h2>
 
-              {/* Meta */}
               <div className="flex flex-wrap gap-3 text-xs text-slate-500 mb-4">
                 <span className="flex items-center gap-1"><Star size={11} className="text-amber-400 fill-amber-400" /> {enrollModal.rating} rating</span>
                 <span className="flex items-center gap-1"><Users size={11} /> {enrollModal.students.toLocaleString()} students</span>
@@ -363,7 +383,6 @@ export default function ProfilePage() {
 
               <p className="text-sm text-slate-600 leading-relaxed mb-5">{enrollModal.desc}</p>
 
-              {/* Topics */}
               <div className="mb-5">
                 <p className="text-xs font-bold text-slate-700 uppercase tracking-wide mb-2">What you will learn</p>
                 <div className="flex flex-wrap gap-1.5">
@@ -375,7 +394,6 @@ export default function ProfilePage() {
                 </div>
               </div>
 
-              {/* Includes */}
               <div className="flex items-center gap-4 text-xs text-slate-500 mb-6 p-3 rounded-xl bg-slate-50 border border-slate-100">
                 <span>💻 Online &amp; Offline</span>
                 <span>📜 Certificate included</span>
@@ -383,7 +401,6 @@ export default function ProfilePage() {
                 <span>🎯 Project-based</span>
               </div>
 
-              {/* Price + CTA */}
               <div className="flex items-center justify-between pt-4 border-t border-slate-100">
                 <div>
                   <p className="text-3xl font-black" style={{ color:enrollModal.color }}>{enrollModal.price}</p>
@@ -407,7 +424,7 @@ export default function ProfilePage() {
       )}
 
       {/* ── Header ───────────────────────────────────────── */}
-      <header className="sticky top-0 z-50" style={{ background:"rgba(255,255,255,0.95)", backdropFilter:"blur(20px)", borderBottom:"1px solid #e9edf3" }}>
+      <header className="sticky top-0 z-50" style={{ background:"rgba(255,255,255,0.85)", backdropFilter:"blur(20px) saturate(180%)", borderBottom:"1px solid rgba(15,23,42,0.06)" }}>
         <div className="px-5 md:px-7 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-md shadow-blue-200">
@@ -418,30 +435,62 @@ export default function ProfilePage() {
               </svg>
             </div>
             <span className="font-bold text-slate-900 text-[16px] tracking-tight">GeoVision<span className="text-blue-600">Pro</span></span>
+            <span className="hidden lg:flex items-center gap-1.5 ml-2 pl-3 text-sm" style={{ borderLeft: "1px solid rgba(15,23,42,0.08)" }}>
+              <span className="text-slate-400">Learner</span>
+              <ChevronRight size={13} className="text-slate-300" />
+              <span className="text-slate-700 font-semibold">{activeLabel}</span>
+            </span>
           </Link>
+
           <div className="flex items-center gap-2">
             <button className="relative w-9 h-9 rounded-xl flex items-center justify-center text-slate-500 hover:bg-slate-100 transition-all">
               <Bell size={17} />
-              {notEnrolled.length > 0 && <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-blue-500 border-2 border-white" />}
+              {notEnrolled.length > 0 && <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-blue-500 ring-2 ring-white" />}
             </button>
-            <div className="flex items-center gap-2 px-2 py-1 rounded-xl cursor-default">
-              <Avatar name={user.name} size={30} />
-              <span className="text-sm font-semibold text-slate-700 hidden sm:block">{user.name}</span>
+
+            {/* Avatar menu */}
+            <div className="relative" ref={menuRef}>
+              <button onClick={() => setMenuOpen((o) => !o)}
+                className="flex items-center gap-2 pl-1.5 pr-2.5 py-1.5 rounded-xl hover:bg-slate-100 transition-all">
+                <Avatar name={user.name} size={30} ring={false} />
+                <span className="text-sm font-semibold text-slate-700 hidden sm:block">{user.name}</span>
+                <ChevronDown size={14} className="text-slate-400 hidden sm:block" />
+              </button>
+
+              {menuOpen && (
+                <div className="absolute right-0 top-[calc(100%+8px)] w-64 rounded-2xl overflow-hidden z-50"
+                  style={{ background:"#fff", border:"1px solid rgba(15,23,42,0.08)", boxShadow:"0 16px 40px rgba(15,23,42,0.16)" }}>
+                  <div className="p-4 flex items-center gap-3" style={{ borderBottom:"1px solid rgba(15,23,42,0.06)" }}>
+                    <Avatar name={user.name} size={40} />
+                    <div className="min-w-0">
+                      <p className="font-bold text-slate-900 text-sm truncate">{user.name}</p>
+                      <p className="text-xs text-slate-400 truncate">{user.email || "—"}</p>
+                    </div>
+                  </div>
+                  <div className="p-1.5">
+                    <button onClick={goToEditProfile}
+                      className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50 transition-all">
+                      <UserCog size={15} /> Edit Profile
+                    </button>
+                    <button onClick={handleLogout}
+                      className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium text-red-500 hover:bg-red-50 transition-all">
+                      <LogOut size={15} /> Logout
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
-            <button onClick={handleLogout} className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold text-slate-500 hover:bg-red-50 hover:text-red-600 transition-all">
-              <LogOut size={15} /> Logout
-            </button>
           </div>
         </div>
       </header>
 
       {/* ── Mobile nav (sidebar replacement on small screens) ── */}
       <div className="md:hidden sticky z-40 flex gap-1 px-3 py-2 overflow-x-auto"
-        style={{ top: 64, background:"rgba(255,255,255,0.97)", borderBottom:"1px solid #e9edf3" }}>
+        style={{ top: 64, background:"rgba(255,255,255,0.97)", borderBottom:"1px solid rgba(15,23,42,0.06)" }}>
         {NAV_ITEMS.map(({ key, label, icon: Icon }) => (
           <button key={key} onClick={() => selectTab(key)}
             className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all flex-shrink-0"
-            style={activeTab===key ? { background:"#eff6ff", color:"#2563eb" } : { color:"#64748b" }}>
+            style={activeTab===key ? { background:"#eef2ff", color:"#4f46e5" } : { color:"#64748b" }}>
             <Icon size={14} /> {label}
           </button>
         ))}
@@ -450,52 +499,77 @@ export default function ProfilePage() {
       <div className="flex">
 
         {/* ── Sidebar ──────────────────────────────────────── */}
-        <aside className="hidden md:block w-64 flex-shrink-0" style={{ borderRight:"1px solid #e9edf3", background:"#fff" }}>
-          <div className="sticky p-5" style={{ top: 64 }}>
-            <div className="flex items-center gap-3 mb-5 p-3 rounded-xl" style={{ background:"#f8fafc" }}>
-              <Avatar name={user.name} size={42} />
-              <div className="min-w-0">
-                <p className="font-bold text-slate-900 text-sm truncate">{user.name}</p>
-                <p className="text-xs text-slate-400 truncate">{user.email || "—"}</p>
-              </div>
+        <aside className="hidden md:flex md:flex-col" style={{ width: 248, flexShrink: 0, borderRight:"1px solid rgba(15,23,42,0.06)", background:"#fff" }}>
+          <div className="sticky flex flex-col" style={{ top: 64, height: "calc(100vh - 64px)" }}>
+            <div className="flex-1 overflow-y-auto p-4">
+              {NAV_GROUPS.map((group) => (
+                <div key={group.label} className="mb-5">
+                  <p className="px-3 mb-1.5 text-[10.5px] font-bold uppercase tracking-wider text-slate-400">{group.label}</p>
+                  <nav className="space-y-0.5">
+                    {group.items.map(({ key, label, icon: Icon }) => {
+                      const active = activeTab === key;
+                      return (
+                        <button key={key} onClick={() => selectTab(key)}
+                          className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all text-left relative group">
+                          <span className="absolute inset-0 rounded-xl transition-opacity"
+                            style={{ background: active ? "#eef2ff" : "transparent", opacity: active ? 1 : 0 }} />
+                          <span className="absolute left-0 top-2 bottom-2 w-[3px] rounded-full transition-all"
+                            style={{ background: active ? "#4f46e5" : "transparent" }} />
+                          <Icon size={16} className="relative z-10 transition-colors" style={{ color: active ? "#4338ca" : "#94a3b8" }} />
+                          <span className="relative z-10 transition-colors" style={{ color: active ? "#3730a3" : "#475569" }}>{label}</span>
+                          {key === "explore" && notEnrolled.length > 0 && (
+                            <span className="relative z-10 ml-auto text-[10px] font-bold w-5 h-5 rounded-full bg-indigo-600 text-white flex items-center justify-center">{notEnrolled.length}</span>
+                          )}
+                        </button>
+                      );
+                    })}
+                  </nav>
+                </div>
+              ))}
             </div>
 
-            <nav className="space-y-1">
-              {NAV_ITEMS.map(({ key, label, icon: Icon }) => {
-                const active = activeTab === key;
-                return (
-                  <button key={key} onClick={() => selectTab(key)}
-                    className="w-full flex items-center gap-3 pl-4 pr-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all text-left relative"
-                    style={active ? { background:"#eff6ff", color:"#2563eb" } : { color:"#64748b" }}>
-                    {active && <span className="absolute left-0 top-1.5 bottom-1.5 w-1 rounded-full bg-blue-600" />}
-                    <Icon size={17} />
-                    {label}
-                    {key === "explore" && notEnrolled.length > 0 && (
-                      <span className="ml-auto text-[10px] font-bold w-5 h-5 rounded-full bg-blue-600 text-white flex items-center justify-center">{notEnrolled.length}</span>
-                    )}
-                  </button>
-                );
-              })}
-            </nav>
+            {/* Pinned plan card */}
+            <div className="p-4">
+              <div className="rounded-2xl p-4 relative overflow-hidden" style={{ background:"linear-gradient(160deg,#1e1b4b,#312e81)" }}>
+                <div className="absolute -top-6 -right-6 w-24 h-24 rounded-full" style={{ background:"radial-gradient(circle,#818cf8,transparent 70%)", filter:"blur(18px)", opacity:0.5 }} />
+                <div className="relative z-10">
+                  <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-white/10 text-amber-300 mb-2">
+                    <Crown size={10} /> {user.plan.toUpperCase()}
+                  </span>
+                  <p className="text-white text-xs font-semibold leading-snug mb-3">{enrolledCourses.length}/{ALL_COURSES.length} courses enrolled</p>
+                  <div className="w-full h-1.5 rounded-full bg-white/15 overflow-hidden mb-3">
+                    <div className="h-full rounded-full" style={{ width:`${(enrolledCourses.length/ALL_COURSES.length)*100}%`, background:"linear-gradient(90deg,#818cf8,#c4b5fd)" }} />
+                  </div>
+                  {notEnrolled.length > 0 && (
+                    <button onClick={() => setActiveTab("explore")}
+                      className="w-full flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-bold text-indigo-900 hover:opacity-90 transition-all"
+                      style={{ background:"#fff" }}>
+                      <Sparkles size={11} /> Explore More
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
           </div>
         </aside>
 
         {/* ── Main content (single active view) ─────────────── */}
-        <main className="flex-1 min-w-0 px-5 md:px-8 py-6 md:py-7">
+        <main className="flex-1 min-w-0 px-5 md:px-9 py-6 md:py-8">
 
           {/* ══════════ DASHBOARD ══════════ */}
           {activeTab === "dashboard" && (
             <>
               {/* Welcome banner */}
-              <div className="rounded-2xl p-7 mb-6 flex flex-wrap items-center justify-between gap-5 border" style={SOFT_BLUE}>
-                <div className="flex items-center gap-5">
+              <div className="rounded-3xl p-7 md:p-8 mb-6 flex flex-wrap items-center justify-between gap-5 relative overflow-hidden border" style={SOFT_BLUE}>
+                <div className="absolute top-0 right-0 w-72 h-72 rounded-full pointer-events-none" style={{ background:"radial-gradient(circle,#a5b4fc,transparent 70%)", filter:"blur(50px)", opacity:0.35 }} />
+                <div className="relative z-10 flex items-center gap-5">
                   <Avatar name={user.name} size={64} />
                   <div>
-                    <p className="text-blue-600 text-sm font-medium">{greeting},</p>
-                    <h1 className="text-2xl font-black text-slate-900 tracking-tight">{user.name} 👋</h1>
+                    <p className="text-indigo-500 text-sm font-semibold">{greeting},</p>
+                    <h1 className="text-[26px] font-black text-slate-900 tracking-tight leading-tight">{user.name} 👋</h1>
                     <div className="flex flex-wrap items-center gap-3 mt-1.5">
-                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-blue-100 text-blue-700 border border-blue-200">
-                        <Zap size={10} /> {user.plan} Plan
+                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-white text-indigo-600 border border-indigo-100 shadow-sm">
+                        <Crown size={10} /> {user.plan} Plan
                       </span>
                       <span className="inline-flex items-center gap-1 text-xs text-slate-500">
                         <Target size={11} /> {user.streak}-day streak 🔥
@@ -505,8 +579,8 @@ export default function ProfilePage() {
                   </div>
                 </div>
                 <button onClick={() => setActiveTab("explore")}
-                  className="flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm text-white hover:opacity-90 transition-all shadow-lg"
-                  style={{ background:"linear-gradient(135deg,#3b82f6,#6366f1)", boxShadow:"0 4px 16px rgba(99,102,241,0.4)" }}>
+                  className="relative z-10 flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm text-white hover:opacity-90 hover:-translate-y-0.5 transition-all"
+                  style={{ background:PRIMARY_BTN, boxShadow:PRIMARY_SHADOW }}>
                   <ShoppingCart size={15} /> Browse All Courses
                 </button>
               </div>
@@ -514,14 +588,14 @@ export default function ProfilePage() {
               {/* Stats */}
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                 {[
-                  { label:"Enrolled Courses",    value:enrolledCourses.length, sub:`of ${ALL_COURSES.length} available`, icon:<BookOpen size={17}/>,   grad:"#3b82f6,#2563eb",  bg:"bg-blue-50",    tc:"text-blue-600" },
-                  { label:"Hours Learned",        value:"62",                   sub:"Total hrs so far",              icon:<Clock size={17}/>,        grad:"#6366f1,#7c3aed",  bg:"bg-indigo-50",  tc:"text-indigo-600" },
-                  { label:"Certificates Earned",  value:certCourses.length,     sub:"Completed courses",             icon:<Award size={17}/>,        grad:"#f59e0b,#ea580c",  bg:"bg-amber-50",   tc:"text-amber-600" },
-                  { label:"Avg. Completion",      value:`${avgPct}%`,           sub:"Across enrolled courses",       icon:<TrendingUp size={17}/>,   grad:"#10b981,#059669",  bg:"bg-emerald-50", tc:"text-emerald-600" },
-                ].map(({ label, value, sub, icon, grad, bg, tc }) => (
-                  <div key={label} className="rounded-2xl border p-5 hover:-translate-y-0.5 transition-all" style={CARD}>
-                    <div className={`w-9 h-9 rounded-xl ${bg} ${tc} flex items-center justify-center mb-3`}>{icon}</div>
-                    <p className="text-2xl font-black mb-0.5" style={{ background:`linear-gradient(135deg,${grad})`, WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent", backgroundClip:"text" }}>{value}</p>
+                  { label:"Enrolled Courses",    value:enrolledCourses.length, sub:`of ${ALL_COURSES.length} available`, icon:<BookOpen size={16}/>,   tc:"#3b82f6", bg:"#eff6ff" },
+                  { label:"Hours Learned",        value:"62",                   sub:"Total hrs so far",              icon:<Clock size={16}/>,        tc:"#6366f1", bg:"#eef2ff" },
+                  { label:"Certificates Earned",  value:certCourses.length,     sub:"Completed courses",             icon:<Award size={16}/>,        tc:"#d97706", bg:"#fffbeb" },
+                  { label:"Avg. Completion",      value:`${avgPct}%`,           sub:"Across enrolled courses",       icon:<TrendingUp size={16}/>,   tc:"#059669", bg:"#ecfdf5" },
+                ].map(({ label, value, sub, icon, tc, bg }) => (
+                  <div key={label} className="rounded-2xl border p-5 hover:-translate-y-0.5 hover:shadow-md transition-all" style={CARD}>
+                    <div className="w-9 h-9 rounded-xl flex items-center justify-center mb-3" style={{ background:bg, color:tc }}>{icon}</div>
+                    <p className="text-[26px] font-black text-slate-900 leading-none mb-1 tracking-tight">{value}</p>
                     <p className="text-xs font-semibold text-slate-700">{label}</p>
                     <p className="text-[11px] text-slate-400">{sub}</p>
                   </div>
@@ -540,7 +614,7 @@ export default function ProfilePage() {
                       </h2>
                       <div className="space-y-3">
                         {enrolledCourses.filter((c)=>c.progress<100).map((c) => (
-                          <div key={c.id} className="flex items-center gap-4 p-4 rounded-xl border hover:shadow-md transition-all group" style={{ borderColor:"#e9edf3", background:"#fafbff" }}>
+                          <div key={c.id} className="flex items-center gap-4 p-4 rounded-xl border hover:shadow-md transition-all group" style={{ borderColor:"rgba(15,23,42,0.06)", background:"#fafbff" }}>
                             <Ring pct={c.progress} color={c.color} size={56} />
                             <div className="flex-1 min-w-0">
                               <p className="font-bold text-slate-800 text-sm truncate">{c.title}</p>
@@ -568,15 +642,15 @@ export default function ProfilePage() {
                         <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
                           <span className="w-7 h-7 rounded-lg bg-amber-50 flex items-center justify-center"><ShoppingCart size={13} className="text-amber-500" /></span>
                           Enroll in More Courses
-                          <span className="ml-1 text-xs font-bold px-2 py-0.5 rounded-full bg-blue-100 text-blue-600">{notEnrolled.length} available</span>
+                          <span className="ml-1 text-xs font-bold px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-600">{notEnrolled.length} available</span>
                         </h2>
-                        <button onClick={() => setActiveTab("explore")} className="text-xs font-semibold text-blue-600 hover:text-blue-700 flex items-center gap-0.5">
+                        <button onClick={() => setActiveTab("explore")} className="text-xs font-semibold text-indigo-600 hover:text-indigo-700 flex items-center gap-0.5">
                           See all <ChevronRight size={13} />
                         </button>
                       </div>
                       <div className="grid sm:grid-cols-3 gap-3">
                         {notEnrolled.map((c) => (
-                          <div key={c.id} className="rounded-xl border p-4 hover:shadow-md transition-all flex flex-col gap-2 cursor-pointer group" style={{ borderColor:"#e9edf3", background:"#fafbff" }}
+                          <div key={c.id} className="rounded-xl border p-4 hover:shadow-md transition-all flex flex-col gap-2 cursor-pointer group" style={{ borderColor:"rgba(15,23,42,0.06)", background:"#fafbff" }}
                             onClick={() => setEnrollModal(c)}>
                             <div className="flex items-center justify-between">
                               <span className="px-2 py-0.5 rounded-full text-[11px] font-bold" style={{ background:`${c.color}15`, color:c.color }}>{c.tag}</span>
@@ -621,15 +695,16 @@ export default function ProfilePage() {
                       </div>
                     </div>
                     {[
-                      { icon:<Mail size={12} className="text-blue-400"/>,     v:user.email||"—" },
-                      { icon:<Phone size={12} className="text-blue-400"/>,    v:user.phone },
-                      { icon:<MapPin size={12} className="text-blue-400"/>,   v:user.location },
-                      { icon:<Calendar size={12} className="text-blue-400"/>, v:`Since ${user.memberSince}` },
+                      { icon:<Mail size={12} className="text-indigo-400"/>,     v:user.email||"—" },
+                      { icon:<Phone size={12} className="text-indigo-400"/>,    v:user.phone },
+                      { icon:<MapPin size={12} className="text-indigo-400"/>,   v:user.location },
+                      { icon:<Calendar size={12} className="text-indigo-400"/>, v:`Since ${user.memberSince}` },
                     ].map(({ icon, v }) => (
                       <div key={v} className="flex items-center gap-2 text-xs text-slate-500 py-1">{icon}<span className="truncate">{v}</span></div>
                     ))}
                     <button onClick={goToEditProfile}
-                      className="mt-4 w-full flex items-center justify-center gap-1.5 py-2.5 rounded-xl border border-slate-200 text-sm font-semibold text-slate-600 hover:bg-slate-50 transition-all">
+                      className="mt-4 w-full flex items-center justify-center gap-1.5 py-2.5 rounded-xl border text-sm font-semibold text-slate-600 hover:bg-slate-50 transition-all"
+                      style={{ borderColor: "rgba(15,23,42,0.1)" }}>
                       <UserCog size={13} /> Edit Profile
                     </button>
                   </div>
@@ -644,20 +719,6 @@ export default function ProfilePage() {
                         <div key={i} className={`h-7 rounded-md flex items-center justify-center text-[10px] font-bold ${i<user.streak?"bg-orange-400 text-white":"bg-slate-100 text-slate-300"}`}>{d}</div>
                       ))}
                     </div>
-                  </div>
-
-                  {/* Plan */}
-                  <div className="rounded-2xl p-5 border" style={SOFT_BLUE}>
-                    <p className="text-blue-600 text-xs font-semibold mb-0.5">Current Plan</p>
-                    <p className="text-slate-900 text-xl font-black">{user.plan} <span className="text-blue-600">Member</span></p>
-                    <p className="text-slate-500 text-xs mt-1 mb-4">{enrolledCourses.length}/{ALL_COURSES.length} courses enrolled</p>
-                    {notEnrolled.length > 0 && (
-                      <button onClick={() => setActiveTab("explore")}
-                        className="w-full py-2.5 rounded-xl text-sm font-semibold text-white hover:opacity-90 transition-all"
-                        style={{ background:"linear-gradient(135deg,#3b82f6,#6366f1)" }}>
-                        Enroll in {notEnrolled.length} More Course{notEnrolled.length!==1?"s":""}
-                      </button>
-                    )}
                   </div>
                 </div>
               </div>
@@ -719,9 +780,9 @@ export default function ProfilePage() {
                   style={SOFT_BLUE}>
                   <div className="text-left">
                     <p className="font-bold text-base text-slate-900">Enroll in {notEnrolled.length} More Course{notEnrolled.length!==1?"s":""}</p>
-                    <p className="text-blue-600 text-sm mt-0.5">Prices starting from ₹299 · Certificate on completion</p>
+                    <p className="text-indigo-600 text-sm mt-0.5">Prices starting from ₹299 · Certificate on completion</p>
                   </div>
-                  <ChevronRight size={22} className="text-blue-600 group-hover:translate-x-1 transition-transform" />
+                  <ChevronRight size={22} className="text-indigo-600 group-hover:translate-x-1 transition-transform" />
                 </button>
               )}
             </div>
@@ -737,7 +798,7 @@ export default function ProfilePage() {
                 </div>
                 <div className="flex items-center gap-2 text-xs">
                   <span className="flex items-center gap-1 px-3 py-1.5 rounded-full bg-green-50 text-green-700 border border-green-200 font-semibold"><CheckCircle size={11} /> {enrolledCourses.length} Enrolled</span>
-                  <span className="flex items-center gap-1 px-3 py-1.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200 font-semibold"><ShoppingCart size={11} /> {notEnrolled.length} Available</span>
+                  <span className="flex items-center gap-1 px-3 py-1.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200 font-semibold"><ShoppingCart size={11} /> {notEnrolled.length} Available</span>
                 </div>
               </div>
 
@@ -807,8 +868,8 @@ export default function ProfilePage() {
                   <p className="text-xs text-slate-500 mt-0.5">Our experts will guide you to the right course for your career goals.</p>
                 </div>
                 <Link href="/#contact"
-                  className="flex items-center gap-1.5 px-5 py-2.5 rounded-xl text-sm font-bold text-white whitespace-nowrap"
-                  style={{ background:"linear-gradient(135deg,#3b82f6,#6366f1)" }}>
+                  className="flex items-center gap-1.5 px-5 py-2.5 rounded-xl text-sm font-bold text-white whitespace-nowrap hover:-translate-y-0.5 transition-all"
+                  style={{ background:PRIMARY_BTN, boxShadow:PRIMARY_SHADOW }}>
                   Talk to an Expert
                 </Link>
               </div>
@@ -851,8 +912,8 @@ export default function ProfilePage() {
                   <p className="font-bold text-slate-700 text-lg">No certificates yet</p>
                   <p className="text-sm text-slate-400 mt-1 mb-5">Complete a course to earn your certificate.</p>
                   <button onClick={() => setActiveTab("my courses")}
-                    className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-bold text-white"
-                    style={{ background:"linear-gradient(135deg,#3b82f6,#6366f1)" }}>
+                    className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-bold text-white hover:-translate-y-0.5 transition-all"
+                    style={{ background:PRIMARY_BTN, boxShadow:PRIMARY_SHADOW }}>
                     <Play size={14} /> Go to My Courses
                   </button>
                 </div>
@@ -889,9 +950,9 @@ export default function ProfilePage() {
                   style={SOFT_BLUE}>
                   <div className="text-left">
                     <p className="font-bold text-slate-900">Earn More Certificates</p>
-                    <p className="text-blue-600 text-sm mt-0.5">Enroll in {notEnrolled.length} more courses — from ₹299</p>
+                    <p className="text-indigo-600 text-sm mt-0.5">Enroll in {notEnrolled.length} more courses — from ₹299</p>
                   </div>
-                  <ChevronRight size={20} className="text-blue-600 group-hover:translate-x-1 transition-transform" />
+                  <ChevronRight size={20} className="text-indigo-600 group-hover:translate-x-1 transition-transform" />
                 </button>
               )}
             </div>
@@ -900,14 +961,16 @@ export default function ProfilePage() {
           {/* ══════════ EDIT PROFILE ══════════ */}
           {activeTab === "profile" && (
             <div className="max-w-2xl pb-8">
-              <div className="rounded-2xl border p-7" style={CARD}>
-                <div className="flex items-center gap-3 mb-1">
-                  <span className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center"><UserCog size={16} className="text-blue-600" /></span>
-                  <h2 className="text-lg font-black text-slate-900">Edit Profile</h2>
+              <div className="rounded-2xl border p-7 md:p-8" style={CARD}>
+                <div className="flex items-center gap-4 mb-7">
+                  <Avatar name={editForm.full_name || user.name} size={56} />
+                  <div>
+                    <h2 className="text-lg font-black text-slate-900">{editForm.full_name || user.name}</h2>
+                    <p className="text-sm text-slate-400">Update your personal details below</p>
+                  </div>
                 </div>
-                <p className="text-sm text-slate-500 mb-6 ml-11">Update your personal details. Changes save straight to your account.</p>
 
-                <form onSubmit={handleSaveProfile} className="space-y-4">
+                <form onSubmit={handleSaveProfile} className="space-y-6">
                   {saveError && (
                     <p className="px-4 py-3 rounded-xl text-sm font-medium bg-red-50 text-red-600 border border-red-200">
                       {saveError}
@@ -915,55 +978,65 @@ export default function ProfilePage() {
                   )}
 
                   <div>
-                    <label className={labelCls}>Full Name</label>
-                    <input value={editForm.full_name} onChange={(e) => setEditForm((f) => ({ ...f, full_name: e.target.value }))} className={inputCls} />
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-3">
-                    <div>
-                      <label className={labelCls}>Email Address</label>
-                      <input type="email" value={editForm.email} onChange={(e) => setEditForm((f) => ({ ...f, email: e.target.value }))} className={inputCls} />
-                    </div>
-                    <div>
-                      <label className={labelCls}>Date of Birth</label>
-                      <input type="date" value={editForm.dob} onChange={(e) => setEditForm((f) => ({ ...f, dob: e.target.value }))} className={inputCls} />
+                    <p className="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-3">Personal Information</p>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className={labelCls}>Full Name</label>
+                        <input value={editForm.full_name} onChange={(e) => setEditForm((f) => ({ ...f, full_name: e.target.value }))} className={inputCls} style={inputStyle} />
+                      </div>
+                      <div>
+                        <label className={labelCls}>Date of Birth</label>
+                        <input type="date" value={editForm.dob} onChange={(e) => setEditForm((f) => ({ ...f, dob: e.target.value }))} className={inputCls} style={inputStyle} />
+                      </div>
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-3">
-                    <div>
-                      <label className={labelCls}>Phone</label>
-                      <input value={editForm.phone} onChange={(e) => setEditForm((f) => ({ ...f, phone: e.target.value }))} className={inputCls} />
-                    </div>
-                    <div>
-                      <label className={labelCls}>Organization</label>
-                      <input value={editForm.organization} onChange={(e) => setEditForm((f) => ({ ...f, organization: e.target.value }))} className={inputCls} />
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-3 gap-3">
-                    <div>
-                      <label className={labelCls}>City</label>
-                      <input value={editForm.city} onChange={(e) => setEditForm((f) => ({ ...f, city: e.target.value }))} className={inputCls} />
-                    </div>
-                    <div>
-                      <label className={labelCls}>State</label>
-                      <input value={editForm.state} onChange={(e) => setEditForm((f) => ({ ...f, state: e.target.value }))} className={inputCls} />
-                    </div>
-                    <div>
-                      <label className={labelCls}>Pincode</label>
-                      <input value={editForm.pincode} onChange={(e) => setEditForm((f) => ({ ...f, pincode: e.target.value }))} className={inputCls} />
+                  <div style={{ borderTop: "1px solid rgba(15,23,42,0.06)" }} className="pt-6">
+                    <p className="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-3">Contact Details</p>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className={labelCls}>Email Address</label>
+                        <input type="email" value={editForm.email} onChange={(e) => setEditForm((f) => ({ ...f, email: e.target.value }))} className={inputCls} style={inputStyle} />
+                      </div>
+                      <div>
+                        <label className={labelCls}>Phone</label>
+                        <input value={editForm.phone} onChange={(e) => setEditForm((f) => ({ ...f, phone: e.target.value }))} className={inputCls} style={inputStyle} />
+                      </div>
                     </div>
                   </div>
 
-                  <div className="flex gap-3 pt-2">
+                  <div style={{ borderTop: "1px solid rgba(15,23,42,0.06)" }} className="pt-6">
+                    <p className="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-3">Organization &amp; Location</p>
+                    <div className="space-y-4">
+                      <div>
+                        <label className={labelCls}>Organization</label>
+                        <input value={editForm.organization} onChange={(e) => setEditForm((f) => ({ ...f, organization: e.target.value }))} className={inputCls} style={inputStyle} />
+                      </div>
+                      <div className="grid grid-cols-3 gap-4">
+                        <div>
+                          <label className={labelCls}>City</label>
+                          <input value={editForm.city} onChange={(e) => setEditForm((f) => ({ ...f, city: e.target.value }))} className={inputCls} style={inputStyle} />
+                        </div>
+                        <div>
+                          <label className={labelCls}>State</label>
+                          <input value={editForm.state} onChange={(e) => setEditForm((f) => ({ ...f, state: e.target.value }))} className={inputCls} style={inputStyle} />
+                        </div>
+                        <div>
+                          <label className={labelCls}>Pincode</label>
+                          <input value={editForm.pincode} onChange={(e) => setEditForm((f) => ({ ...f, pincode: e.target.value }))} className={inputCls} style={inputStyle} />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-end gap-5 pt-2" style={{ borderTop: "1px solid rgba(15,23,42,0.06)" }}>
                     <button type="button" onClick={resetEditForm}
-                      className="flex-1 py-3 rounded-xl font-semibold text-sm text-slate-600 border border-slate-200 hover:bg-slate-50 transition-all">
+                      className="text-sm font-semibold text-slate-500 hover:text-slate-700 transition-all">
                       Reset
                     </button>
                     <button type="submit" disabled={saving}
-                      className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-sm text-white disabled:opacity-70 transition-all hover:opacity-90"
-                      style={{ background:"linear-gradient(135deg,#3b82f6,#6366f1)" }}>
+                      className="flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl font-bold text-sm text-white disabled:opacity-70 transition-all hover:opacity-90 hover:-translate-y-0.5"
+                      style={{ background:PRIMARY_BTN, boxShadow:PRIMARY_SHADOW }}>
                       {saving ? "Saving…" : "Save Changes"}
                     </button>
                   </div>
