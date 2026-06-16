@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { ArrowLeft, Loader2, Mail } from "lucide-react";
+import { createClient } from "@/lib/supabase/client";
 
 export default function ForgotPasswordPage() {
   const [email, setEmail]       = useState("");
@@ -14,10 +15,21 @@ export default function ForgotPasswordPage() {
     e.preventDefault();
     if (!email.trim()) { setError("Email address is required."); return; }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { setError("Please enter a valid email address."); return; }
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+      setError("Password reset isn't configured yet. Please contact the site admin.");
+      return;
+    }
     setError("");
     setLoading(true);
-    await new Promise((r) => setTimeout(r, 1400));
+    const supabase = createClient();
+    const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/reset-password`,
+    });
     setLoading(false);
+    if (resetError) {
+      setError(resetError.message);
+      return;
+    }
     setSent(true);
   }
 
