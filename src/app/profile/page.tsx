@@ -302,6 +302,13 @@ export default function ProfilePage() {
     return new Date(iso).toLocaleDateString("en-US", { day: "numeric", month: "short", year: "numeric" });
   }
 
+  function exactTime(iso: string) {
+    return new Date(iso).toLocaleString("en-US", {
+      day: "numeric", month: "short", year: "numeric",
+      hour: "numeric", minute: "2-digit", hour12: true,
+    });
+  }
+
   function resetEditForm() {
     setEditForm({ ...profile, full_name: profile.full_name || user.name, email: user.email });
     setSaveError("");
@@ -1263,7 +1270,7 @@ export default function ProfilePage() {
                           <div className="flex-1 min-w-0">
                             <p className="text-sm font-semibold text-slate-800">{item.description}</p>
                           </div>
-                          <span className="text-xs text-slate-400 flex-shrink-0 whitespace-nowrap">{timeAgo(item.createdAt)}</span>
+                          <span className="text-xs text-slate-400 flex-shrink-0 whitespace-nowrap" title={timeAgo(item.createdAt)}>{exactTime(item.createdAt)}</span>
                         </div>
                       );
                     })}
