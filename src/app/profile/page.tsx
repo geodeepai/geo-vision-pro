@@ -10,6 +10,7 @@ import {
   Users, BarChart2, GraduationCap,
 } from "lucide-react";
 import CertificateModal from "@/components/CertificateModal";
+import { createClient } from "@/lib/supabase/client";
 
 /* ─── course catalogue (mirrors the website) ─────────────────── */
 const ALL_COURSES = [
@@ -139,8 +140,16 @@ export default function ProfilePage() {
   useEffect(() => {
     const ids = localStorage.getItem("gvp_enrolled_ids");
     if (ids) setEnrolledIds(JSON.parse(ids));
-    const email = sessionStorage.getItem("gvp_user_email");
-    if (email) setUser((u) => ({ ...u, email }));
+
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) return;
+
+    const supabase = createClient();
+    supabase.auth.getUser().then(({ data }) => {
+      const authUser = data.user;
+      if (!authUser) return;
+      const fullName = (authUser.user_metadata?.full_name as string) || MOCK_USER.name;
+      setUser((u) => ({ ...u, name: fullName, email: authUser.email ?? "" }));
+    });
   }, []);
 
   /* enroll action */
@@ -158,8 +167,11 @@ export default function ProfilePage() {
     setActiveTab("my courses");
   }
 
-  function handleLogout() {
-    sessionStorage.removeItem("gvp_user_email");
+  async function handleLogout() {
+    if (process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+      const supabase = createClient();
+      await supabase.auth.signOut();
+    }
     router.push("/login");
   }
 

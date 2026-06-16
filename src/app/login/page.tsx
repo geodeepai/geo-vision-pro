@@ -1,17 +1,27 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Eye, EyeOff, ArrowLeft, Loader2 } from "lucide-react";
 import AuthPanel from "@/components/AuthPanel";
+import { createClient } from "@/lib/supabase/client";
 
 export default function LoginPage() {
+  return (
+    <Suspense fallback={null}>
+      <LoginForm />
+    </Suspense>
+  );
+}
+
+function LoginForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [email, setEmail]         = useState("");
   const [password, setPassword]   = useState("");
   const [showPass, setShowPass]   = useState(false);
-  const [errors, setErrors]       = useState<{ email?: string; password?: string }>({});
+  const [errors, setErrors]       = useState<{ email?: string; password?: string; form?: string }>({});
   const [loading, setLoading]     = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
@@ -34,13 +44,22 @@ export default function LoginPage() {
     e.preventDefault();
     const errs = validate();
     if (Object.keys(errs).length) { setErrors(errs); return; }
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+      setErrors({ form: "Sign-in isn't configured yet. Please contact the site admin." });
+      return;
+    }
     setErrors({});
     setLoading(true);
-    await new Promise((r) => setTimeout(r, 1400));
+    const supabase = createClient();
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
     setLoading(false);
-    sessionStorage.setItem("gvp_user_email", email);
+    if (error) {
+      setErrors({ form: error.message });
+      return;
+    }
     setSubmitted(true);
-    router.push("/profile");
+    const redirect = searchParams.get("redirect");
+    router.push(redirect || "/profile");
   }
 
   return (
@@ -121,6 +140,12 @@ export default function LoginPage() {
                 </p>
 
                 <form onSubmit={handleSubmit} noValidate className="space-y-5">
+
+                  {errors.form && (
+                    <p className="px-4 py-3 rounded-xl text-sm font-medium bg-red-50 text-red-600 border border-red-200">
+                      {errors.form}
+                    </p>
+                  )}
 
                   {/* Email */}
                   <div>

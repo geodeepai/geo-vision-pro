@@ -7,6 +7,7 @@ import {
   AlertCircle, CreditCard, Landmark, Smartphone, Wallet, Building2, FileText,
 } from "lucide-react";
 import { downloadPaymentReceipt, downloadEnrollmentLetter } from "@/lib/gvpPDF";
+import { createClient } from "@/lib/supabase/client";
 
 /* ─── Course data ──────────────────────────────────────────────── */
 interface CourseInfo { id: number; title: string; ref: string; level: string; duration: string; fee: number; }
@@ -268,6 +269,10 @@ export default function EnrollPage() {
   /* ── Post-success redirect ── */
   const [redirectCount, setRedirectCount] = useState(10);
 
+  /* ── Save-to-backend state ── */
+  const [savingEnrollment, setSavingEnrollment] = useState(false);
+  const [saveError, setSaveError] = useState("");
+
   /* ── Corporate ── */
   const [corp, setCorp]             = useState({ company: "", gst: "", email: "", contact: "", seats: "1" });
 
@@ -289,10 +294,23 @@ export default function EnrollPage() {
 
   useEffect(() => {
     if (!upiWaiting) return;
-    const succ  = setTimeout(() => { setUpiWaiting(false); handlePaymentSuccess(); }, 5000);
     const count = setInterval(() => setUpiTimer(p => p > 0 ? p - 1 : 0), 1000);
-    return () => { clearTimeout(succ); clearInterval(count); };
+    return () => clearInterval(count);
   }, [upiWaiting]);
+
+  useEffect(() => {
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) return;
+    const supabase = createClient();
+    supabase.auth.getUser().then(({ data }) => {
+      const u = data.user;
+      if (!u) return;
+      setForm(f => ({
+        ...f,
+        name: f.name || (u.user_metadata?.full_name as string) || "",
+        email: f.email || u.email || "",
+      }));
+    });
+  }, []);
 
   useEffect(() => {
     if (step !== 5) return;
@@ -338,12 +356,41 @@ export default function EnrollPage() {
     return Object.keys(e).length === 0;
   }
 
-  function handlePaymentSuccess() {
+  async function submitEnrollment(paymentMethodLabel: string, transactionId: string, nextStep: number) {
+    setSaveError("");
+    setSavingEnrollment(true);
     const enrollmentId = genId("GVP-ENR");
-    const transactionId = genId("GVP-TXN");
     const receiptNo = genId("GVP-RCT");
-    setEnrollIds({ enrollmentId, transactionId, receiptNo });
-    setStep(5);
+
+    try {
+      const res = await fetch("/api/enroll", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          courseId: course.id, courseTitle: course.title, courseRef: course.ref,
+          studentName: form.name, studentEmail: form.email, studentMobile: form.mobile,
+          organization: form.organization, city: form.city, state: form.state,
+          pincode: form.pincode, hearAbout: form.hearAbout,
+          fee: course.fee, gst, discount, total,
+          paymentMethod: paymentMethodLabel,
+          enrollmentId, transactionId, receiptNo,
+        }),
+      });
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        throw new Error(body.error || "Could not save your enrollment. Please try again.");
+      }
+      setEnrollIds({ enrollmentId, transactionId, receiptNo });
+      setStep(nextStep);
+    } catch (err) {
+      setSaveError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
+    } finally {
+      setSavingEnrollment(false);
+    }
+  }
+
+  function handlePaymentSuccess() {
+    submitEnrollment(PAY_METHODS.find(p => p.id === payMethod)?.label ?? payMethod, genId("GVP-TXN"), 5);
   }
 
   function handleCardSubmit() {
@@ -1137,7 +1184,7 @@ export default function EnrollPage() {
                 placeholder="Enter UTR number after transfer"
                 style={inpStyle("neft", !!neftUTR)} />
             </div>
-            <button onClick={() => { const eId = genId("GVP-ENR"); setEnrollIds({ enrollmentId: eId, transactionId: neftUTR || "NEFT-PENDING", receiptNo: genId("GVP-RCT") }); setStep(7); }}
+            <button onClick={() => submitEnrollment("NEFT / RTGS / IMPS", neftUTR || "NEFT-PENDING", 7)}
               className="w-full py-3.5 rounded-xl font-black text-base text-white mt-5 transition-all hover:opacity-90"
               style={{ background: "linear-gradient(135deg,#22c48a,#1d9e75)", boxShadow: "0 4px 20px rgba(29,158,117,0.3)" }}>
               Submit Enrollment Request
@@ -1183,7 +1230,7 @@ export default function EnrollPage() {
                   placeholder="Bank name e.g. HDFC Bank, SBI" style={inpStyle("ddBank", !!ddBank)} />
               </div>
             </div>
-            <button onClick={() => { setEnrollIds({ enrollmentId: genId("GVP-ENR"), transactionId: `DD-${ddNum}`, receiptNo: genId("GVP-RCT") }); setStep(7); }}
+            <button onClick={() => submitEnrollment("Demand Draft / Cheque", `DD-${ddNum}`, 7)}
               disabled={!ddNum || !ddDate || !ddBank}
               className="w-full py-3.5 rounded-xl font-black text-base text-white mt-5 transition-all hover:opacity-90"
               style={{ background: ddNum && ddDate && ddBank ? "linear-gradient(135deg,#22c48a,#1d9e75)" : "rgba(255,255,255,0.08)", boxShadow: "0 4px 20px rgba(29,158,117,0.2)" }}>
@@ -1237,7 +1284,7 @@ export default function EnrollPage() {
                 📄 A formal invoice will be generated and emailed within 2–4 business hours. Payment terms: Net 15 days. GST invoice provided.
               </div>
             </div>
-            <button onClick={() => { if (!corp.company || !corp.email || !corp.contact) return; setEnrollIds({ enrollmentId: genId("GVP-ENR"), transactionId: `CORP-INV-${Date.now().toString().slice(-6)}`, receiptNo: genId("GVP-RCT") }); setStep(7); }}
+            <button onClick={() => { if (!corp.company || !corp.email || !corp.contact) return; submitEnrollment("Corporate / Invoice", `CORP-INV-${Date.now().toString().slice(-6)}`, 7); }}
               disabled={!corp.company || !corp.email || !corp.contact}
               className="w-full py-3.5 rounded-xl font-black text-base text-white mt-5 transition-all hover:opacity-90"
               style={{ background: corp.company && corp.email && corp.contact ? "linear-gradient(135deg,#22c48a,#1d9e75)" : "rgba(255,255,255,0.08)", boxShadow: "0 4px 20px rgba(29,158,117,0.2)" }}>
@@ -1559,6 +1606,16 @@ export default function EnrollPage() {
 
       {/* Content */}
       <div className="max-w-2xl mx-auto px-4 pb-20">
+        {saveError && (
+          <div className="rounded-xl p-4 mb-4 flex items-start gap-3"
+            style={{ background: "rgba(239,68,68,0.1)", border: "1px solid rgba(239,68,68,0.3)" }}>
+            <AlertCircle size={16} style={{ color: "#ef4444", flexShrink: 0, marginTop: 2 }} />
+            <div>
+              <p className="text-sm font-bold" style={{ color: "#ef4444" }}>Couldn&apos;t save your enrollment</p>
+              <p className="text-xs mt-0.5" style={{ color: "#fca5a5" }}>{saveError} Click the confirm button again to retry.</p>
+            </div>
+          </div>
+        )}
         {step === 1 && renderStep1()}
         {step === 2 && renderStep2()}
         {step === 3 && renderStep3()}
@@ -1570,6 +1627,16 @@ export default function EnrollPage() {
       </div>
 
       {showOTP && renderOTPOverlay()}
+      {savingEnrollment && (
+        <div className="fixed inset-0 z-[80] flex items-center justify-center p-4"
+          style={{ background: "rgba(0,0,0,0.8)", backdropFilter: "blur(8px)" }}>
+          <div className="flex flex-col items-center gap-4 px-8 py-7 rounded-2xl"
+            style={{ background: "#0f2035", border: "1px solid rgba(29,158,117,0.3)" }}>
+            <Loader2 size={32} className="animate-spin" style={{ color: "#1d9e75" }} />
+            <p className="text-white font-bold text-sm">Saving your enrollment…</p>
+          </div>
+        </div>
+      )}
     </main>
   );
 }

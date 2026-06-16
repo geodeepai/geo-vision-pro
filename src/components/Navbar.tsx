@@ -1,9 +1,12 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { Menu, X, LogIn, ChevronDown, ArrowRight } from "lucide-react";
+import { Menu, X, LogIn, LogOut, UserCircle2, ChevronDown, ArrowRight } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import ThemeToggle from "./ThemeToggle";
+import { useAuth } from "@/components/AuthProvider";
+import { createClient } from "@/lib/supabase/client";
 import {
   IconNews,
   IconArticle,
@@ -86,6 +89,17 @@ export default function Navbar() {
   const svc   = useDropdown();
   const news  = useDropdown();
   const learn = useDropdown();
+
+  const router = useRouter();
+  const { user } = useAuth();
+
+  async function handleLogout() {
+    if (process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+      const supabase = createClient();
+      await supabase.auth.signOut();
+    }
+    router.push("/login");
+  }
 
   return (
     <nav
@@ -374,12 +388,29 @@ export default function Navbar() {
         {/* Right actions */}
         <div className="hidden lg:flex items-center gap-1.5">
           <ThemeToggle />
-          <Link href="/login"
-            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl font-semibold text-[14px] transition-all"
-            style={{ color: "var(--nav-text)" }}
-          >
-            <LogIn size={15} /> Log In
-          </Link>
+          {user ? (
+            <>
+              <Link href="/profile"
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl font-semibold text-[14px] transition-all"
+                style={{ color: "var(--nav-text)" }}
+              >
+                <UserCircle2 size={15} /> My Profile
+              </Link>
+              <button onClick={handleLogout}
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl font-semibold text-[14px] transition-all"
+                style={{ color: "var(--nav-text)" }}
+              >
+                <LogOut size={15} /> Log Out
+              </button>
+            </>
+          ) : (
+            <Link href="/login"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl font-semibold text-[14px] transition-all"
+              style={{ color: "var(--nav-text)" }}
+            >
+              <LogIn size={15} /> Log In
+            </Link>
+          )}
         </div>
 
         {/* Hamburger */}
@@ -504,13 +535,30 @@ export default function Navbar() {
             ))}
           </ul>
 
-          <div className="mt-3">
-            <Link href="/login" onClick={() => setMobileOpen(false)}
-              className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border font-semibold text-[15px] transition-all"
-              style={{ borderColor: "var(--card-border)", color: "var(--heading)" }}
-            >
-              <LogIn size={15} /> Log In
-            </Link>
+          <div className="mt-3 space-y-2">
+            {user ? (
+              <>
+                <Link href="/profile" onClick={() => setMobileOpen(false)}
+                  className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border font-semibold text-[15px] transition-all"
+                  style={{ borderColor: "var(--card-border)", color: "var(--heading)" }}
+                >
+                  <UserCircle2 size={15} /> My Profile
+                </Link>
+                <button onClick={() => { setMobileOpen(false); handleLogout(); }}
+                  className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border font-semibold text-[15px] transition-all w-full"
+                  style={{ borderColor: "var(--card-border)", color: "var(--heading)" }}
+                >
+                  <LogOut size={15} /> Log Out
+                </button>
+              </>
+            ) : (
+              <Link href="/login" onClick={() => setMobileOpen(false)}
+                className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border font-semibold text-[15px] transition-all"
+                style={{ borderColor: "var(--card-border)", color: "var(--heading)" }}
+              >
+                <LogIn size={15} /> Log In
+              </Link>
+            )}
           </div>
         </div>
       )}

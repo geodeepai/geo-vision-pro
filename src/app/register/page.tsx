@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { Eye, EyeOff, ArrowLeft, Loader2 } from "lucide-react";
 import AuthPanel from "@/components/AuthPanel";
+import { createClient } from "@/lib/supabase/client";
 
 const interests = [
   "Google Earth Engine (GEE)",
@@ -26,7 +27,7 @@ type Fields = {
   confirm: string;
   agree: boolean;
 };
-type Errors = Partial<Record<keyof Fields, string>>;
+type Errors = Partial<Record<keyof Fields, string>> & { form?: string };
 
 export default function RegisterPage() {
   const [f, setF] = useState<Fields>({
@@ -58,10 +59,23 @@ export default function RegisterPage() {
     e.preventDefault();
     const errs = validate();
     if (Object.keys(errs).length) { setErrors(errs); return; }
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+      setErrors({ form: "Account creation isn't configured yet. Please contact the site admin." });
+      return;
+    }
     setErrors({});
     setLoading(true);
-    await new Promise((r) => setTimeout(r, 1600));
+    const supabase = createClient();
+    const { error } = await supabase.auth.signUp({
+      email: f.email,
+      password: f.password,
+      options: { data: { full_name: f.name, phone: f.phone, interest: f.interest } },
+    });
     setLoading(false);
+    if (error) {
+      setErrors({ form: error.message });
+      return;
+    }
     setSubmitted(true);
   }
 
@@ -141,6 +155,12 @@ export default function RegisterPage() {
                 </p>
 
                 <form onSubmit={handleSubmit} noValidate className="space-y-5">
+
+                  {errors.form && (
+                    <p className="px-4 py-3 rounded-xl text-sm font-medium bg-red-50 text-red-600 border border-red-200">
+                      {errors.form}
+                    </p>
+                  )}
 
                   {/* Full name */}
                   <div>
