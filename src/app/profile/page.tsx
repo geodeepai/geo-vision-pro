@@ -9,9 +9,11 @@ import {
   Target, Mail, Phone, MapPin, Calendar, X,
   Users, BarChart2, GraduationCap, LayoutDashboard, Compass, UserCog,
   Crown, ChevronDown, Sparkles, Camera, Loader2,
+  History, LogIn, UserPlus, KeyRound, Image as ImageIcon,
 } from "lucide-react";
 import CertificateModal from "@/components/CertificateModal";
 import { createClient } from "@/lib/supabase/client";
+import { logActivity } from "@/lib/activity";
 
 /* ─── course catalogue (mirrors the website) ─────────────────── */
 const ALL_COURSES = [
@@ -138,7 +140,7 @@ const SOFT_BLUE = { background:"linear-gradient(135deg,#f3f7ff,#f1f0fe)", border
 const PRIMARY_BTN = "linear-gradient(135deg,#4f7df3,#6366f1)";
 const PRIMARY_SHADOW = "0 4px 14px rgba(79,125,243,0.28)";
 
-type TabKey = "dashboard" | "my courses" | "explore" | "certificates" | "profile";
+type TabKey = "dashboard" | "my courses" | "explore" | "certificates" | "profile" | "activity";
 const NAV_GROUPS: { label: string; items: { key: TabKey; label: string; icon: typeof LayoutDashboard }[] }[] = [
   { label: "Learning", items: [
     { key: "dashboard",    label: "Dashboard",       icon: LayoutDashboard },
@@ -147,10 +149,22 @@ const NAV_GROUPS: { label: string; items: { key: TabKey; label: string; icon: ty
     { key: "certificates", label: "Certificates",    icon: Award },
   ]},
   { label: "Account", items: [
-    { key: "profile", label: "Edit Profile", icon: UserCog },
+    { key: "profile",  label: "Edit Profile", icon: UserCog },
+    { key: "activity", label: "Activity Log",  icon: History },
   ]},
 ];
 const NAV_ITEMS = NAV_GROUPS.flatMap((g) => g.items);
+
+const ACTIVITY_ICONS: Record<string, typeof LogIn> = {
+  login: LogIn,
+  account_created: UserPlus,
+  profile_updated: UserCog,
+  email_changed: Mail,
+  password_changed: KeyRound,
+  avatar_updated: ImageIcon,
+  avatar_removed: ImageIcon,
+  enrollment: GraduationCap,
+};
 
 /* ─── page ───────────────────────────────────────────────────── */
 const PROFILE_FIELDS_INIT = { full_name: "", dob: "", phone: "", organization: "", city: "", state: "", pincode: "" };
@@ -179,6 +193,11 @@ export default function ProfilePage() {
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const [avatarError, setAvatarError]     = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  /* ── Activity log ── */
+  const [activity, setActivity]           = useState<{ id: string; type: string; description: string; createdAt: string }[]>([]);
+  const [activityLoading, setActivityLoading] = useState(false);
+  const [activityLoaded, setActivityLoaded] = useState(false);
 
   /* load persisted state */
   useEffect(() => {
@@ -234,7 +253,53 @@ export default function ProfilePage() {
 
   function selectTab(key: TabKey) {
     if (key === "profile") { goToEditProfile(); return; }
+    if (key === "activity" && !activityLoaded) loadActivity();
     setActiveTab(key);
+  }
+
+  async function loadActivity() {
+    setActivityLoading(true);
+    try {
+      const supabase = createClient();
+      const { data: { user: authUser } } = await supabase.auth.getUser();
+      if (!authUser) return;
+
+      const [logRes, enrollRes] = await Promise.all([
+        supabase.from("activity_log").select("*").eq("user_id", authUser.id).order("created_at", { ascending: false }).limit(50),
+        supabase.from("enrollments").select("*").eq("user_id", authUser.id).order("created_at", { ascending: false }).limit(50),
+      ]);
+
+      const logItems = (logRes.data ?? []).map((r) => ({
+        id: r.id as string,
+        type: r.event_type as string,
+        description: r.description as string,
+        createdAt: r.created_at as string,
+      }));
+      const enrollItems = (enrollRes.data ?? []).map((r) => ({
+        id: r.id as string,
+        type: "enrollment",
+        description: `Enrolled in "${r.course_title}"`,
+        createdAt: r.created_at as string,
+      }));
+
+      const merged = [...logItems, ...enrollItems].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+      setActivity(merged);
+      setActivityLoaded(true);
+    } finally {
+      setActivityLoading(false);
+    }
+  }
+
+  function timeAgo(iso: string) {
+    const diff = Date.now() - new Date(iso).getTime();
+    const mins = Math.floor(diff / 60000);
+    if (mins < 1) return "just now";
+    if (mins < 60) return `${mins}m ago`;
+    const hours = Math.floor(mins / 60);
+    if (hours < 24) return `${hours}h ago`;
+    const days = Math.floor(hours / 24);
+    if (days < 30) return `${days}d ago`;
+    return new Date(iso).toLocaleDateString("en-US", { day: "numeric", month: "short", year: "numeric" });
   }
 
   function resetEditForm() {
@@ -275,6 +340,7 @@ export default function ProfilePage() {
       if (upsertError) throw upsertError;
 
       await supabase.auth.updateUser({ data: { avatar_url: freshUrl } });
+      await logActivity(supabase, authUser.id, "avatar_updated", "Updated profile picture");
 
       setAvatarUrl(freshUrl);
       setToast("Profile picture updated!");
@@ -304,6 +370,7 @@ export default function ProfilePage() {
       if (upsertError) throw upsertError;
 
       await supabase.auth.updateUser({ data: { avatar_url: null } });
+      await logActivity(supabase, authUser.id, "avatar_removed", "Removed profile picture");
       setAvatarUrl(null);
     } catch (err) {
       setAvatarError(err instanceof Error ? err.message : "Could not remove photo. Please try again.");
@@ -335,6 +402,7 @@ export default function ProfilePage() {
       if (upsertError) throw upsertError;
 
       await supabase.auth.updateUser({ data: { full_name: editForm.full_name } });
+      await logActivity(supabase, authUser.id, "profile_updated", "Updated profile details");
 
       if (editForm.email && editForm.email !== user.email) {
         const res = await fetch("/api/profile/email", {
@@ -346,6 +414,7 @@ export default function ProfilePage() {
           const body = await res.json().catch(() => ({}));
           throw new Error(body.error || "Could not update email address");
         }
+        await logActivity(supabase, authUser.id, "email_changed", `Changed email to ${editForm.email}`);
       }
 
       const { full_name, dob, phone, organization, city, state, pincode } = editForm;
@@ -1157,6 +1226,49 @@ export default function ProfilePage() {
                     </button>
                   </div>
                 </form>
+              </div>
+            </div>
+          )}
+
+          {/* ══════════ ACTIVITY LOG ══════════ */}
+          {activeTab === "activity" && (
+            <div className="max-w-2xl pb-8">
+              <div className="rounded-2xl border p-7 md:p-8" style={CARD}>
+                <div className="flex items-center gap-3 mb-1">
+                  <span className="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center"><History size={16} className="text-indigo-600" /></span>
+                  <h2 className="text-lg font-black text-slate-900">Activity Log</h2>
+                </div>
+                <p className="text-sm text-slate-500 mb-6 ml-11">Logins, account changes, and enrollments on your account.</p>
+
+                {activityLoading ? (
+                  <div className="flex items-center justify-center py-10">
+                    <Loader2 size={24} className="animate-spin text-indigo-400" />
+                  </div>
+                ) : activity.length === 0 ? (
+                  <div className="text-center py-10">
+                    <div className="w-14 h-14 rounded-full bg-slate-100 flex items-center justify-center mx-auto mb-3">
+                      <History size={24} className="text-slate-300" />
+                    </div>
+                    <p className="text-sm text-slate-500">No activity recorded yet.</p>
+                  </div>
+                ) : (
+                  <div className="space-y-1">
+                    {activity.map((item, i) => {
+                      const Icon = ACTIVITY_ICONS[item.type] ?? History;
+                      return (
+                        <div key={item.id} className="flex items-start gap-3 py-3" style={{ borderTop: i === 0 ? "none" : "1px solid rgba(15,23,42,0.06)" }}>
+                          <span className="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center flex-shrink-0 mt-0.5">
+                            <Icon size={14} className="text-slate-500" />
+                          </span>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm font-semibold text-slate-800">{item.description}</p>
+                          </div>
+                          <span className="text-xs text-slate-400 flex-shrink-0 whitespace-nowrap">{timeAgo(item.createdAt)}</span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
             </div>
           )}

@@ -6,6 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Eye, EyeOff, ArrowLeft, Loader2 } from "lucide-react";
 import AuthPanel from "@/components/AuthPanel";
 import { createClient } from "@/lib/supabase/client";
+import { logActivity, deviceLabel } from "@/lib/activity";
 
 const interests = [
   "Google Earth Engine (GEE)",
@@ -87,7 +88,8 @@ function RegisterForm() {
       setErrors({ form: error.message });
       return;
     }
-    if (data.session) {
+    if (data.session && data.user) {
+      await logActivity(supabase, data.user.id, "account_created", "Account created", { device: deviceLabel() });
       router.push(searchParams.get("redirect") || "/profile");
       return;
     }

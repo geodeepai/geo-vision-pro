@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, Eye, EyeOff, Loader2, ShieldCheck, AlertCircle } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
+import { logActivity, deviceLabel } from "@/lib/activity";
 
 export default function ResetPasswordPage() {
   const router = useRouter();
@@ -50,11 +51,14 @@ export default function ResetPasswordPage() {
     setError("");
     setLoading(true);
     const supabase = createClient();
-    const { error: updateError } = await supabase.auth.updateUser({ password });
+    const { data, error: updateError } = await supabase.auth.updateUser({ password });
     setLoading(false);
     if (updateError) {
       setError(updateError.message);
       return;
+    }
+    if (data.user) {
+      await logActivity(supabase, data.user.id, "password_changed", "Password changed", { device: deviceLabel() });
     }
     setStatus("success");
     setTimeout(() => router.push("/profile"), 1800);

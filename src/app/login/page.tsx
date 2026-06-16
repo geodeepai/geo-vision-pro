@@ -6,6 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Eye, EyeOff, ArrowLeft, Loader2 } from "lucide-react";
 import AuthPanel from "@/components/AuthPanel";
 import { createClient } from "@/lib/supabase/client";
+import { logActivity, deviceLabel } from "@/lib/activity";
 
 export default function LoginPage() {
   return (
@@ -51,11 +52,14 @@ function LoginForm() {
     setErrors({});
     setLoading(true);
     const supabase = createClient();
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
     setLoading(false);
     if (error) {
       setErrors({ form: error.message });
       return;
+    }
+    if (data.user) {
+      await logActivity(supabase, data.user.id, "login", "Signed in to your account", { device: deviceLabel() });
     }
     setSubmitted(true);
     const redirect = searchParams.get("redirect");
