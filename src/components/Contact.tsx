@@ -43,10 +43,40 @@ const interestOptions = [
 
 export default function Contact() {
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState("");
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setSubmitted(true);
+    const form = e.currentTarget;
+    const data = new FormData(form);
+    const payload = {
+      name: data.get("name"),
+      email: data.get("email"),
+      phone: data.get("phone"),
+      interest: data.get("interest"),
+      message: data.get("message"),
+    };
+
+    setError("");
+    setSubmitting(true);
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        throw new Error(body.error || "Could not send your message. Please try again.");
+      }
+      setSubmitted(true);
+      form.reset();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Could not send your message. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -117,6 +147,11 @@ export default function Contact() {
                 className="rounded-2xl border p-8 space-y-5 shadow-sm"
                 style={{ background: "var(--card-bg)", borderColor: "var(--card-border)" }}
               >
+                {error && (
+                  <p className="px-4 py-3 rounded-xl text-sm font-medium bg-red-50 text-red-600 border border-red-200">
+                    {error}
+                  </p>
+                )}
                 <div className="grid sm:grid-cols-2 gap-5">
                   <FormField label="Full Name" type="text" id="name" placeholder="Your name" required />
                   <FormField label="Email Address" type="email" id="email" placeholder="your@email.com" required />
@@ -161,11 +196,12 @@ export default function Contact() {
                 </div>
                 <button
                   type="submit"
-                  className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl text-white font-semibold hover:opacity-90 transition-all shadow-lg hover:-translate-y-0.5"
+                  disabled={submitting}
+                  className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl text-white font-semibold hover:opacity-90 disabled:opacity-70 transition-all shadow-lg hover:-translate-y-0.5"
                   style={{ background: "linear-gradient(135deg,#2563eb,#4f46e5)", boxShadow: "0 8px 24px rgba(37,99,235,0.25)" }}
                 >
-                  <span>Send Message</span>
-                  <Send size={16} />
+                  <span>{submitting ? "Sending…" : "Send Message"}</span>
+                  {!submitting && <Send size={16} />}
                 </button>
               </form>
             )}

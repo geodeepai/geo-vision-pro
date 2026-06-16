@@ -97,3 +97,53 @@ export async function sendAdminNotification(data: EnrollmentEmailData) {
     html,
   });
 }
+
+export interface ContactEmailData {
+  name: string;
+  email: string;
+  phone: string;
+  interest: string;
+  message: string;
+}
+
+export async function sendContactAcknowledgment(data: ContactEmailData) {
+  if (!process.env.RESEND_API_KEY) return;
+
+  const html = wrapper(
+    `Thanks for reaching out, ${data.name.split(" ")[0]}!`,
+    `<p>We've received your message about <strong style="color:#1d9e75;">${data.interest}</strong> and will get back to you within 24 hours.</p>
+     <div style="margin:16px 0;">
+       ${detailRow("Your message", data.message)}
+     </div>`
+  );
+
+  return getResend().emails.send({
+    from: FROM,
+    to: data.email,
+    subject: "We received your message — GeoVisionPro",
+    html,
+  });
+}
+
+export async function sendContactNotification(data: ContactEmailData) {
+  const adminEmail = process.env.ADMIN_NOTIFICATION_EMAIL;
+  if (!adminEmail || !process.env.RESEND_API_KEY) return;
+
+  const html = wrapper(
+    "New Contact Form Submission",
+    `<div style="margin:16px 0;">
+       ${detailRow("Name", data.name)}
+       ${detailRow("Email", data.email)}
+       ${detailRow("Phone", data.phone || "—")}
+       ${detailRow("Interest", data.interest)}
+     </div>
+     <p style="margin-top:16px;">${data.message}</p>`
+  );
+
+  return getResend().emails.send({
+    from: FROM,
+    to: adminEmail,
+    subject: `New contact form submission from ${data.name}`,
+    html,
+  });
+}
