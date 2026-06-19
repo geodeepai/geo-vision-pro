@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { gsap } from "gsap";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 
 /* Three.js Globe — loaded client-side only (no SSR, WebGL requirement) */
@@ -28,6 +28,18 @@ const STATS = [
   { value: "12+",   label: "States" },
 ];
 
+const BADGE_WORDS = [
+  "Next-Gen Geospatial Intelligence",
+  "AI-Powered Satellite Analytics",
+  "Precision GIS Engineering",
+];
+
+const MARQUEE_ITEMS = [
+  "Remote Sensing", "GIS Analytics", "Drone Mapping", "AI Geo-Analytics",
+  "LULC Analysis", "Google Earth Engine", "Sentinel-2", "LiDAR",
+  "ArcGIS Pro", "UAV Surveys", "STAAD Pro", "Structural Engineering",
+];
+
 /* Deterministic star field — avoids hydration mismatch */
 const STARS = Array.from({ length: 80 }, (_, i) => ({
   x:  ((i * 73  + 11) % 97),
@@ -36,6 +48,36 @@ const STARS = Array.from({ length: 80 }, (_, i) => ({
   o:  ((i * 19) % 28) / 100 + 0.04,
   d:  (i * 0.3) % 6,
 }));
+
+/* ── Scrolling tech marquee (Framer-style) ──────────────────────────────── */
+function MarqueeStrip() {
+  return (
+    <div
+      className="relative overflow-hidden py-2"
+      style={{
+        maskImage: "linear-gradient(90deg, transparent 0%, black 8%, black 92%, transparent 100%)",
+        WebkitMaskImage: "linear-gradient(90deg, transparent 0%, black 8%, black 92%, transparent 100%)",
+      }}
+    >
+      <motion.div
+        className="flex gap-10 whitespace-nowrap"
+        animate={{ x: ["0%", "-50%"] }}
+        transition={{ duration: 32, ease: "linear", repeat: Infinity }}
+      >
+        {[...MARQUEE_ITEMS, ...MARQUEE_ITEMS].map((item, i) => (
+          <span
+            key={i}
+            className="inline-flex items-center gap-2.5 text-xs font-semibold tracking-widest uppercase"
+            style={{ color: "#2d4a6e" }}
+          >
+            <span style={{ color: "#0077FF", opacity: 0.55, fontSize: 8 }}>✦</span>
+            {item}
+          </span>
+        ))}
+      </motion.div>
+    </div>
+  );
+}
 
 /* ── Spinning-border capsule (Linear-inspired) ──────────────────────────── */
 function IntelligenceCapsule() {
@@ -309,6 +351,7 @@ function EarthGlobe({ ready }: { ready: boolean }) {
 /* ── Hero ────────────────────────────────────────────────────────────────── */
 export default function Hero() {
   const [ready, setReady] = useState(false);
+  const [badgeIdx, setBadgeIdx] = useState(0);
 
   const auroraA = useRef<HTMLDivElement>(null);
   const auroraB = useRef<HTMLDivElement>(null);
@@ -316,6 +359,11 @@ export default function Hero() {
   const auroraD = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const gsapCtx  = useRef<gsap.Context | null>(null);
+
+  useEffect(() => {
+    const cycle = setInterval(() => setBadgeIdx(i => (i + 1) % BADGE_WORDS.length), 3000);
+    return () => clearInterval(cycle);
+  }, []);
 
   useEffect(() => {
     /* Aurora mesh — each orb drifts on its own rhythm */
@@ -387,15 +435,27 @@ export default function Hero() {
           />
         ))}
 
-        {/* Blueprint grid */}
+        {/* Dot grid (Framer-style) */}
         <div
           className="absolute inset-0"
           style={{
-            backgroundImage: `linear-gradient(rgba(0,119,255,0.055) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(0,119,255,0.055) 1px, transparent 1px)`,
-            backgroundSize: "52px 52px",
+            backgroundImage: `radial-gradient(circle, rgba(0,119,255,0.16) 1px, transparent 1px)`,
+            backgroundSize: "40px 40px",
           }}
         />
+
+        {/* Noise texture — adds depth and premium feel */}
+        <svg
+          className="absolute inset-0 w-full h-full pointer-events-none"
+          style={{ opacity: 0.04 }}
+          aria-hidden="true"
+        >
+          <filter id="hero-noise">
+            <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch" />
+            <feColorMatrix type="saturate" values="0" />
+          </filter>
+          <rect width="100%" height="100%" filter="url(#hero-noise)" />
+        </svg>
 
         {/* Aurora mesh — 4 large colour orbs (Stripe-inspired) */}
         <div
@@ -404,7 +464,7 @@ export default function Hero() {
           style={{
             width: "55vw", height: "55vh",
             top: "5%", left: "8%",
-            background: "radial-gradient(ellipse, rgba(0,119,255,0.13) 0%, transparent 65%)",
+            background: "radial-gradient(ellipse, rgba(0,119,255,0.18) 0%, transparent 65%)",
             filter: "blur(80px)",
           }}
         />
@@ -414,7 +474,7 @@ export default function Hero() {
           style={{
             width: "48vw", height: "48vh",
             top: "20%", right: "5%",
-            background: "radial-gradient(ellipse, rgba(0,212,255,0.10) 0%, transparent 65%)",
+            background: "radial-gradient(ellipse, rgba(0,212,255,0.15) 0%, transparent 65%)",
             filter: "blur(90px)",
           }}
         />
@@ -424,7 +484,7 @@ export default function Hero() {
           style={{
             width: "40vw", height: "40vh",
             bottom: "8%", left: "28%",
-            background: "radial-gradient(ellipse, rgba(0,184,148,0.10) 0%, transparent 65%)",
+            background: "radial-gradient(ellipse, rgba(0,184,148,0.14) 0%, transparent 65%)",
             filter: "blur(80px)",
           }}
         />
@@ -473,9 +533,19 @@ export default function Hero() {
                   animation: "pulseDot 2s ease-in-out infinite",
                 }}
               />
-              <span className="text-xs sm:text-sm font-semibold" style={{ color: "#00D4FF" }}>
-                Next-Gen Geospatial Intelligence
-              </span>
+              <AnimatePresence mode="wait">
+                <motion.span
+                  key={badgeIdx}
+                  initial={{ opacity: 0, y: 7 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -7 }}
+                  transition={{ duration: 0.35, ease: "easeInOut" }}
+                  className="text-xs sm:text-sm font-semibold"
+                  style={{ color: "#00D4FF" }}
+                >
+                  {BADGE_WORDS[badgeIdx]}
+                </motion.span>
+              </AnimatePresence>
             </div>
           </motion.div>
 
@@ -609,6 +679,15 @@ export default function Hero() {
 
         {/* ── Right column — Globe ─────────────────────────────────────── */}
         <EarthGlobe ready={ready} />
+
+        {/* ── Full-width tech marquee ───────────────────────────────────── */}
+        <motion.div
+          {...fm(1.0)}
+          className="lg:col-span-2 w-full"
+          style={{ borderTop: "1px solid rgba(0,119,255,0.10)", paddingTop: "20px" }}
+        >
+          <MarqueeStrip />
+        </motion.div>
 
       </div>
 
