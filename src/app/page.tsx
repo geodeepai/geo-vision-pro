@@ -1,6 +1,7 @@
 import MaskReveal from "@/components/MaskReveal";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
+import WorkPhotoStrip from "@/components/WorkPhotoStrip";
 import AIIntelligence from "@/components/AIIntelligence";
 import Ticker from "@/components/Ticker";
 import Services from "@/components/Services";
@@ -18,6 +19,7 @@ export default function Home() {
       <MaskReveal />
       <Navbar />
       <Hero />
+      <WorkPhotoStrip />
       <AIIntelligence />
       <Ticker />
       <Services />

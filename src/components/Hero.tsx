@@ -913,33 +913,13 @@ export default function Hero() {
         {/* ── Right column — Globe ─────────────────────────────────────── */}
         <EarthGlobe ready={ready} />
 
-        {/* ── Photo marquee rows + tech strip ──────────────────────────── */}
+        {/* ── Full-width tech marquee ───────────────────────────────────── */}
         <motion.div
-          {...fm(0.82)}
+          {...fm(1.0)}
           className="lg:col-span-2 w-full"
+          style={{ borderTop: "1px solid var(--divider)", paddingTop: "20px" }}
         >
-          {/* Section label */}
-          <div className="flex items-center gap-3 mb-3">
-            <span className="text-[10px] font-bold uppercase tracking-widest" style={{ color: "var(--muted)" }}>
-              Our Official Work
-            </span>
-            <div className="flex-1 h-px" style={{ background: "var(--divider)" }} />
-          </div>
-
-          {/* Row 1 — slides left */}
-          <div className="mb-2.5">
-            <PhotoSlideRow photos={PHOTOS_ROW_1} direction={1} />
-          </div>
-
-          {/* Row 2 — slides right */}
-          <div className="mb-4">
-            <PhotoSlideRow photos={PHOTOS_ROW_2} direction={-1} />
-          </div>
-
-          {/* Tech word marquee below photos */}
-          <div style={{ borderTop: "1px solid var(--divider)", paddingTop: "16px" }}>
-            <MarqueeStrip />
-          </div>
+          <MarqueeStrip />
         </motion.div>
 
       </div>
