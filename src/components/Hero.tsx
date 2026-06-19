@@ -63,6 +63,33 @@ const SIGNAL_ROWS = [
   { label: "Risk Scan", value: "Live", width: "68%", color: "#6D5BD0" },
 ];
 
+/* ── Official work photos — drop images into /public/photos/ ──────────────
+   Name them photo-01.jpg … photo-12.jpg (or update the src paths below).
+   The cards show a neutral placeholder when an image hasn't been added yet. */
+const PHOTOS_ROW_1 = [
+  { src: "/photos/photo-01.jpg", label: "Field Survey" },
+  { src: "/photos/photo-02.jpg", label: "GIS Mapping" },
+  { src: "/photos/photo-03.jpg", label: "Drone Operation" },
+  { src: "/photos/photo-04.jpg", label: "LULC Analysis" },
+  { src: "/photos/photo-05.jpg", label: "Satellite Processing" },
+  { src: "/photos/photo-06.jpg", label: "Site Survey" },
+];
+const PHOTOS_ROW_2 = [
+  { src: "/photos/photo-07.jpg", label: "AI Dashboard" },
+  { src: "/photos/photo-08.jpg", label: "Environmental Study" },
+  { src: "/photos/photo-09.jpg", label: "LiDAR Survey" },
+  { src: "/photos/photo-10.jpg", label: "Urban Mapping" },
+  { src: "/photos/photo-11.jpg", label: "Training Session" },
+  { src: "/photos/photo-12.jpg", label: "Award Ceremony" },
+];
+/* Background drift photos — a subset that float behind the hero content */
+const BG_DRIFT = [
+  { src: "/photos/photo-01.jpg", x: 3,  y: 14, dx: 50,  dy: 22,  size: 290, dur: 14, delay: 0  },
+  { src: "/photos/photo-05.jpg", x: 68, y: 6,  dx: -40, dy: 32,  size: 250, dur: 17, delay: 4  },
+  { src: "/photos/photo-09.jpg", x: 74, y: 62, dx: -45, dy: -28, size: 270, dur: 15, delay: 9  },
+  { src: "/photos/photo-03.jpg", x: 6,  y: 62, dx: 40,  dy: -22, size: 230, dur: 13, delay: 6  },
+];
+
 /* Deterministic star field — avoids hydration mismatch */
 const STARS = Array.from({ length: 80 }, (_, i) => ({
   x:  ((i * 73  + 11) % 97),
@@ -99,6 +126,89 @@ function MarqueeStrip() {
         ))}
       </motion.div>
     </div>
+  );
+}
+
+/* ── Single photo marquee row ────────────────────────────────────────────── */
+function PhotoSlideRow({ photos, direction = 1 }: {
+  photos: { src: string; label: string }[];
+  direction?: 1 | -1;
+}) {
+  const doubled = [...photos, ...photos];
+  return (
+    <div
+      className="relative overflow-hidden"
+      style={{
+        maskImage: "linear-gradient(90deg,transparent 0%,black 6%,black 94%,transparent 100%)",
+        WebkitMaskImage: "linear-gradient(90deg,transparent 0%,black 6%,black 94%,transparent 100%)",
+      }}
+    >
+      <motion.div
+        className="flex gap-3"
+        animate={{ x: direction === 1 ? ["0%", "-50%"] : ["-50%", "0%"] }}
+        transition={{ duration: 38, ease: "linear", repeat: Infinity }}
+      >
+        {doubled.map((p, i) => (
+          <div
+            key={i}
+            className="relative flex-shrink-0 overflow-hidden rounded-xl"
+            style={{
+              width: 224, height: 132,
+              background: "var(--section-alt)",
+              border: "1px solid var(--card-border)",
+            }}
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={p.src}
+              alt={p.label}
+              className="w-full h-full object-cover"
+              loading="lazy"
+              decoding="async"
+              onError={e => { (e.currentTarget as HTMLImageElement).style.display = "none"; }}
+            />
+            <div
+              className="absolute inset-0 pointer-events-none"
+              style={{ background: "linear-gradient(transparent 52%,rgba(0,0,0,0.52))" }}
+            />
+            <p className="absolute bottom-2 left-2.5 text-white text-[10px] font-semibold leading-none drop-shadow">
+              {p.label}
+            </p>
+          </div>
+        ))}
+      </motion.div>
+    </div>
+  );
+}
+
+/* ── Background drifting photos (float + vanish) ─────────────────────────── */
+function BackgroundDriftPhotos() {
+  return (
+    <>
+      {BG_DRIFT.map((item, i) => (
+        <motion.div
+          key={i}
+          className="absolute pointer-events-none overflow-hidden rounded-2xl"
+          style={{ left: `${item.x}%`, top: `${item.y}%`, width: item.size, aspectRatio: "16/10" }}
+          animate={{
+            opacity: [0, 0.09, 0.09, 0],
+            x: [0, item.dx],
+            y: [0, item.dy],
+          }}
+          transition={{ duration: item.dur, delay: item.delay, repeat: Infinity, ease: "easeInOut" }}
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={item.src}
+            alt=""
+            aria-hidden="true"
+            className="w-full h-full object-cover"
+            style={{ filter: "blur(2.5px) grayscale(0.25)" }}
+            onError={e => { (e.currentTarget as HTMLImageElement).style.display = "none"; }}
+          />
+        </motion.div>
+      ))}
+    </>
   );
 }
 
@@ -597,6 +707,9 @@ export default function Hero() {
           }}
         />
 
+        {/* Background drifting work photos */}
+        <BackgroundDriftPhotos />
+
         {/* Soft edge vignette */}
         <div
           className="absolute inset-0"
@@ -771,13 +884,33 @@ export default function Hero() {
         {/* ── Right column — Globe ─────────────────────────────────────── */}
         <EarthGlobe ready={ready} />
 
-        {/* ── Full-width tech marquee ───────────────────────────────────── */}
+        {/* ── Photo marquee rows + tech strip ──────────────────────────── */}
         <motion.div
-          {...fm(1.0)}
+          {...fm(0.82)}
           className="lg:col-span-2 w-full"
-          style={{ borderTop: "1px solid var(--divider)", paddingTop: "20px" }}
         >
-          <MarqueeStrip />
+          {/* Section label */}
+          <div className="flex items-center gap-3 mb-3">
+            <span className="text-[10px] font-bold uppercase tracking-widest" style={{ color: "var(--muted)" }}>
+              Our Official Work
+            </span>
+            <div className="flex-1 h-px" style={{ background: "var(--divider)" }} />
+          </div>
+
+          {/* Row 1 — slides left */}
+          <div className="mb-2.5">
+            <PhotoSlideRow photos={PHOTOS_ROW_1} direction={1} />
+          </div>
+
+          {/* Row 2 — slides right */}
+          <div className="mb-4">
+            <PhotoSlideRow photos={PHOTOS_ROW_2} direction={-1} />
+          </div>
+
+          {/* Tech word marquee below photos */}
+          <div style={{ borderTop: "1px solid var(--divider)", paddingTop: "16px" }}>
+            <MarqueeStrip />
+          </div>
         </motion.div>
 
       </div>
