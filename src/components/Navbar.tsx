@@ -214,9 +214,9 @@ export default function Navbar() {
                 onMouseLeave={news.leave}
                 className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-[min(580px,92vw)] rounded-2xl overflow-hidden"
                 style={{
-                  background: "#0a1628",
-                  border:     "1px solid rgba(29,158,117,0.25)",
-                  boxShadow:  "0 24px 64px rgba(0,0,0,0.45), 0 0 0 1px rgba(29,158,117,0.1)",
+                  background: "var(--card-bg)",
+                  border:     "1px solid var(--card-border)",
+                  boxShadow:  "0 24px 64px rgba(15,23,42,0.12), 0 0 0 1px rgba(29,158,117,0.08)",
                   animation:  "fadeSlideDown 0.18s ease-out forwards",
                 }}
               >
@@ -229,8 +229,8 @@ export default function Navbar() {
                       <IconNews size={15} color="#1d9e75" stroke={1.8} />
                     </div>
                     <div>
-                      <p className="text-sm font-black text-white">News &amp; Updates</p>
-                      <p className="text-[11px]" style={{ color: "rgba(255,255,255,0.4)" }}>Stay informed with GeoVision Pro</p>
+                      <p className="text-sm font-black" style={{ color: "var(--heading)" }}>News &amp; Updates</p>
+                      <p className="text-[11px]" style={{ color: "var(--muted)" }}>Stay informed with GeoVision Pro</p>
                     </div>
                   </div>
                   <span className="flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-widest"
@@ -260,17 +260,17 @@ export default function Navbar() {
                     >
                       {/* Icon bubble */}
                       <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 transition-all duration-150"
-                        style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)" }}
+                        style={{ background: "var(--section-alt)", border: "1px solid var(--card-border)" }}
                         onMouseEnter={undefined}
                       >
                         <Icon size={16} color="#1d9e75" stroke={1.6} className="group-hover:scale-110 transition-transform duration-150" />
                       </div>
                       {/* Text */}
                       <div className="min-w-0">
-                        <p className="text-[13px] font-bold leading-none mb-0.5 transition-colors duration-150 text-white group-hover:text-[#1d9e75]">
+                        <p className="text-[13px] font-bold leading-none mb-0.5 transition-colors duration-150 group-hover:text-[#1d9e75]" style={{ color: "var(--heading)" }}>
                           {label}
                         </p>
-                        <p className="text-[10px] leading-snug truncate" style={{ color: "rgba(255,255,255,0.35)" }}>
+                        <p className="text-[10px] leading-snug truncate" style={{ color: "var(--muted)" }}>
                           {desc}
                         </p>
                       </div>
@@ -281,7 +281,7 @@ export default function Navbar() {
                 {/* Footer strip */}
                 <div className="px-5 py-2.5 flex items-center justify-between"
                   style={{ borderTop: "1px solid rgba(29,158,117,0.15)", background: "rgba(0,0,0,0.25)" }}>
-                  <p className="text-[10px]" style={{ color: "rgba(255,255,255,0.3)" }}>
+                  <p className="text-[10px]" style={{ color: "var(--muted)" }}>
                     Fresh content published weekly
                   </p>
                   <Link href="/news/newsletters" onClick={news.close}
@@ -314,15 +314,16 @@ export default function Navbar() {
                 onMouseLeave={learn.leave}
                 className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-52 rounded-xl overflow-hidden"
                 style={{
-                  background: "#0a1628",
-                  border:     "1px solid rgba(29,158,117,0.2)",
+                  background: "var(--card-bg)",
+                  border:     "1px solid var(--card-border)",
+                  boxShadow:  "0 16px 48px rgba(15,23,42,0.10)",
                   animation:  "fadeSlideDown 0.18s ease-out forwards",
                 }}
               >
                 {/* Header */}
                 <div className="px-4 py-3 flex items-center justify-between"
                   style={{ borderBottom: "1px solid rgba(29,158,117,0.15)" }}>
-                  <span className="text-sm font-black text-white">Learn</span>
+                  <span className="text-sm font-black" style={{ color: "var(--heading)" }}>Learn</span>
                   <Link
                     href="/learn"
                     onClick={learn.close}
@@ -341,14 +342,14 @@ export default function Navbar() {
                       href={item.href}
                       onClick={learn.close}
                       className="block px-4 py-2.5 text-[13px] font-medium transition-all duration-150 rounded-lg mx-1.5"
-                      style={{ color: "#b0c4d8" }}
+                      style={{ color: "var(--body-text)" }}
                       onMouseEnter={e => {
-                        e.currentTarget.style.background = "rgba(29,158,117,0.12)";
-                        e.currentTarget.style.color = "#5dcaa5";
+                        e.currentTarget.style.background = "rgba(29,158,117,0.10)";
+                        e.currentTarget.style.color = "#1d9e75";
                       }}
                       onMouseLeave={e => {
                         e.currentTarget.style.background = "transparent";
-                        e.currentTarget.style.color = "#b0c4d8";
+                        e.currentTarget.style.color = "var(--body-text)";
                       }}
                     >
                       {item.label}
@@ -474,17 +475,17 @@ export default function Navbar() {
               </button>
               {newsMob && (
                 <div className="ml-3 mt-1 mb-2 rounded-xl overflow-hidden"
-                  style={{ background: "#0a1628", border: "1px solid rgba(29,158,117,0.22)" }}>
+                  style={{ background: "var(--section-alt)", border: "1px solid var(--card-border)" }}>
                   {NEWS_LINKS.map(({ label, href, icon: Icon }) => (
                     <Link key={label} href={href}
                       onClick={() => { setMobileOpen(false); setNewsMob(false); }}
                       className="flex items-center gap-3 px-4 py-2.5 transition-all group"
-                      style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}
-                      onMouseEnter={e => (e.currentTarget.style.background = "rgba(29,158,117,0.08)")}
+                      style={{ borderBottom: "1px solid var(--divider)" }}
+                      onMouseEnter={e => (e.currentTarget.style.background = "rgba(29,158,117,0.07)")}
                       onMouseLeave={e => (e.currentTarget.style.background = "")}
                     >
                       <Icon size={14} color="#1d9e75" stroke={1.6} className="flex-shrink-0" />
-                      <span className="text-sm font-semibold text-white group-hover:text-[#1d9e75] transition-colors">
+                      <span className="text-sm font-semibold group-hover:text-[#1d9e75] transition-colors" style={{ color: "var(--heading)" }}>
                         {label}
                       </span>
                     </Link>
@@ -506,14 +507,14 @@ export default function Navbar() {
               </button>
               {learnMob && (
                 <div className="ml-3 mt-1 mb-2 rounded-xl overflow-hidden"
-                  style={{ background: "#0a1628", border: "1px solid rgba(29,158,117,0.2)" }}>
+                  style={{ background: "var(--section-alt)", border: "1px solid var(--card-border)" }}>
                   {LEARN_LINKS.map(item => (
                     <Link key={item.label} href={item.href}
                       onClick={() => { setMobileOpen(false); setLearnMob(false); }}
                       className="block px-4 py-2.5 text-sm font-medium transition-all"
-                      style={{ color: "#b0c4d8", borderBottom: "1px solid rgba(255,255,255,0.04)" }}
-                      onMouseEnter={e => { e.currentTarget.style.background = "rgba(29,158,117,0.1)"; e.currentTarget.style.color = "#5dcaa5"; }}
-                      onMouseLeave={e => { e.currentTarget.style.background = ""; e.currentTarget.style.color = "#b0c4d8"; }}
+                      style={{ color: "var(--body-text)", borderBottom: "1px solid var(--divider)" }}
+                      onMouseEnter={e => { e.currentTarget.style.background = "rgba(29,158,117,0.07)"; e.currentTarget.style.color = "#1d9e75"; }}
+                      onMouseLeave={e => { e.currentTarget.style.background = ""; e.currentTarget.style.color = "var(--body-text)"; }}
                     >
                       {item.label}
                     </Link>

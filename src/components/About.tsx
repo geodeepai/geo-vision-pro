@@ -40,8 +40,8 @@ function StatCard({ value, label, delay }: { value: string; label: string; delay
       className="text-center transition-all duration-700"
       style={{ opacity: inView ? 1 : 0, transform: inView ? "translateY(0)" : "translateY(20px)", transitionDelay: `${delay}ms` }}
     >
-      <div className="text-3xl md:text-4xl font-black text-white mb-1">{value}</div>
-      <div className="text-blue-200 text-xs font-medium tracking-wide">{label}</div>
+      <div className="text-3xl md:text-4xl font-black mb-1" style={{ color: "#ffffff" }}>{value}</div>
+      <div className="text-xs font-medium tracking-wide" style={{ color: "rgba(219,234,254,0.85)" }}>{label}</div>
     </div>
   );
 }
@@ -53,8 +53,8 @@ export default function About() {
   return (
     <section id="about" style={{ background: "var(--section-bg)" }} className="overflow-hidden">
 
-      {/* Stats banner — always dark blue, no theming needed */}
-      <div style={{ background: "linear-gradient(135deg,#0c1445 0%,#1e3a8a 50%,#0c1445 100%)" }}>
+      {/* Stats banner — professional navy blue */}
+      <div style={{ background: "linear-gradient(135deg,#0f2d6e 0%,#1d4ed8 50%,#1e40af 100%)" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10 md:py-14">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 md:divide-x md:divide-blue-700/40">
             {STATS.map((s, i) => <StatCard key={s.label} value={s.value} label={s.label} delay={i * 100} />)}
@@ -216,16 +216,16 @@ export default function About() {
           </div>
         </div>
 
-        {/* Domain expertise — always dark */}
-        <div className="rounded-3xl p-6 sm:p-10 text-center" style={{ background: "linear-gradient(135deg,#0c1445,#1e3a8a,#0c1445)" }}>
-          <span className="inline-block px-4 py-1.5 rounded-full text-xs font-bold tracking-widest uppercase mb-4" style={{ background: "rgba(255,255,255,0.1)", color: "#93c5fd", border: "1px solid rgba(147,197,253,0.2)" }}>
+        {/* Domain expertise */}
+        <div className="rounded-3xl p-6 sm:p-10 text-center" style={{ background: "var(--card-bg)", border: "1px solid var(--card-border)" }}>
+          <span className="inline-block px-4 py-1.5 rounded-full text-xs font-bold tracking-widest uppercase mb-4" style={{ background: "var(--badge-bg)", color: "var(--badge-text)", border: "1px solid var(--badge-border)" }}>
             Domain Expertise
           </span>
-          <h3 className="text-2xl md:text-3xl font-black text-white mb-2">Sectors We Have Transformed</h3>
-          <p className="text-blue-200 text-sm mb-8 max-w-xl mx-auto">Our geospatial solutions have created measurable impact across these critical domains</p>
+          <h3 className="text-2xl md:text-3xl font-black mb-2" style={{ color: "var(--heading)" }}>Sectors We Have Transformed</h3>
+          <p className="text-sm mb-8 max-w-xl mx-auto" style={{ color: "var(--body-text)" }}>Our geospatial solutions have created measurable impact across these critical domains</p>
           <div className="flex flex-wrap justify-center gap-2.5">
             {DOMAINS.map((d) => (
-              <span key={d} className="px-4 py-2 rounded-xl text-xs font-semibold hover:scale-105 transition-transform" style={{ background: "rgba(255,255,255,0.08)", color: "#e2e8f0", border: "1px solid rgba(255,255,255,0.12)" }}>
+              <span key={d} className="px-4 py-2 rounded-xl text-xs font-semibold hover:scale-105 transition-transform cursor-default" style={{ background: "var(--section-alt)", color: "var(--heading)", border: "1px solid var(--card-border)" }}>
                 {d}
               </span>
             ))}
