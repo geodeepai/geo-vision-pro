@@ -135,6 +135,26 @@ body {
   100% { transform: translateY(16px); opacity: 0; }
 }
 
+@keyframes scrollCue {
+  0%, 100% { transform: translateY(-2px); opacity: 0.55; }
+  50%      { transform: translateY(3px); opacity: 1; }
+}
+
+@keyframes heroGridDrift {
+  from { background-position: 0 0; }
+  to   { background-position: 40px 40px; }
+}
+
+@keyframes starTwinkle {
+  0%, 100% { transform: scale(1); opacity: var(--star-opacity, 0.12); }
+  50%      { transform: scale(1.8); opacity: calc(var(--star-opacity, 0.12) + 0.16); }
+}
+
+@keyframes signalSweep {
+  0%, 100% { transform: translateX(-35%); opacity: 0.15; }
+  50%      { transform: translateX(35%); opacity: 1; }
+}
+
 /* Pulse dot */
 @keyframes pulseDot {
   0%, 100% { opacity: 1; transform: scale(1); }
@@ -244,4 +264,47 @@ input:focus, select:focus, textarea:focus {
   background-clip: text;
   animation: geoGradFlow 5s ease infinite;
   display: inline;
+}
+
+.future-grad {
+  display: block;
+}
+
+@media (min-width: 640px) {
+  .future-grad {
+    display: inline;
+  }
+}
+
+/* ── Hero-specific design tokens ─────────────────────────────────────────── */
+:root {
+  --hero-bg:              #ffffff;
+  --hero-grid:            rgba(37,99,235,0.08);
+  --hero-aurora-a:        rgba(37,99,235,0.08);
+  --hero-aurora-b:        rgba(99,102,241,0.06);
+  --hero-aurora-c:        rgba(16,185,129,0.05);
+  --hero-aurora-d:        rgba(123,97,255,0.04);
+  --hero-vignette:        rgba(255,255,255,0.80);
+  --hero-badge-bg:        rgba(37,99,235,0.06);
+  --hero-badge-border:    rgba(37,99,235,0.18);
+  --hero-accent:          #2563eb;
+  --hero-secondary-border:rgba(37,99,235,0.25);
+  --hero-secondary-bg:    rgba(37,99,235,0.04);
+  --hero-scroll-border:   rgba(37,99,235,0.22);
+}
+
+html.dark {
+  --hero-bg:              #071A2E;
+  --hero-grid:            rgba(0,119,255,0.16);
+  --hero-aurora-a:        rgba(0,119,255,0.18);
+  --hero-aurora-b:        rgba(0,212,255,0.15);
+  --hero-aurora-c:        rgba(0,184,148,0.14);
+  --hero-aurora-d:        rgba(123,97,255,0.08);
+  --hero-vignette:        #071A2E;
+  --hero-badge-bg:        rgba(0,119,255,0.08);
+  --hero-badge-border:    rgba(0,119,255,0.22);
+  --hero-accent:          #00D4FF;
+  --hero-secondary-border:rgba(0,212,255,0.30);
+  --hero-secondary-bg:    rgba(0,212,255,0.05);
+  --hero-scroll-border:   rgba(0,212,255,0.22);
 }
