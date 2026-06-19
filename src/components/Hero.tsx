@@ -19,7 +19,7 @@ const SLIDES = [
     sub:      "Meet the experts behind India's premier geospatial intelligence consultancy.",
   },
   {
-    src:      "/hero/slide-nature.jpg",
+    src:      "/hero/slide-nature.png",
     gradient: "linear-gradient(150deg,#052e16 0%,#065f46 45%,#0f766e 100%)",
     pattern:  "rgba(255,255,255,0.03)",
     accent:   "#34d399",
