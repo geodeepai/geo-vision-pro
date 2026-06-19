@@ -129,6 +129,60 @@ function MarqueeStrip() {
   );
 }
 
+/* ── Individual photo card with visible placeholder ──────────────────────── */
+function PhotoCard({ src, label }: { src: string; label: string }) {
+  const [ok, setOk] = useState<boolean | null>(null); // null = loading
+
+  return (
+    <div
+      className="relative flex-shrink-0 overflow-hidden rounded-xl"
+      style={{ width: 224, height: 132 }}
+    >
+      {/* Placeholder — shown until image loads or when image is missing */}
+      {ok !== true && (
+        <div
+          className="absolute inset-0 flex flex-col items-center justify-center gap-1.5"
+          style={{
+            background: "linear-gradient(135deg,#e0e7ff 0%,#dbeafe 60%,#e0f2fe 100%)",
+            border: "1px dashed rgba(37,99,235,0.25)",
+          }}
+        >
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#93c5fd" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+            <circle cx="8.5" cy="8.5" r="1.5"/>
+            <polyline points="21 15 16 10 5 21"/>
+          </svg>
+          <span className="text-[9px] font-semibold text-blue-400 text-center px-3 leading-tight">{label}</span>
+          {ok === false && (
+            <span className="text-[8px] text-blue-300">Add to /public/photos/</span>
+          )}
+        </div>
+      )}
+
+      {/* Real photo */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={src}
+        alt={label}
+        className="absolute inset-0 w-full h-full object-cover transition-opacity duration-500"
+        style={{ opacity: ok === true ? 1 : 0 }}
+        loading="lazy"
+        decoding="async"
+        onLoad={() => setOk(true)}
+        onError={() => setOk(false)}
+      />
+
+      {/* Label gradient overlay — only over real photos */}
+      {ok === true && (
+        <>
+          <div className="absolute inset-0 pointer-events-none" style={{ background: "linear-gradient(transparent 52%,rgba(0,0,0,0.55))" }} />
+          <p className="absolute bottom-2 left-2.5 text-white text-[10px] font-semibold leading-none drop-shadow">{label}</p>
+        </>
+      )}
+    </div>
+  );
+}
+
 /* ── Single photo marquee row ────────────────────────────────────────────── */
 function PhotoSlideRow({ photos, direction = 1 }: {
   photos: { src: string; label: string }[];
@@ -149,32 +203,7 @@ function PhotoSlideRow({ photos, direction = 1 }: {
         transition={{ duration: 38, ease: "linear", repeat: Infinity }}
       >
         {doubled.map((p, i) => (
-          <div
-            key={i}
-            className="relative flex-shrink-0 overflow-hidden rounded-xl"
-            style={{
-              width: 224, height: 132,
-              background: "var(--section-alt)",
-              border: "1px solid var(--card-border)",
-            }}
-          >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={p.src}
-              alt={p.label}
-              className="w-full h-full object-cover"
-              loading="lazy"
-              decoding="async"
-              onError={e => { (e.currentTarget as HTMLImageElement).style.display = "none"; }}
-            />
-            <div
-              className="absolute inset-0 pointer-events-none"
-              style={{ background: "linear-gradient(transparent 52%,rgba(0,0,0,0.52))" }}
-            />
-            <p className="absolute bottom-2 left-2.5 text-white text-[10px] font-semibold leading-none drop-shadow">
-              {p.label}
-            </p>
-          </div>
+          <PhotoCard key={i} src={p.src} label={p.label} />
         ))}
       </motion.div>
     </div>
