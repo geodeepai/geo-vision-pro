@@ -39,7 +39,7 @@ const SLIDES = [
     sub:      "From satellite imagery to deep learning — building the tools that shape tomorrow.",
   },
   {
-    src:      "/hero/slide-field.jpg",
+    src:      "/hero/slide-field.png",
     gradient: "linear-gradient(150deg,#0c4a6e 0%,#0369a1 45%,#0284c7 100%)",
     pattern:  "rgba(255,255,255,0.03)",
     accent:   "#38bdf8",
