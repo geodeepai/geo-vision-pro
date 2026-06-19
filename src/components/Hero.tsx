@@ -158,39 +158,43 @@ export default function Hero() {
               }}
             />
 
-            {/* Real photo — fades in when loaded */}
+            {/* Real photo — fades in when loaded, top-anchored so faces stay visible */}
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={slide.src}
               alt={slide.category}
               className="absolute inset-0 w-full h-full object-cover"
-              style={{ opacity: 0, transition: "opacity 0.8s ease" }}
+              style={{ opacity: 0, transition: "opacity 0.8s ease", objectPosition: "center top" }}
               loading="eager"
               onLoad={e  => { (e.currentTarget as HTMLImageElement).style.opacity = "1"; }}
               onError={e => { (e.currentTarget as HTMLImageElement).style.display = "none"; }}
             />
 
-            {/* Left-to-right text readability overlay */}
+            {/* Light base overlay — keeps photo visible on mobile */}
+            <div className="absolute inset-0" style={{ background: "rgba(0,0,0,0.28)" }} />
+
+            {/* Desktop extra: left-side darkening for text column */}
             <div
-              className="absolute inset-0"
+              className="absolute inset-0 hidden sm:block"
               style={{
                 background:
-                  "linear-gradient(to right,rgba(0,0,0,0.72) 0%,rgba(0,0,0,0.42) 50%,rgba(0,0,0,0.12) 100%)",
+                  "linear-gradient(to right,rgba(0,0,0,0.48) 0%,rgba(0,0,0,0.18) 55%,rgba(0,0,0,0) 100%)",
               }}
             />
-            {/* Bottom fade for stats/nav bar */}
+
+            {/* Bottom fade — shorter on mobile so photo shows more */}
             <div
               className="absolute inset-x-0 bottom-0"
               style={{
-                height: 220,
-                background: "linear-gradient(to top,rgba(0,0,0,0.82),transparent)",
+                height: "clamp(100px, 22vh, 200px)",
+                background: "linear-gradient(to top,rgba(0,0,0,0.80),transparent)",
               }}
             />
           </motion.div>
         </AnimatePresence>
 
         {/* ── Content overlay ────────────────────────────────────────── */}
-        <div className="relative z-10 flex flex-col min-h-[100svh] max-w-7xl mx-auto px-6 sm:px-10 pt-28 pb-10">
+        <div className="relative z-10 flex flex-col min-h-[100svh] max-w-7xl mx-auto px-6 sm:px-10 pt-20 sm:pt-24 lg:pt-28 pb-8 sm:pb-10">
 
           {/* Main text block */}
           <div className="flex-1 flex flex-col justify-center max-w-2xl">
