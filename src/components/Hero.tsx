@@ -63,33 +63,6 @@ const SIGNAL_ROWS = [
   { label: "Risk Scan", value: "Live", width: "68%", color: "#6D5BD0" },
 ];
 
-/* ── Official work photos — drop images into /public/photos/ ──────────────
-   Name them photo-01.jpg … photo-12.jpg (or update the src paths below).
-   The cards show a neutral placeholder when an image hasn't been added yet. */
-const PHOTOS_ROW_1 = [
-  { src: "/photos/photo-01.jpg", label: "Field Survey" },
-  { src: "/photos/photo-02.jpg", label: "GIS Mapping" },
-  { src: "/photos/photo-03.jpg", label: "Drone Operation" },
-  { src: "/photos/photo-04.jpg", label: "LULC Analysis" },
-  { src: "/photos/photo-05.jpg", label: "Satellite Processing" },
-  { src: "/photos/photo-06.jpg", label: "Site Survey" },
-];
-const PHOTOS_ROW_2 = [
-  { src: "/photos/photo-07.jpg", label: "AI Dashboard" },
-  { src: "/photos/photo-08.jpg", label: "Environmental Study" },
-  { src: "/photos/photo-09.jpg", label: "LiDAR Survey" },
-  { src: "/photos/photo-10.jpg", label: "Urban Mapping" },
-  { src: "/photos/photo-11.jpg", label: "Training Session" },
-  { src: "/photos/photo-12.jpg", label: "Award Ceremony" },
-];
-/* Background drift photos — a subset that float behind the hero content */
-const BG_DRIFT = [
-  { src: "/photos/photo-01.jpg", x: 3,  y: 14, dx: 50,  dy: 22,  size: 290, dur: 14, delay: 0  },
-  { src: "/photos/photo-05.jpg", x: 68, y: 6,  dx: -40, dy: 32,  size: 250, dur: 17, delay: 4  },
-  { src: "/photos/photo-09.jpg", x: 74, y: 62, dx: -45, dy: -28, size: 270, dur: 15, delay: 9  },
-  { src: "/photos/photo-03.jpg", x: 6,  y: 62, dx: 40,  dy: -22, size: 230, dur: 13, delay: 6  },
-];
-
 /* Deterministic star field — avoids hydration mismatch */
 const STARS = Array.from({ length: 80 }, (_, i) => ({
   x:  ((i * 73  + 11) % 97),
@@ -126,118 +99,6 @@ function MarqueeStrip() {
         ))}
       </motion.div>
     </div>
-  );
-}
-
-/* ── Individual photo card with visible placeholder ──────────────────────── */
-function PhotoCard({ src, label }: { src: string; label: string }) {
-  const [ok, setOk] = useState<boolean | null>(null); // null = loading
-
-  return (
-    <div
-      className="relative flex-shrink-0 overflow-hidden rounded-xl"
-      style={{ width: 224, height: 132 }}
-    >
-      {/* Placeholder — shown until image loads or when image is missing */}
-      {ok !== true && (
-        <div
-          className="absolute inset-0 flex flex-col items-center justify-center gap-1.5"
-          style={{
-            background: "linear-gradient(135deg,#e0e7ff 0%,#dbeafe 60%,#e0f2fe 100%)",
-            border: "1px dashed rgba(37,99,235,0.25)",
-          }}
-        >
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#93c5fd" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
-            <circle cx="8.5" cy="8.5" r="1.5"/>
-            <polyline points="21 15 16 10 5 21"/>
-          </svg>
-          <span className="text-[9px] font-semibold text-blue-400 text-center px-3 leading-tight">{label}</span>
-          {ok === false && (
-            <span className="text-[8px] text-blue-300">Add to /public/photos/</span>
-          )}
-        </div>
-      )}
-
-      {/* Real photo */}
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src={src}
-        alt={label}
-        className="absolute inset-0 w-full h-full object-cover transition-opacity duration-500"
-        style={{ opacity: ok === true ? 1 : 0 }}
-        loading="lazy"
-        decoding="async"
-        onLoad={() => setOk(true)}
-        onError={() => setOk(false)}
-      />
-
-      {/* Label gradient overlay — only over real photos */}
-      {ok === true && (
-        <>
-          <div className="absolute inset-0 pointer-events-none" style={{ background: "linear-gradient(transparent 52%,rgba(0,0,0,0.55))" }} />
-          <p className="absolute bottom-2 left-2.5 text-white text-[10px] font-semibold leading-none drop-shadow">{label}</p>
-        </>
-      )}
-    </div>
-  );
-}
-
-/* ── Single photo marquee row ────────────────────────────────────────────── */
-function PhotoSlideRow({ photos, direction = 1 }: {
-  photos: { src: string; label: string }[];
-  direction?: 1 | -1;
-}) {
-  const doubled = [...photos, ...photos];
-  return (
-    <div
-      className="relative overflow-hidden"
-      style={{
-        maskImage: "linear-gradient(90deg,transparent 0%,black 6%,black 94%,transparent 100%)",
-        WebkitMaskImage: "linear-gradient(90deg,transparent 0%,black 6%,black 94%,transparent 100%)",
-      }}
-    >
-      <motion.div
-        className="flex gap-3"
-        animate={{ x: direction === 1 ? ["0%", "-50%"] : ["-50%", "0%"] }}
-        transition={{ duration: 38, ease: "linear", repeat: Infinity }}
-      >
-        {doubled.map((p, i) => (
-          <PhotoCard key={i} src={p.src} label={p.label} />
-        ))}
-      </motion.div>
-    </div>
-  );
-}
-
-/* ── Background drifting photos (float + vanish) ─────────────────────────── */
-function BackgroundDriftPhotos() {
-  return (
-    <>
-      {BG_DRIFT.map((item, i) => (
-        <motion.div
-          key={i}
-          className="absolute pointer-events-none overflow-hidden rounded-2xl"
-          style={{ left: `${item.x}%`, top: `${item.y}%`, width: item.size, aspectRatio: "16/10" }}
-          animate={{
-            opacity: [0, 0.09, 0.09, 0],
-            x: [0, item.dx],
-            y: [0, item.dy],
-          }}
-          transition={{ duration: item.dur, delay: item.delay, repeat: Infinity, ease: "easeInOut" }}
-        >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={item.src}
-            alt=""
-            aria-hidden="true"
-            className="w-full h-full object-cover"
-            style={{ filter: "blur(2.5px) grayscale(0.25)" }}
-            onError={e => { (e.currentTarget as HTMLImageElement).style.display = "none"; }}
-          />
-        </motion.div>
-      ))}
-    </>
   );
 }
 
@@ -735,9 +596,6 @@ export default function Hero() {
             filter: "blur(70px)",
           }}
         />
-
-        {/* Background drifting work photos */}
-        <BackgroundDriftPhotos />
 
         {/* Soft edge vignette */}
         <div
