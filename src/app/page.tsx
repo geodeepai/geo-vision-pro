@@ -1,4 +1,3 @@
-import MaskReveal from "@/components/MaskReveal";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import Contact from "@/components/Contact";
@@ -8,7 +7,6 @@ import ScrollArrows from "@/components/ScrollArrows";
 export default function Home() {
   return (
     <>
-      <MaskReveal />
       <Navbar />
 
       {/* Section 1 — Hero */}
