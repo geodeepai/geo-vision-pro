@@ -11,7 +11,6 @@ import {
   MessageSquare, User, Briefcase, AtSign, PhoneCall,
   SlidersHorizontal, Navigation2, DollarSign, Calendar,
 } from "lucide-react";
-import ServiceTopBar from "@/components/ServiceTopBar";
 
 /* ─── Core services ──────────────────────────────────────────── */
 const CORE_SERVICES = [
@@ -741,13 +740,6 @@ export default function ConsultancyPage() {
   return (
     <div className="min-h-screen" style={{ background: "#f0f4f8" }}>
 
-      <ServiceTopBar
-        color="#2563eb"
-        gradientTo="#4f46e5"
-        badge="RS"
-        title="Remote Sensing Consultancy"
-        navLinks={CONSULTANCY_NAV}
-      />
 
       {/* ── Hero ──────────────────────────────────────────────── */}
       <div

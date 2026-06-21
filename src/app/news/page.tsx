@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import ServiceTopBar from "@/components/ServiceTopBar";
 import {
   downloadPressRelease,
   downloadPublication,
@@ -257,15 +256,6 @@ export default function NewsPage() {
 
   return (
     <>
-      <ServiceTopBar
-        color={ACCENT} gradientTo="#1e3a8a" badge="News & Updates" title="News & Updates"
-        navLinks={[
-          { href: "#press-releases", label: "Press" },
-          { href: "#videos",         label: "Videos" },
-          { href: "#events",         label: "Events" },
-          { href: "#partners",       label: "Partners" },
-        ]}
-      />
 
       <div id="news-top" style={{ background: BG, minHeight: "100vh" }}>
 

@@ -9,7 +9,6 @@ import {
   ArrowUpDown, Clock, Share2, Printer, ChevronRight,
   BookOpen, Briefcase, GraduationCap, Settings,
 } from "lucide-react";
-import ServiceTopBar from "@/components/ServiceTopBar";
 
 /* ── Types ──────────────────────────────────────────────────────────── */
 type Priority = "urgent" | "high" | "medium" | "low";
@@ -556,16 +555,6 @@ export default function NoticesPage() {
 
   return (
     <>
-      <ServiceTopBar
-        color="#2563eb"
-        gradientTo="#059669"
-        badge="Notice Board"
-        title="Notice Board"
-        navLinks={[
-          { href: "#notices", label: "Notices" },
-          { href: "#pinned",  label: "Pinned" },
-        ]}
-      />
 
       {/* ── Hero banner ── */}
       <div className="relative overflow-hidden" style={{ background: "linear-gradient(135deg,#071A2E 0%,#0c2461 45%,#05471e 100%)" }}>

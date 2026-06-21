@@ -1,9 +1,8 @@
-﻿"use client";
+"use client";
 
 import Link from "next/link";
 import { CheckCircle, Mail, Phone, MapPin } from "lucide-react";
 import ConsultationSection from "@/components/ConsultationSection";
-import ServiceTopBar from "@/components/ServiceTopBar";
 
 const COLOR   = "#059669";
 const BG      = "#ecfdf5";
@@ -67,9 +66,6 @@ const DELIVERABLES = [
 export default function LULCPage() {
   return (
     <div className="min-h-screen" style={{ background: "#f0f4f8" }}>
-
-      <ServiceTopBar color={COLOR} gradientTo="#047857" badge="LULC" title="LULC Analysis & Mapping" />
-
       {/* Hero */}
       <div className="relative overflow-hidden" style={{ background: "linear-gradient(135deg,#022c22 0%,#064e3b 60%,#022c22 100%)" }}>
         <div className="absolute inset-0 opacity-[0.05]" style={{ backgroundImage: `linear-gradient(rgba(167,243,208,.9) 1px,transparent 1px),linear-gradient(90deg,rgba(167,243,208,.9) 1px,transparent 1px)`, backgroundSize: "40px 40px" }} />

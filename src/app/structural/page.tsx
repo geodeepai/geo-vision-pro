@@ -1,9 +1,8 @@
-﻿"use client";
+"use client";
 
 import Link from "next/link";
 import { CheckCircle, Mail, Phone, MapPin } from "lucide-react";
 import ConsultationSection from "@/components/ConsultationSection";
-import ServiceTopBar from "@/components/ServiceTopBar";
 
 const COLOR  = "#d97706";
 const BG     = "#fffbeb";
@@ -67,9 +66,6 @@ const DELIVERABLES = [
 export default function StructuralPage() {
   return (
     <div className="min-h-screen" style={{ background: "#fffbeb" }}>
-
-      <ServiceTopBar color={COLOR} gradientTo="#b45309" badge="Civil" title="Structural & Civil Consulting" />
-
       {/* Hero */}
       <div className="relative overflow-hidden" style={{ background: "linear-gradient(135deg,#1c1003 0%,#451a03 60%,#1c1003 100%)" }}>
         <div className="absolute inset-0 opacity-[0.05]" style={{ backgroundImage: `linear-gradient(rgba(253,230,138,.9) 1px,transparent 1px),linear-gradient(90deg,rgba(253,230,138,.9) 1px,transparent 1px)`, backgroundSize: "40px 40px" }} />

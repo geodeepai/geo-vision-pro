@@ -1,7 +1,5 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import { ArrowLeft, Mail, MessageCircle, ChevronDown } from "lucide-react";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 
 const FAQ_GROUPS: { category: string; items: { q: string; a: string }[] }[] = [
   {
@@ -38,9 +36,7 @@ const FAQ_GROUPS: { category: string; items: { q: string; a: string }[] }[] = [
 
 export default function HelpAndSupportPage() {
   return (
-    <>
-      <Navbar />
-      <div className="h-16" aria-hidden="true" />
+    <>      <div className="h-16" aria-hidden="true" />
       <main className="bg-white min-h-screen">
         <div className="max-w-3xl mx-auto px-6 py-14 md:py-20">
           <Link href="/" className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-900 mb-8 transition-colors">
@@ -85,8 +81,6 @@ export default function HelpAndSupportPage() {
             </Link>
           </div>
         </div>
-      </main>
-      <Footer />
-    </>
+      </main>    </>
   );
 }

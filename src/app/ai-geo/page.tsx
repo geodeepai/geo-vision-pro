@@ -1,9 +1,8 @@
-﻿"use client";
+"use client";
 
 import Link from "next/link";
 import { CheckCircle, Mail, Phone, MapPin } from "lucide-react";
 import ConsultationSection from "@/components/ConsultationSection";
-import ServiceTopBar from "@/components/ServiceTopBar";
 
 const COLOR  = "#0891b2";
 const BG     = "#ecfeff";
@@ -67,9 +66,6 @@ const DELIVERABLES = [
 export default function AIGeoPage() {
   return (
     <div className="min-h-screen" style={{ background: "#ecfeff" }}>
-
-      <ServiceTopBar color={COLOR} gradientTo="#0e7490" badge="AI" title="AI-Powered Geo-Analytics" />
-
       {/* Hero */}
       <div className="relative overflow-hidden" style={{ background: "linear-gradient(135deg,#082f49 0%,#0c4a6e 60%,#082f49 100%)" }}>
         <div className="absolute inset-0 opacity-[0.05]" style={{ backgroundImage: `linear-gradient(rgba(165,243,252,.9) 1px,transparent 1px),linear-gradient(90deg,rgba(165,243,252,.9) 1px,transparent 1px)`, backgroundSize: "40px 40px" }} />

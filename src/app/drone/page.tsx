@@ -1,9 +1,8 @@
-﻿"use client";
+"use client";
 
 import Link from "next/link";
 import { CheckCircle, Mail, Phone, MapPin } from "lucide-react";
 import ConsultationSection from "@/components/ConsultationSection";
-import ServiceTopBar from "@/components/ServiceTopBar";
 
 const COLOR  = "#ea580c";
 const BG     = "#fff7ed";
@@ -67,9 +66,6 @@ const DELIVERABLES = [
 export default function DronePage() {
   return (
     <div className="min-h-screen" style={{ background: "#fff7ed" }}>
-
-      <ServiceTopBar color={COLOR} gradientTo="#c2410c" badge="UAV" title="Drone & UAV Mapping" />
-
       {/* Hero */}
       <div className="relative overflow-hidden" style={{ background: "linear-gradient(135deg,#431407 0%,#7c2d12 60%,#431407 100%)" }}>
         <div className="absolute inset-0 opacity-[0.05]" style={{ backgroundImage: `linear-gradient(rgba(254,215,170,.9) 1px,transparent 1px),linear-gradient(90deg,rgba(254,215,170,.9) 1px,transparent 1px)`, backgroundSize: "40px 40px" }} />

@@ -1,9 +1,8 @@
-﻿"use client";
+"use client";
 
 import Link from "next/link";
 import { CheckCircle, Mail, Phone, MapPin } from "lucide-react";
 import ConsultationSection from "@/components/ConsultationSection";
-import ServiceTopBar from "@/components/ServiceTopBar";
 
 const COLOR  = "#7c3aed";
 const BG     = "#f5f3ff";
@@ -67,9 +66,6 @@ const DELIVERABLES = [
 export default function GISPage() {
   return (
     <div className="min-h-screen" style={{ background: "#f5f3ff" }}>
-
-      <ServiceTopBar color={COLOR} gradientTo="#5b21b6" badge="GIS" title="GIS & Spatial Analysis" />
-
       {/* Hero */}
       <div className="relative overflow-hidden" style={{ background: "linear-gradient(135deg,#1e1b4b 0%,#2e1065 60%,#1e1b4b 100%)" }}>
         <div className="absolute inset-0 opacity-[0.05]" style={{ backgroundImage: `linear-gradient(rgba(196,181,254,.9) 1px,transparent 1px),linear-gradient(90deg,rgba(196,181,254,.9) 1px,transparent 1px)`, backgroundSize: "40px 40px" }} />
