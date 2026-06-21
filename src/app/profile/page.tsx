@@ -587,7 +587,7 @@ export default function ProfilePage() {
   const labelCls = "block text-xs font-semibold text-slate-500 mb-1.5";
 
   return (
-    <div className="min-h-screen" style={{ background:"#fafbfd" }}>
+    <div className="min-h-screen bg-white">
 
       {/* ── Success toast ─────────────────────────────────── */}
       {toast && (
@@ -852,20 +852,20 @@ export default function ProfilePage() {
 
             {/* Pinned plan card */}
             <div className="p-4">
-              <div className="rounded-2xl p-4 relative overflow-hidden" style={{ background:"linear-gradient(160deg,#1e1b4b,#312e81)" }}>
-                <div className="absolute -top-6 -right-6 w-24 h-24 rounded-full" style={{ background:"radial-gradient(circle,#818cf8,transparent 70%)", filter:"blur(18px)", opacity:0.5 }} />
+              <div className="rounded-2xl p-4 relative overflow-hidden border border-indigo-100" style={{ background:"linear-gradient(160deg,#eef2ff,#f0f4ff)" }}>
+                <div className="absolute -top-6 -right-6 w-24 h-24 rounded-full" style={{ background:"radial-gradient(circle,#a5b4fc,transparent 70%)", filter:"blur(18px)", opacity:0.4 }} />
                 <div className="relative z-10">
-                  <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-white/10 text-amber-300 mb-2">
+                  <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-700 mb-2">
                     <Crown size={10} /> {user.plan.toUpperCase()}
                   </span>
-                  <p className="text-white text-xs font-semibold leading-snug mb-3">{enrolledCourses.length}/{ALL_COURSES.length} courses enrolled</p>
-                  <div className="w-full h-1.5 rounded-full bg-white/15 overflow-hidden mb-3">
-                    <div className="h-full rounded-full" style={{ width:`${(enrolledCourses.length/ALL_COURSES.length)*100}%`, background:"linear-gradient(90deg,#818cf8,#c4b5fd)" }} />
+                  <p className="text-slate-700 text-xs font-semibold leading-snug mb-3">{enrolledCourses.length}/{ALL_COURSES.length} courses enrolled</p>
+                  <div className="w-full h-1.5 rounded-full overflow-hidden mb-3" style={{ background:"rgba(99,102,241,0.15)" }}>
+                    <div className="h-full rounded-full" style={{ width:`${(enrolledCourses.length/ALL_COURSES.length)*100}%`, background:"linear-gradient(90deg,#6366f1,#8b5cf6)" }} />
                   </div>
                   {notEnrolled.length > 0 && (
                     <button onClick={() => setActiveTab("explore")}
-                      className="w-full flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-bold text-indigo-900 hover:opacity-90 transition-all"
-                      style={{ background:"#fff" }}>
+                      className="w-full flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-bold text-white hover:opacity-90 transition-all"
+                      style={{ background:"linear-gradient(135deg,#6366f1,#8b5cf6)" }}>
                       <Sparkles size={11} /> Explore More
                     </button>
                   )}

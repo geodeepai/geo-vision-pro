@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+import SubpageHero from "@/components/SubpageHero";
 
 const SECTIONS = [
   {
@@ -54,32 +54,36 @@ const SECTIONS = [
 
 export default function TermsOfServicePage() {
   return (
-    <>      <div className="h-16" aria-hidden="true" />
-      <main className="bg-white min-h-screen">
-        <div className="max-w-3xl mx-auto px-6 py-14 md:py-20">
-          <Link href="/" className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-900 mb-8 transition-colors">
-            <ArrowLeft size={15} /> Back to Home
-          </Link>
+    <main className="min-h-screen bg-white pt-14">
+      <SubpageHero
+        crumbs={[{ label: "Terms of Service" }]}
+        badge="Legal"
+        title="Terms of Service"
+        desc="The rules that govern your use of DeepEarthScience's platform and courses."
+        accent="#2563eb"
+        ctaLabel="Contact Us"
+        ctaHref="/#contact"
+      />
 
-          <h1 className="text-3xl md:text-4xl font-black text-slate-900 mb-2 tracking-tight">Terms of Service</h1>
-          <p className="text-sm text-slate-400 mb-10">Last updated: June 2026</p>
+      <div className="max-w-3xl mx-auto px-6 py-12 md:py-16">
+        <p className="text-sm text-slate-400 mb-10">Last updated: June 2026</p>
 
-          <div className="space-y-8">
-            {SECTIONS.map((s) => (
-              <section key={s.title}>
-                <h2 className="text-lg font-bold text-slate-900 mb-2">{s.title}</h2>
-                <p className="text-[15px] text-slate-600 leading-relaxed">{s.body}</p>
-              </section>
-            ))}
-          </div>
-
-          <div className="mt-12 pt-8 border-t border-slate-100">
-            <Link href="/#contact" className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl text-sm font-bold text-white"
-              style={{ background: "linear-gradient(135deg,#3b82f6,#6366f1)" }}>
-              Contact Us
-            </Link>
-          </div>
+        <div className="space-y-8">
+          {SECTIONS.map((s) => (
+            <section key={s.title}>
+              <h2 className="text-lg font-bold text-slate-900 mb-2">{s.title}</h2>
+              <p className="text-[15px] text-slate-600 leading-relaxed">{s.body}</p>
+            </section>
+          ))}
         </div>
-      </main>    </>
+
+        <div className="mt-12 pt-8 border-t border-slate-100">
+          <Link href="/#contact" className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl text-sm font-bold text-white"
+            style={{ background: "linear-gradient(135deg,#3b82f6,#6366f1)" }}>
+            Contact Us
+          </Link>
+        </div>
+      </div>
+    </main>
   );
 }

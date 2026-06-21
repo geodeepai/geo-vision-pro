@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { ArrowLeft, Mail, MessageCircle, ChevronDown } from "lucide-react";
+import { Mail, MessageCircle, ChevronDown } from "lucide-react";
+import SubpageHero from "@/components/SubpageHero";
 
 const FAQ_GROUPS: { category: string; items: { q: string; a: string }[] }[] = [
   {
@@ -36,51 +37,53 @@ const FAQ_GROUPS: { category: string; items: { q: string; a: string }[] }[] = [
 
 export default function HelpAndSupportPage() {
   return (
-    <>      <div className="h-16" aria-hidden="true" />
-      <main className="bg-white min-h-screen">
-        <div className="max-w-3xl mx-auto px-6 py-14 md:py-20">
-          <Link href="/" className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-900 mb-8 transition-colors">
-            <ArrowLeft size={15} /> Back to Home
-          </Link>
+    <main className="min-h-screen bg-white pt-14">
+      <SubpageHero
+        crumbs={[{ label: "Help & Support" }]}
+        badge="FAQ & Support"
+        title="Help & Support"
+        desc="Answers to common questions about your account, enrollments, and courses."
+        accent="#2563eb"
+        ctaLabel="Contact Support"
+        ctaHref="/#contact"
+      />
 
-          <h1 className="text-3xl md:text-4xl font-black text-slate-900 mb-2 tracking-tight">Help &amp; Support</h1>
-          <p className="text-slate-500 mb-10">Answers to common questions about your account, enrollments, and courses.</p>
-
-          <div className="space-y-10">
-            {FAQ_GROUPS.map((group) => (
-              <div key={group.category}>
-                <h2 className="text-sm font-bold uppercase tracking-wider text-blue-600 mb-3">{group.category}</h2>
-                <div className="space-y-2">
-                  {group.items.map((item) => (
-                    <details key={item.q} className="group rounded-xl border border-slate-200 px-5 py-4 open:bg-slate-50 transition-colors">
-                      <summary className="flex items-center justify-between gap-3 cursor-pointer font-semibold text-slate-800 text-sm list-none">
-                        {item.q}
-                        <ChevronDown size={16} className="text-slate-400 flex-shrink-0 transition-transform group-open:rotate-180" />
-                      </summary>
-                      <p className="text-sm text-slate-600 leading-relaxed mt-3">{item.a}</p>
-                    </details>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-14 rounded-2xl border border-slate-200 bg-slate-50 p-7 flex flex-wrap items-center justify-between gap-5">
-            <div className="flex items-center gap-3">
-              <div className="w-11 h-11 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center flex-shrink-0">
-                <MessageCircle size={20} className="text-blue-600" />
-              </div>
-              <div>
-                <p className="font-bold text-slate-900 text-sm">Still need help?</p>
-                <p className="text-xs text-slate-500">Our team typically responds within 24 hours.</p>
+      <div className="max-w-3xl mx-auto px-6 py-12 md:py-16">
+        <div className="space-y-10">
+          {FAQ_GROUPS.map((group) => (
+            <div key={group.category}>
+              <h2 className="text-sm font-bold uppercase tracking-wider text-blue-600 mb-3">{group.category}</h2>
+              <div className="space-y-2">
+                {group.items.map((item) => (
+                  <details key={item.q} className="group rounded-xl border border-slate-200 px-5 py-4 open:bg-slate-50 transition-colors">
+                    <summary className="flex items-center justify-between gap-3 cursor-pointer font-semibold text-slate-800 text-sm list-none">
+                      {item.q}
+                      <ChevronDown size={16} className="text-slate-400 flex-shrink-0 transition-transform group-open:rotate-180" />
+                    </summary>
+                    <p className="text-sm text-slate-600 leading-relaxed mt-3">{item.a}</p>
+                  </details>
+                ))}
               </div>
             </div>
-            <Link href="/#contact" className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl text-sm font-bold text-white whitespace-nowrap"
-              style={{ background: "linear-gradient(135deg,#3b82f6,#6366f1)" }}>
-              <Mail size={14} /> Contact Support
-            </Link>
-          </div>
+          ))}
         </div>
-      </main>    </>
+
+        <div className="mt-14 rounded-2xl border border-slate-200 bg-slate-50 p-7 flex flex-wrap items-center justify-between gap-5">
+          <div className="flex items-center gap-3">
+            <div className="w-11 h-11 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center flex-shrink-0">
+              <MessageCircle size={20} className="text-blue-600" />
+            </div>
+            <div>
+              <p className="font-bold text-slate-900 text-sm">Still need help?</p>
+              <p className="text-xs text-slate-500">Our team typically responds within 24 hours.</p>
+            </div>
+          </div>
+          <Link href="/#contact" className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl text-sm font-bold text-white whitespace-nowrap"
+            style={{ background: "linear-gradient(135deg,#3b82f6,#6366f1)" }}>
+            <Mail size={14} /> Contact Support
+          </Link>
+        </div>
+      </div>
+    </main>
   );
 }

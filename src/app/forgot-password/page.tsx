@@ -34,7 +34,7 @@ export default function ForgotPasswordPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col">
+    <div className="min-h-screen bg-white flex flex-col">
 
       {/* Minimal header */}
       <header className="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between">

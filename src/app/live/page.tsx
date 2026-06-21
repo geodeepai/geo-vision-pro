@@ -1,11 +1,11 @@
-﻿"use client";
+"use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import {
   Radio, Bell, ExternalLink, Calendar,
-  Users, PlayCircle, ChevronRight, ArrowLeft,
+  Users, PlayCircle, ChevronRight,
 } from "lucide-react";
+import SubpageHero from "@/components/SubpageHero";
 
 function YTIcon({ size = 20, color = "#fff" }: { size?: number; color?: string }) {
   return (
@@ -15,11 +15,6 @@ function YTIcon({ size = 20, color = "#fff" }: { size?: number; color?: string }
   );
 }
 
-/* ─────────────────────────────────────────────────────────────────────
-   REPLACE the two constants below with your real YouTube details:
-   YOUTUBE_CHANNEL_ID  →  find it at youtube.com → your channel → About
-   YOUTUBE_CHANNEL_URL →  your channel's public URL (/@handle or /channel/ID)
-───────────────────────────────────────────────────────────────────── */
 const YOUTUBE_CHANNEL_URL = "https://www.youtube.com/@earthscience_lab";
 const YOUTUBE_LIVE_URL    = "https://www.youtube.com/@earthscience_lab/live";
 
@@ -36,7 +31,6 @@ const PAST_HIGHLIGHTS = [
   { thumb: null, title: "Satellite Image Classification with ML",   views: "3.1K", duration: "47:20" },
 ];
 
-/* ── Pulsing dot ─────────────────────────────────────────────────── */
 function LiveDot() {
   return (
     <span className="relative flex h-2.5 w-2.5">
@@ -46,153 +40,108 @@ function LiveDot() {
   );
 }
 
-/* ─────────────────────────────────────────────────────────────────── */
 export default function LivePage() {
   const [subClicked, setSubClicked] = useState(false);
 
   return (
-    <main
-      className="min-h-screen pt-14"
-      style={{ background: "var(--section-bg)", color: "var(--heading)" }}
-    >
-      {/* ── Top bar ────────────────────────────────────────────────── */}
+    <main className="min-h-screen bg-white pt-14">
+
+      <SubpageHero
+        crumbs={[{ label: "GEO+ Live" }]}
+        badge="Live Broadcasts"
+        title="DeepEarthScience Live"
+        highlight="Live"
+        desc="Watch live workshops, webinars, and expert Q&A sessions on remote sensing, GIS, drone mapping, and AI geospatial analytics — directly on our YouTube channel."
+        accent="#ef4444"
+        ctaLabel="Open YouTube Channel"
+        ctaHref={YOUTUBE_CHANNEL_URL}
+        secondLabel="Subscribe & Get Notified"
+        secondHref={YOUTUBE_LIVE_URL + "?sub_confirmation=1"}
+        stats={[
+          { val: "Live", label: "Weekly Sessions" },
+          { val: "4+", label: "Topics Covered" },
+          { val: "Free", label: "All Sessions" },
+          { val: "YT", label: "On YouTube" },
+        ]}
+      />
+
+      {/* ── Live now sticky bar ─────────────────────────────── */}
       <div
         className="sticky top-14 z-40 flex items-center justify-between px-5 sm:px-10 h-11 text-sm"
-        style={{ background: "#0c0f16", borderBottom: "1px solid rgba(255,255,255,0.07)" }}
+        style={{ background: "rgba(255,255,255,0.97)", borderBottom: "1px solid rgba(0,0,0,0.06)", backdropFilter: "blur(12px)" }}
       >
-        <Link
-          href="/"
-          className="flex items-center gap-1.5 font-semibold text-[13px] transition-opacity hover:opacity-70"
-          style={{ color: "rgba(255,255,255,0.7)" }}
-        >
-          <ArrowLeft size={14} /> Back to Home
-        </Link>
-
         <div className="flex items-center gap-2">
           <LiveDot />
-          <span className="font-black text-[11px] uppercase tracking-widest text-red-400">GEO+ Live</span>
+          <span className="font-black text-[11px] uppercase tracking-widest text-red-500">GEO+ Live</span>
         </div>
-
         <a
           href={YOUTUBE_CHANNEL_URL}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center gap-1.5 text-[13px] font-semibold text-red-400 hover:text-red-300 transition-colors"
+          className="flex items-center gap-1.5 text-[13px] font-semibold text-red-500 hover:text-red-600 transition-colors"
         >
-          <YTIcon size={15} /> YouTube <ExternalLink size={11} />
+          <YTIcon size={15} color="#ef4444" /> YouTube <ExternalLink size={11} />
         </a>
       </div>
 
-      {/* ── Hero section ───────────────────────────────────────────── */}
-      <section
-        className="relative py-14 px-5 sm:px-10 text-center overflow-hidden"
-        style={{ background: "#0c0f16" }}
-      >
-        {/* Glow decoration */}
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            background: "radial-gradient(ellipse 70% 60% at 50% 0%, rgba(239,68,68,0.12) 0%, transparent 70%)",
-          }}
-        />
-
-        <div className="relative z-10 max-w-2xl mx-auto">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full mb-6" style={{ background: "rgba(239,68,68,0.12)", border: "1px solid rgba(239,68,68,0.30)" }}>
-            <LiveDot />
-            <span className="text-[11px] font-black uppercase tracking-widest text-red-400">Live Broadcasts</span>
-          </div>
-
-          <h1 className="font-black text-white mb-4" style={{ fontSize: "clamp(1.8rem,4vw,3rem)", lineHeight: 1.1 }}>
-            DeepEarthScience <span style={{ color: "#ef4444" }}>Live</span>
-          </h1>
-          <p className="text-[15px] leading-relaxed mb-8" style={{ color: "rgba(255,255,255,0.55)" }}>
-            Watch live workshops, webinars, and expert Q&amp;A sessions on remote sensing, GIS, drone mapping, and AI geospatial analytics — directly on our YouTube channel.
-          </p>
-
-          <div className="flex flex-wrap items-center justify-center gap-3">
-            <a
-              href={YOUTUBE_CHANNEL_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-sm text-white transition-all hover:-translate-y-0.5"
-              style={{ background: "#ef4444", boxShadow: "0 6px 20px rgba(239,68,68,0.35)" }}
-            >
-              <YTIcon size={16} /> Open YouTube Channel
-            </a>
-            <button
-              onClick={() => { setSubClicked(true); window.open(YOUTUBE_LIVE_URL + "?sub_confirmation=1", "_blank"); }}
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-sm transition-all hover:-translate-y-0.5"
-              style={{ background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)", color: "rgba(255,255,255,0.85)" }}
-            >
-              <Bell size={15} style={{ color: subClicked ? "#fbbf24" : undefined }} />
-              {subClicked ? "Subscribed ✓" : "Subscribe & Get Notified"}
-            </button>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Live embed ─────────────────────────────────────────────── */}
+      {/* ── Live embed ─────────────────────────────────────────── */}
       <section className="px-5 sm:px-10 py-10 max-w-5xl mx-auto">
         <div className="flex items-center gap-3 mb-5">
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-full" style={{ background: "rgba(239,68,68,0.10)", border: "1px solid rgba(239,68,68,0.25)" }}>
+          <div
+            className="flex items-center gap-2 px-3 py-1.5 rounded-full"
+            style={{ background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.20)" }}
+          >
             <LiveDot />
-            <span className="text-[11px] font-black uppercase tracking-widest text-red-400">Live Now</span>
+            <span className="text-[11px] font-black uppercase tracking-widest text-red-500">Live Now</span>
           </div>
-          <span className="text-sm" style={{ color: "var(--muted)" }}>If no stream is active, you&apos;ll see our latest uploaded video</span>
+          <span className="text-sm text-slate-500">If no stream is active, you&apos;ll see our latest uploaded video</span>
         </div>
 
-        {/* Watch Live card */}
+        {/* Watch Live card — intentionally dark, represents a video player */}
         <a
           href={YOUTUBE_LIVE_URL}
           target="_blank"
           rel="noopener noreferrer"
           className="group relative w-full rounded-2xl overflow-hidden flex flex-col items-center justify-center text-center transition-all hover:scale-[1.01]"
           style={{
-            aspectRatio:  "16/9",
-            background:   "linear-gradient(135deg,#0f0a1a 0%,#1a0a0a 50%,#0a0f1a 100%)",
-            border:       "1px solid rgba(255,255,255,0.08)",
-            boxShadow:    "0 24px 80px rgba(0,0,0,0.5)",
+            aspectRatio: "16/9",
+            background: "linear-gradient(135deg,#0f0a1a 0%,#1a0a0a 50%,#0a0f1a 100%)",
+            border: "1px solid rgba(255,255,255,0.08)",
+            boxShadow: "0 24px 80px rgba(0,0,0,0.14)",
           }}
         >
-          {/* Glow */}
           <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse 60% 50% at 50% 50%, rgba(239,68,68,0.15) 0%, transparent 70%)" }} />
-
-          {/* Play button */}
           <div
             className="relative z-10 w-20 h-20 rounded-full flex items-center justify-center mb-5 transition-transform group-hover:scale-110"
             style={{ background: "#ef4444", boxShadow: "0 0 60px rgba(239,68,68,0.45)" }}
           >
             <YTIcon size={36} color="#fff" />
           </div>
-
           <p className="relative z-10 text-white font-black text-xl mb-2">Watch Live on YouTube</p>
           <p className="relative z-10 text-sm mb-6" style={{ color: "rgba(255,255,255,0.55)" }}>
             @earthscience_lab — Click to open the live stream in YouTube
           </p>
-
           <div
             className="relative z-10 flex items-center gap-2 px-6 py-2.5 rounded-xl font-bold text-sm text-white"
             style={{ background: "#ef4444", boxShadow: "0 4px 20px rgba(239,68,68,0.40)" }}
           >
             <YTIcon size={16} /> Open Live Stream <ExternalLink size={13} />
           </div>
-
-          {/* Scan lines decoration */}
           <div className="absolute inset-0 pointer-events-none opacity-[0.03]" style={{ backgroundImage: "repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(255,255,255,1) 2px,rgba(255,255,255,1) 4px)" }} />
         </a>
 
-        {/* Channel CTA below embed */}
+        {/* Channel CTA */}
         <div
           className="mt-5 flex flex-col sm:flex-row items-center justify-between gap-4 rounded-2xl px-6 py-4"
-          style={{ background: "var(--card-bg)", border: "1px solid var(--card-border)" }}
+          style={{ background: "#ffffff", border: "1px solid rgba(0,0,0,0.07)", boxShadow: "0 2px 12px rgba(0,0,0,0.04)" }}
         >
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: "#ef4444" }}>
               <YTIcon size={20} color="#fff" />
             </div>
             <div>
-              <p className="font-black text-sm" style={{ color: "var(--heading)" }}>DeepEarthScience Official</p>
-              <p className="text-xs" style={{ color: "var(--muted)" }}>Subscribe for live sessions, tutorials & project walkthroughs</p>
+              <p className="font-black text-sm text-slate-900">DeepEarthScience Official</p>
+              <p className="text-xs text-slate-500">Subscribe for live sessions, tutorials & project walkthroughs</p>
             </div>
           </div>
           <a
@@ -205,16 +154,28 @@ export default function LivePage() {
             <YTIcon size={15} /> Visit Channel <ExternalLink size={12} />
           </a>
         </div>
+
+        {/* Subscribe button */}
+        <div className="mt-4">
+          <button
+            onClick={() => { setSubClicked(true); window.open(YOUTUBE_LIVE_URL + "?sub_confirmation=1", "_blank"); }}
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm transition-all hover:-translate-y-0.5"
+            style={{ background: "rgba(239,68,68,0.06)", border: "1px solid rgba(239,68,68,0.18)", color: "#ef4444" }}
+          >
+            <Bell size={15} style={{ color: subClicked ? "#fbbf24" : undefined }} />
+            {subClicked ? "Subscribed ✓" : "Subscribe & Get Notified"}
+          </button>
+        </div>
       </section>
 
-      {/* ── Upcoming streams ───────────────────────────────────────── */}
+      {/* ── Upcoming streams ───────────────────────────────────── */}
       <section className="px-5 sm:px-10 py-10 max-w-5xl mx-auto">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h2 className="text-xl font-black" style={{ color: "var(--heading)" }}>Upcoming Live Sessions</h2>
-            <p className="text-sm mt-0.5" style={{ color: "var(--muted)" }}>Subscribe to get notified before each session starts</p>
+            <h2 className="text-xl font-black text-slate-900">Upcoming Live Sessions</h2>
+            <p className="text-sm mt-0.5 text-slate-500">Subscribe to get notified before each session starts</p>
           </div>
-          <div className="flex items-center gap-2 text-[11px] font-black uppercase tracking-widest" style={{ color: "var(--muted)" }}>
+          <div className="flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-slate-400">
             <Calendar size={13} /> Schedule
           </div>
         </div>
@@ -224,14 +185,17 @@ export default function LivePage() {
             <div
               key={i}
               className="flex items-center gap-4 px-5 py-4 rounded-2xl transition-all"
-              style={{ background: "var(--card-bg)", border: "1px solid var(--card-border)" }}
+              style={{ background: "#ffffff", border: "1px solid rgba(0,0,0,0.07)", boxShadow: "0 2px 8px rgba(0,0,0,0.03)" }}
             >
-              <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: "rgba(239,68,68,0.10)", border: "1px solid rgba(239,68,68,0.20)" }}>
+              <div
+                className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
+                style={{ background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.16)" }}
+              >
                 <Radio size={18} color="#ef4444" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="font-bold text-sm leading-snug" style={{ color: "var(--heading)" }}>{s.title}</p>
-                <p className="text-xs mt-0.5 truncate" style={{ color: "var(--muted)" }}>{s.desc}</p>
+                <p className="font-bold text-sm leading-snug text-slate-800">{s.title}</p>
+                <p className="text-xs mt-0.5 truncate text-slate-500">{s.desc}</p>
               </div>
               <div className="text-right flex-shrink-0">
                 <p className="text-[11px] font-bold uppercase tracking-wide" style={{ color: "#ef4444" }}>{s.date}</p>
@@ -239,8 +203,7 @@ export default function LivePage() {
                   href={YOUTUBE_CHANNEL_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-[11px] font-semibold flex items-center gap-0.5 mt-0.5 justify-end hover:text-blue-500 transition-colors"
-                  style={{ color: "var(--muted)" }}
+                  className="text-[11px] font-semibold flex items-center gap-0.5 mt-0.5 justify-end text-slate-400 hover:text-blue-500 transition-colors"
                 >
                   Set reminder <ChevronRight size={11} />
                 </a>
@@ -250,18 +213,18 @@ export default function LivePage() {
         </div>
       </section>
 
-      {/* ── Past highlights ────────────────────────────────────────── */}
+      {/* ── Past highlights ────────────────────────────────────── */}
       <section className="px-5 sm:px-10 py-10 pb-20 max-w-5xl mx-auto">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h2 className="text-xl font-black" style={{ color: "var(--heading)" }}>Past Highlights</h2>
-            <p className="text-sm mt-0.5" style={{ color: "var(--muted)" }}>Missed a session? Catch up on our channel</p>
+            <h2 className="text-xl font-black text-slate-900">Past Highlights</h2>
+            <p className="text-sm mt-0.5 text-slate-500">Missed a session? Catch up on our channel</p>
           </div>
           <a
             href={YOUTUBE_CHANNEL_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-1.5 text-sm font-bold text-red-500 hover:text-red-400 transition-colors"
+            className="flex items-center gap-1.5 text-sm font-bold text-red-500 hover:text-red-600 transition-colors"
           >
             View All <ExternalLink size={13} />
           </a>
@@ -275,29 +238,27 @@ export default function LivePage() {
               target="_blank"
               rel="noopener noreferrer"
               className="group flex flex-col rounded-2xl overflow-hidden transition-all hover:-translate-y-1"
-              style={{ background: "var(--card-bg)", border: "1px solid var(--card-border)", boxShadow: "0 2px 12px rgba(0,0,0,0.06)" }}
+              style={{ background: "#ffffff", border: "1px solid rgba(0,0,0,0.07)", boxShadow: "0 2px 12px rgba(0,0,0,0.04)" }}
             >
-              {/* Thumbnail placeholder */}
               <div
                 className="relative flex items-center justify-center"
-                style={{ aspectRatio: "16/9", background: "linear-gradient(135deg,#0f172a,#1e1b4b)" }}
+                style={{ aspectRatio: "16/9", background: "#f1f5f9" }}
               >
-                <PlayCircle size={40} className="text-white opacity-40 group-hover:opacity-70 transition-opacity" />
+                <PlayCircle size={40} className="text-slate-300 group-hover:text-red-400 transition-colors" />
                 <span
                   className="absolute bottom-2 right-2 text-[10px] font-bold px-2 py-0.5 rounded"
-                  style={{ background: "rgba(0,0,0,0.75)", color: "#fff" }}
+                  style={{ background: "rgba(0,0,0,0.55)", color: "#fff" }}
                 >
                   {v.duration}
                 </span>
               </div>
-              {/* Info */}
               <div className="p-4">
-                <p className="font-bold text-sm leading-snug mb-1 group-hover:text-red-500 transition-colors" style={{ color: "var(--heading)" }}>
+                <p className="font-bold text-sm leading-snug mb-1 text-slate-800 group-hover:text-red-500 transition-colors">
                   {v.title}
                 </p>
-                <div className="flex items-center gap-3 text-[11px]" style={{ color: "var(--muted)" }}>
+                <div className="flex items-center gap-3 text-[11px] text-slate-400">
                   <span className="flex items-center gap-1"><Users size={11} /> {v.views} views</span>
-                  <span className="flex items-center gap-1"><YTIcon size={11} /> DeepEarthScience</span>
+                  <span className="flex items-center gap-1"><YTIcon size={11} color="#94a3b8" /> DeepEarthScience</span>
                 </div>
               </div>
             </a>
