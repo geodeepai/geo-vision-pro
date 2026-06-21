@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import {
   Radio, Bell, ExternalLink, Calendar,
@@ -20,8 +20,8 @@ function YTIcon({ size = 20, color = "#fff" }: { size?: number; color?: string }
    YOUTUBE_CHANNEL_ID  →  find it at youtube.com → your channel → About
    YOUTUBE_CHANNEL_URL →  your channel's public URL (/@handle or /channel/ID)
 ───────────────────────────────────────────────────────────────────── */
-const YOUTUBE_CHANNEL_ID  = "UCxxxxxxxxxxxxxxxxxxxxxx";          // ← your channel ID
-const YOUTUBE_CHANNEL_URL = "https://www.youtube.com/@GeoVisionPro"; // ← your channel URL
+const YOUTUBE_CHANNEL_URL = "https://www.youtube.com/@earthscience_lab";
+const YOUTUBE_LIVE_URL    = "https://www.youtube.com/@earthscience_lab/live";
 
 const UPCOMING = [
   { date: "Coming Soon", title: "Google Earth Engine: Beginner to Advanced",  desc: "Live workshop — cloud-based geospatial analysis" },
@@ -49,12 +49,6 @@ function LiveDot() {
 /* ─────────────────────────────────────────────────────────────────── */
 export default function LivePage() {
   const [subClicked, setSubClicked] = useState(false);
-  const [mounted,    setMounted]    = useState(false);
-
-  useEffect(() => setMounted(true), []);
-
-  /* YouTube live embed src */
-  const embedSrc = `https://www.youtube.com/embed/live_stream?channel=${YOUTUBE_CHANNEL_ID}&autoplay=0&rel=0&modestbranding=1`;
 
   return (
     <main
@@ -126,7 +120,7 @@ export default function LivePage() {
               <YTIcon size={16} /> Open YouTube Channel
             </a>
             <button
-              onClick={() => { setSubClicked(true); window.open(YOUTUBE_CHANNEL_URL + "?sub_confirmation=1", "_blank"); }}
+              onClick={() => { setSubClicked(true); window.open(YOUTUBE_LIVE_URL + "?sub_confirmation=1", "_blank"); }}
               className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-sm transition-all hover:-translate-y-0.5"
               style={{ background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)", color: "rgba(255,255,255,0.85)" }}
             >
@@ -147,22 +141,45 @@ export default function LivePage() {
           <span className="text-sm" style={{ color: "var(--muted)" }}>If no stream is active, you&apos;ll see our latest uploaded video</span>
         </div>
 
-        {/* YouTube iframe */}
-        <div
-          className="relative w-full rounded-2xl overflow-hidden shadow-2xl"
-          style={{ paddingBottom: "56.25%", background: "#0a0c12", border: "1px solid rgba(255,255,255,0.08)" }}
+        {/* Watch Live card */}
+        <a
+          href={YOUTUBE_LIVE_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="group relative w-full rounded-2xl overflow-hidden flex flex-col items-center justify-center text-center transition-all hover:scale-[1.01]"
+          style={{
+            aspectRatio:  "16/9",
+            background:   "linear-gradient(135deg,#0f0a1a 0%,#1a0a0a 50%,#0a0f1a 100%)",
+            border:       "1px solid rgba(255,255,255,0.08)",
+            boxShadow:    "0 24px 80px rgba(0,0,0,0.5)",
+          }}
         >
-          {mounted && (
-            <iframe
-              src={embedSrc}
-              title="GeoVisionPro Live Stream"
-              className="absolute inset-0 w-full h-full"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowFullScreen
-              style={{ border: "none" }}
-            />
-          )}
-        </div>
+          {/* Glow */}
+          <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse 60% 50% at 50% 50%, rgba(239,68,68,0.15) 0%, transparent 70%)" }} />
+
+          {/* Play button */}
+          <div
+            className="relative z-10 w-20 h-20 rounded-full flex items-center justify-center mb-5 transition-transform group-hover:scale-110"
+            style={{ background: "#ef4444", boxShadow: "0 0 60px rgba(239,68,68,0.45)" }}
+          >
+            <YTIcon size={36} color="#fff" />
+          </div>
+
+          <p className="relative z-10 text-white font-black text-xl mb-2">Watch Live on YouTube</p>
+          <p className="relative z-10 text-sm mb-6" style={{ color: "rgba(255,255,255,0.55)" }}>
+            @earthscience_lab — Click to open the live stream in YouTube
+          </p>
+
+          <div
+            className="relative z-10 flex items-center gap-2 px-6 py-2.5 rounded-xl font-bold text-sm text-white"
+            style={{ background: "#ef4444", boxShadow: "0 4px 20px rgba(239,68,68,0.40)" }}
+          >
+            <YTIcon size={16} /> Open Live Stream <ExternalLink size={13} />
+          </div>
+
+          {/* Scan lines decoration */}
+          <div className="absolute inset-0 pointer-events-none opacity-[0.03]" style={{ backgroundImage: "repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(255,255,255,1) 2px,rgba(255,255,255,1) 4px)" }} />
+        </a>
 
         {/* Channel CTA below embed */}
         <div
