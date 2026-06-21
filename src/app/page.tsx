@@ -10,6 +10,7 @@ import About from "@/components/About";
 import Process from "@/components/Process";
 import Testimonials from "@/components/Testimonials";
 import CTA from "@/components/CTA";
+import YouTubeSection from "@/components/YouTubeSection";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 
@@ -27,6 +28,7 @@ export default function Home() {
       <Process />
       <Testimonials />
       <CTA />
+      <YouTubeSection />
       <Contact />
       <Footer />
       <ScrollArrows />
