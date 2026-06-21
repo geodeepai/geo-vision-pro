@@ -62,10 +62,7 @@ const SEARCH_INDEX: SearchItem[] = [
   { title: "Field Survey Updates",         desc: "On-ground project reports and survey news",                href: "/news#field-updates",   category: "News" },
   { title: "Partner Program",              desc: "Collaborate with DeepEarthScience, grow together",            href: "/news#partners",        category: "News" },
   // Company
-  { title: "About Us",                     desc: "Our story, mission, vision and leadership team",           href: "#about",                category: "Company" },
   { title: "Contact Us",                   desc: "Get in touch, request a quote or consultation",           href: "#contact",              category: "Company" },
-  { title: "Our Process",                  desc: "How we plan, execute and deliver geospatial projects",    href: "#process",              category: "Company" },
-  { title: "Testimonials",                 desc: "What clients say about DeepEarthScience services",            href: "#testimonials",         category: "Company" },
   { title: "Notices",                      desc: "Important announcements and public notices",               href: "/notices",              category: "Company" },
   // Support / Legal
   { title: "Help & Support",              desc: "FAQs, tutorials and support resources",                     href: "/help",                 category: "Support" },
@@ -352,9 +349,6 @@ const EXPLORE_SECTIONS = [
   { label: "Home",           href: "#home" },
   { label: "Services",       href: "#services" },
   { label: "Courses",        href: "#courses" },
-  { label: "About",          href: "#about" },
-  { label: "Process",        href: "#process" },
-  { label: "Testimonials",   href: "#testimonials" },
   { label: "Contact",        href: "#contact" },
   { label: "Notices",        href: "/notices" },
   { label: "News & Updates", href: "/news" },
