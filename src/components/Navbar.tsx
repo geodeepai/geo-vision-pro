@@ -152,7 +152,7 @@ export default function Navbar() {
               onMouseLeave={explore.leave}
               onClick={explore.toggle}
               aria-expanded={explore.open}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-all text-[13px] font-bold tracking-wide"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-all text-[16px] font-bold tracking-wide"
               style={navBtn(explore.open)}
             >
               <Compass size={14} strokeWidth={2} style={{ color: TEXT_MID }} />
@@ -251,7 +251,7 @@ export default function Navbar() {
               onMouseLeave={svc.leave}
               onClick={svc.toggle}
               aria-expanded={svc.open}
-              className="flex items-center gap-1 px-3.5 py-2 rounded-lg transition-all text-[13.5px] font-semibold"
+              className="flex items-center gap-1 px-3.5 py-2 rounded-lg transition-all text-[16px] font-semibold"
               style={navBtn(svc.open)}
             >
               Services
@@ -314,7 +314,7 @@ export default function Navbar() {
               onMouseLeave={news.leave}
               onClick={news.toggle}
               aria-expanded={news.open}
-              className="flex items-center gap-1 px-3.5 py-2 rounded-lg transition-all text-[13.5px] font-semibold whitespace-nowrap"
+              className="flex items-center gap-1 px-3.5 py-2 rounded-lg transition-all text-[16px] font-semibold whitespace-nowrap"
               style={navBtn(news.open)}
             >
               News &amp; Events
@@ -392,7 +392,7 @@ export default function Navbar() {
               onMouseLeave={learn.leave}
               onClick={learn.toggle}
               aria-expanded={learn.open}
-              className="flex items-center gap-1 px-3.5 py-2 rounded-lg transition-all text-[13.5px] font-semibold"
+              className="flex items-center gap-1 px-3.5 py-2 rounded-lg transition-all text-[16px] font-semibold"
               style={navBtn(learn.open)}
             >
               Learn
@@ -461,7 +461,7 @@ export default function Navbar() {
             {user ? (
               <div className="flex items-center gap-1">
                 <Link href="/profile"
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[13px] font-semibold transition-all"
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[16px] font-semibold transition-all"
                   style={{ color: TEXT_HI }}
                   onMouseEnter={e => (e.currentTarget.style.background = HOVER_BG)}
                   onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
@@ -469,7 +469,7 @@ export default function Navbar() {
                   <UserCircle2 size={14} /> Profile
                 </Link>
                 <button onClick={handleLogout}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[13px] font-semibold transition-all"
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[16px] font-semibold transition-all"
                   style={{ color: TEXT_MID }}
                   onMouseEnter={e => (e.currentTarget.style.background = HOVER_BG)}
                   onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
@@ -479,7 +479,7 @@ export default function Navbar() {
               </div>
             ) : (
               <Link href="/login"
-                className="flex items-center gap-1.5 px-4 py-1.5 rounded-lg text-[13px] font-bold transition-all ml-1"
+                className="flex items-center gap-1.5 px-4 py-1.5 rounded-lg text-[16px] font-bold transition-all ml-1"
                 style={{
                   background: "rgba(37,99,235,0.85)",
                   color: "#fff",
