@@ -395,7 +395,7 @@ export default function Navbar() {
               className="flex items-center gap-1 px-3.5 py-2 rounded-lg transition-all text-[13.5px] font-semibold"
               style={navBtn(learn.open)}
             >
-              Multimedia
+              Learn
               <ChevronDown size={12} className={`transition-transform duration-200 ${learn.open ? "rotate-180" : ""}`} style={{ color: TEXT_MID }} />
             </button>
 
@@ -593,7 +593,7 @@ export default function Navbar() {
                 className="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-[14px] font-semibold"
                 style={{ color: learnMob ? "#1d9e75" : TEXT_HI }}
               >
-                Multimedia
+                Learn
                 <ChevronDown size={15} className={`transition-transform duration-200 ${learnMob ? "rotate-180" : ""}`} style={{ color: learnMob ? "#1d9e75" : TEXT_MID }} />
               </button>
               {learnMob && (
