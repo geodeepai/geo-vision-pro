@@ -62,32 +62,17 @@ export default function LearnLayout({ children }: { children: React.ReactNode })
       {/* Spacer for fixed main Navbar (h-16 = 64 px) */}
       <div className="h-16" aria-hidden="true" />
 
-      {/* ══ Premium Learn sub-header ══ */}
+      {/* ══ Learn sub-header ══ */}
       <nav
         className="sticky top-16 z-40"
         style={{
-          background:          "linear-gradient(180deg,rgba(8,18,35,0.98) 0%,rgba(10,22,40,0.96) 100%)",
-          backdropFilter:      "blur(24px) saturate(180%)",
-          WebkitBackdropFilter:"blur(24px) saturate(180%)",
-          borderBottom:        "1px solid transparent",
-          /* layered borders: faint white top + green bottom via box-shadow */
-          boxShadow:           "inset 0 1px 0 rgba(255,255,255,0.06), 0 1px 0 rgba(29,158,117,0.28), 0 4px 24px rgba(0,0,0,0.4)",
+          background:          "rgba(255,255,255,0.97)",
+          backdropFilter:      "blur(20px) saturate(180%)",
+          WebkitBackdropFilter:"blur(20px) saturate(180%)",
+          borderBottom:        "1px solid #e8edf5",
+          boxShadow:           "0 2px 12px rgba(0,0,0,0.06)",
         }}
       >
-        {/* Green glow gradient line at very bottom */}
-        <div
-          aria-hidden="true"
-          style={{
-            position:   "absolute",
-            bottom:     0,
-            left:       "50%",
-            transform:  "translateX(-50%)",
-            width:      "60%",
-            height:     "1px",
-            background: "linear-gradient(90deg,transparent,rgba(29,158,117,0.7),transparent)",
-            pointerEvents: "none",
-          }}
-        />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 h-14 flex items-center gap-0">
 
@@ -95,22 +80,22 @@ export default function LearnLayout({ children }: { children: React.ReactNode })
           <Link
             href="/"
             className="group flex items-center gap-2.5 pr-5 mr-5 flex-shrink-0 transition-all duration-200"
-            style={{ borderRight: "1px solid rgba(255,255,255,0.07)" }}
+            style={{ borderRight: "1px solid rgba(0,0,0,0.07)" }}
           >
             <LogoMark size={28} />
             <div className="hidden sm:block leading-none">
               <span
-                className="text-[13px] font-black tracking-tight transition-colors duration-200 group-hover:text-white"
-                style={{ color: "#d4e2f0" }}
+                className="text-[13px] font-black tracking-tight transition-colors duration-200 group-hover:text-slate-900"
+                style={{ color: "#0f172a" }}
               >
                 DeepEarth<span style={{ color: "#3b82f6" }}>Science</span>
               </span>
               <div className="flex items-center gap-0.5 mt-0.5">
                 <span className="text-[9px] font-semibold uppercase tracking-widest transition-colors duration-200"
-                  style={{ color: "rgba(255,255,255,0.28)" }}>
+                  style={{ color: "#94a3b8" }}>
                   Main Site
                 </span>
-                <ArrowUpRight size={8} style={{ color: "rgba(255,255,255,0.25)" }}
+                <ArrowUpRight size={8} style={{ color: "#94a3b8" }}
                   className="group-hover:text-[#1d9e75] group-hover:-translate-y-px group-hover:translate-x-px transition-all duration-150" />
               </div>
             </div>
@@ -143,7 +128,7 @@ export default function LearnLayout({ children }: { children: React.ReactNode })
 
           {/* vertical rule */}
           <div className="hidden md:block w-px h-6 mr-5 flex-shrink-0"
-            style={{ background: "linear-gradient(180deg,transparent,rgba(255,255,255,0.1),transparent)" }} />
+            style={{ background: "linear-gradient(180deg,transparent,rgba(0,0,0,0.12),transparent)" }} />
 
           {/* ── Section tabs ── */}
           <div
@@ -167,8 +152,8 @@ export default function LearnLayout({ children }: { children: React.ReactNode })
                   }}
                   onMouseEnter={e => {
                     if (!isActive) {
-                      e.currentTarget.style.background = "rgba(255,255,255,0.05)";
-                      e.currentTarget.style.border     = "1px solid rgba(255,255,255,0.08)";
+                      e.currentTarget.style.background = "rgba(0,0,0,0.04)";
+                      e.currentTarget.style.border     = "1px solid rgba(0,0,0,0.07)";
                     }
                   }}
                   onMouseLeave={e => {
@@ -188,8 +173,8 @@ export default function LearnLayout({ children }: { children: React.ReactNode })
                   >
                     <Icon
                       size={12}
-                      style={{ color: isActive ? color : "#8aa3be" }}
-                      className="transition-colors duration-200 group-hover:text-white"
+                      style={{ color: isActive ? color : "#64748b" }}
+                      className="transition-colors duration-200 group-hover:text-slate-700"
                     />
                   </div>
 
@@ -197,13 +182,13 @@ export default function LearnLayout({ children }: { children: React.ReactNode })
                   <div className="leading-none">
                     <p
                       className="text-[13px] font-bold leading-none transition-colors duration-200"
-                      style={{ color: isActive ? "#fff" : "#b0c4d8" }}
+                      style={{ color: isActive ? "#0f172a" : "#475569" }}
                     >
                       {label}
                     </p>
                     <p
                       className="text-[9px] mt-0.5 hidden sm:block transition-colors duration-200"
-                      style={{ color: isActive ? color : "rgba(255,255,255,0.28)" }}
+                      style={{ color: isActive ? color : "#94a3b8" }}
                     >
                       {desc}
                     </p>
@@ -223,14 +208,14 @@ export default function LearnLayout({ children }: { children: React.ReactNode })
 
           {/* ── Right: stat pill + CTA ── */}
           <div className="ml-auto flex-shrink-0 hidden lg:flex items-center gap-3 pl-4"
-            style={{ borderLeft: "1px solid rgba(255,255,255,0.07)" }}>
+            style={{ borderLeft: "1px solid rgba(0,0,0,0.07)" }}>
 
             {/* Live stat */}
             <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full"
               style={{ background: "rgba(29,158,117,0.08)", border: "1px solid rgba(29,158,117,0.18)" }}>
               <span className="w-1.5 h-1.5 rounded-full bg-[#1d9e75] animate-pulse flex-shrink-0" />
               <span className="text-[11px] font-bold" style={{ color: "#1d9e75" }}>10,000+</span>
-              <span className="text-[11px]" style={{ color: "#8aa3be" }}>enrolled</span>
+              <span className="text-[11px]" style={{ color: "#64748b" }}>enrolled</span>
             </div>
 
             {/* CTA */}

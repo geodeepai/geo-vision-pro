@@ -1,6 +1,7 @@
 ﻿"use client";
 import { useState } from "react";
 import { downloadEventPDF, downloadICS } from "@/lib/gvpPDF";
+import SubpageHero from "@/components/SubpageHero";
 
 /* ── Types ───────────────────────────────────────────────────────── */
 interface LearnEvent {
@@ -137,9 +138,9 @@ const TYPE_TABS   = ["All Types", "Workshop", "Conference", "Expo", "Seminar", "
 
 /* ── Visual helpers ──────────────────────────────────────────────── */
 const statusStyle: Record<string, string> = {
-  Upcoming:  "bg-emerald-500/15 text-emerald-400 border-emerald-500/25",
-  Ongoing:   "bg-blue-500/15 text-blue-400 border-blue-500/25",
-  Completed: "bg-slate-500/20 text-slate-400 border-slate-500/25",
+  Upcoming:  "bg-emerald-50 text-emerald-700 border-emerald-200",
+  Ongoing:   "bg-blue-50 text-blue-700 border-blue-200",
+  Completed: "bg-slate-100 text-slate-500 border-slate-200",
 };
 const typeIcon: Record<string, string> = {
   Workshop:   "🛠",
@@ -163,37 +164,31 @@ export default function EventsPage() {
   const refStr = (id: number) => `GVP-EV-2026-${String(id).padStart(3, "0")}`;
 
   return (
-    <main style={{ background: "#0a1628", minHeight: "100vh", color: "#b0c4d8" }}>
+    <main style={{ background: "#ffffff", minHeight: "100vh" }}>
 
-      {/* ── Hero ── */}
-      <section style={{ background: "linear-gradient(135deg,#0a1628 0%,#0f2035 60%,#0a1628 100%)" }}
-        className="pt-8 pb-10 px-4 text-center">
-        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-4 text-xs font-bold uppercase tracking-widest"
-          style={{ background: "rgba(29,158,117,0.12)", border: "1px solid rgba(29,158,117,0.3)", color: "#1d9e75" }}>
-          <span className="w-1.5 h-1.5 rounded-full bg-[#1d9e75] animate-pulse inline-block" />
-          DeepEarthScience Events
-        </div>
-        <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-white mb-3 leading-tight">
-          Events &amp; Conferences
-          <br className="hidden sm:block" /> <span style={{ color: "#1d9e75" }}>Across India</span>
-        </h1>
-        <p className="text-base max-w-2xl mx-auto leading-relaxed" style={{ color: "#b0c4d8" }}>
-          Join DeepEarthScience at workshops, conferences, expos, and seminars — network with GIS professionals,
-          learn from experts, and stay ahead in geospatial technology.
-        </p>
-      </section>
+      <SubpageHero
+        crumbs={[{ label: "Learn", href: "/learn/events" }, { label: "Events" }]}
+        badge="DeepEarthScience Events"
+        title="Events & Conferences Across India"
+        highlight="Across India"
+        desc="Join DeepEarthScience at workshops, conferences, expos, and seminars — network with GIS professionals, learn from experts, and stay ahead in geospatial technology."
+        accent="#8b5cf6"
+        stats={[{ val: "6+", label: "Events This Year" }, { val: "1,000+", label: "Participants" }, { val: "5", label: "Event Types" }, { val: "Pan-India", label: "Locations" }]}
+        ctaLabel="Browse Events"
+        ctaHref="#events"
+      />
 
       {/* ── Filters ── */}
-      <section className="px-4 pt-6 pb-2 max-w-6xl mx-auto">
+      <section className="px-4 pt-6 pb-2 max-w-6xl mx-auto" id="events">
         {/* Status filter */}
         <div className="flex gap-2 mb-3">
           {STATUS_TABS.map(s => (
             <button key={s} onClick={() => setStatusFilter(s)}
               className="px-4 py-1.5 rounded-full text-sm font-semibold border transition-all"
               style={{
-                background:  statusFilter === s ? "#1d9e75" : "rgba(255,255,255,0.04)",
-                borderColor: statusFilter === s ? "#1d9e75" : "rgba(255,255,255,0.1)",
-                color:       statusFilter === s ? "#fff"    : "#b0c4d8",
+                background:  statusFilter === s ? "#8b5cf6" : "rgba(0,0,0,0.03)",
+                borderColor: statusFilter === s ? "#8b5cf6" : "rgba(0,0,0,0.1)",
+                color:       statusFilter === s ? "#fff"    : "#64748b",
               }}>
               {s}
             </button>
@@ -205,9 +200,9 @@ export default function EventsPage() {
             <button key={t} onClick={() => setTypeFilter(t)}
               className="px-3 py-1 rounded-full text-xs font-semibold border transition-all"
               style={{
-                background:  typeFilter === t ? "rgba(29,158,117,0.2)" : "rgba(255,255,255,0.03)",
-                borderColor: typeFilter === t ? "rgba(29,158,117,0.5)" : "rgba(255,255,255,0.08)",
-                color:       typeFilter === t ? "#1d9e75"               : "#8aa3be",
+                background:  typeFilter === t ? "rgba(139,92,246,0.12)" : "rgba(0,0,0,0.03)",
+                borderColor: typeFilter === t ? "rgba(139,92,246,0.4)"  : "rgba(0,0,0,0.08)",
+                color:       typeFilter === t ? "#7c3aed"                : "#64748b",
               }}>
               {typeIcon[t] ?? ""} {t}
             </button>
@@ -219,28 +214,28 @@ export default function EventsPage() {
       <section className="px-4 py-8 pb-16 max-w-6xl mx-auto space-y-6">
         {filtered.length === 0 && (
           <div className="text-center py-16">
-            <p style={{ color: "#8aa3be" }}>No events match your selected filters.</p>
+            <p className="text-slate-400">No events match your selected filters.</p>
           </div>
         )}
 
         {filtered.map(ev => (
           <div key={ev.id}
-            style={{ background: "#0f2035", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 16 }}
-            className="overflow-hidden hover:border-[#1d9e75]/30 transition-all duration-200">
+            style={{ background: "#ffffff", border: "1px solid rgba(0,0,0,0.07)", borderRadius: 16, boxShadow: "0 2px 12px rgba(0,0,0,0.04)" }}
+            className="overflow-hidden hover:shadow-lg hover:border-[#8b5cf6]/30 transition-all duration-200">
             <div className="flex flex-col lg:flex-row">
               {/* Left colour bar & date */}
-              <div className="lg:w-[180px] flex-shrink-0 flex flex-row lg:flex-col items-center justify-between lg:justify-start gap-4 p-5"
-                style={{ background: "rgba(29,158,117,0.05)", borderRight: "1px solid rgba(255,255,255,0.05)" }}>
+              <div className="lg:w-[180px] flex-shrink-0 flex flex-row lg:flex-col items-center justify-between lg:justify-start gap-4 p-5 bg-slate-50"
+                style={{ borderRight: "1px solid rgba(0,0,0,0.06)" }}>
                 <div className="text-center">
-                  <div className="text-3xl font-black text-white">{ev.date.split(" ")[0]}</div>
-                  <div className="text-sm font-semibold" style={{ color: "#1d9e75" }}>
+                  <div className="text-3xl font-black text-slate-900">{ev.date.split(" ")[0]}</div>
+                  <div className="text-sm font-semibold" style={{ color: "#8b5cf6" }}>
                     {ev.date.split(" ").slice(1).join(" ")}
                   </div>
-                  {ev.time && <div className="text-[11px] mt-1" style={{ color: "#8aa3be" }}>{ev.time}</div>}
+                  {ev.time && <div className="text-[11px] mt-1 text-slate-400">{ev.time}</div>}
                 </div>
                 <div className="text-center">
                   <div className="text-4xl">{typeIcon[ev.type] ?? "📅"}</div>
-                  <div className="text-[11px] font-bold uppercase tracking-widest mt-1" style={{ color: "#8aa3be" }}>
+                  <div className="text-[11px] font-bold uppercase tracking-widest mt-1 text-slate-400">
                     {ev.type}
                   </div>
                 </div>
@@ -255,22 +250,22 @@ export default function EventsPage() {
                       <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${statusStyle[ev.status]}`}>
                         {ev.status}
                       </span>
-                      <span className="text-[10px]" style={{ color: "#8aa3be" }}>{refStr(ev.id)}</span>
+                      <span className="text-[10px] text-slate-400">{refStr(ev.id)}</span>
                     </div>
-                    <h3 className="text-white font-black text-xl leading-snug">{ev.title}</h3>
+                    <h3 className="text-slate-900 font-black text-xl leading-snug">{ev.title}</h3>
                     <p className="text-xs mt-0.5" style={{ color: "#1d9e75" }}>📍 {ev.venue}</p>
                   </div>
                   {ev.fee && (
                     <div className="text-right">
-                      <p className="text-xs" style={{ color: "#8aa3be" }}>Registration Fee</p>
-                      <p className="text-sm font-bold text-white">{ev.fee}</p>
-                      {ev.capacity && <p className="text-[11px]" style={{ color: "#8aa3be" }}>Max {ev.capacity}</p>}
+                      <p className="text-xs text-slate-400">Registration Fee</p>
+                      <p className="text-sm font-bold text-slate-900">{ev.fee}</p>
+                      {ev.capacity && <p className="text-[11px] text-slate-400">Max {ev.capacity}</p>}
                     </div>
                   )}
                 </div>
 
                 {/* Description */}
-                <p className="text-sm leading-relaxed mb-4" style={{ color: "#b0c4d8" }}>{ev.desc}</p>
+                <p className="text-sm leading-relaxed mb-4 text-slate-600">{ev.desc}</p>
 
                 {/* Agenda */}
                 {ev.agenda && (
@@ -280,7 +275,7 @@ export default function EventsPage() {
                     </p>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-1">
                       {ev.agenda.map((item, i) => (
-                        <div key={i} className="flex items-start gap-2 text-xs" style={{ color: "#b0c4d8" }}>
+                        <div key={i} className="flex items-start gap-2 text-xs text-slate-600">
                           <span style={{ color: "#1d9e75" }} className="flex-shrink-0 mt-0.5">▸</span>
                           <span>{item}</span>
                         </div>
@@ -292,13 +287,13 @@ export default function EventsPage() {
                 {/* What you get (for upcoming events) */}
                 {ev.status === "Upcoming" && (
                   <div className="mb-4 p-3 rounded-xl"
-                    style={{ background: "rgba(29,158,117,0.06)", border: "1px solid rgba(29,158,117,0.15)" }}>
+                    style={{ background: "rgba(29,158,117,0.05)", border: "1px solid rgba(29,158,117,0.15)" }}>
                     <p className="text-xs font-bold uppercase tracking-widest mb-1.5" style={{ color: "#1d9e75" }}>
                       What You Get
                     </p>
                     <div className="flex flex-wrap gap-x-4 gap-y-1">
                       {["Workshop materials & study kit", "Participation certificate", "Expert-led sessions", "Networking opportunity"].map((b, i) => (
-                        <span key={i} className="text-xs" style={{ color: "#b0c4d8" }}>✓ {b}</span>
+                        <span key={i} className="text-xs text-slate-600">✓ {b}</span>
                       ))}
                     </div>
                   </div>
@@ -308,7 +303,7 @@ export default function EventsPage() {
                 <div className="flex flex-wrap items-center gap-2">
                   {/* Primary CTA */}
                   <button
-                    className="px-5 py-2 rounded-xl text-sm font-bold text-white transition-all hover:opacity-90"
+                    className="px-5 py-2 rounded-xl text-sm font-bold transition-all hover:opacity-90"
                     style={{ background: ev.btnVariant === "outline" ? "transparent" : "#1d9e75",
                              border: ev.btnVariant === "outline" ? "1px solid #1d9e75" : "none",
                              color:  ev.btnVariant === "outline" ? "#1d9e75" : "#fff" }}>
@@ -317,50 +312,51 @@ export default function EventsPage() {
 
                   {/* Download buttons */}
                   {ev.downloads.map(dl => {
+                    const dlStyle = { background: "rgba(0,0,0,0.04)", border: "1px solid rgba(0,0,0,0.08)" };
                     if (dl === "ICS") return (
                       <button key="ics"
                         onClick={() => downloadICS(ev.title, ev.dateISO, ev.venue, ev.desc)}
-                        className="px-4 py-2 rounded-xl text-xs font-bold transition-all"
-                        style={{ background: "rgba(255,255,255,0.05)", color: "#b0c4d8", border: "1px solid rgba(255,255,255,0.1)" }}>
+                        className="px-4 py-2 rounded-xl text-xs font-bold transition-all text-slate-600"
+                        style={dlStyle}>
                         📅 Add to Calendar
                       </button>
                     );
                     if (dl === "Brochure") return (
                       <button key="brochure"
                         onClick={() => downloadEventPDF(ev.title, ev.date, ev.venue, ev.type, ev.desc, "Brochure", ev.id)}
-                        className="px-4 py-2 rounded-xl text-xs font-bold transition-all"
-                        style={{ background: "rgba(255,255,255,0.05)", color: "#b0c4d8", border: "1px solid rgba(255,255,255,0.1)" }}>
+                        className="px-4 py-2 rounded-xl text-xs font-bold transition-all text-slate-600"
+                        style={dlStyle}>
                         ↓ Brochure PDF
                       </button>
                     );
                     if (dl === "Schedule") return (
                       <button key="schedule"
                         onClick={() => downloadEventPDF(ev.title, ev.date, ev.venue, ev.type, ev.desc, "Schedule", ev.id)}
-                        className="px-4 py-2 rounded-xl text-xs font-bold transition-all"
-                        style={{ background: "rgba(255,255,255,0.05)", color: "#b0c4d8", border: "1px solid rgba(255,255,255,0.1)" }}>
+                        className="px-4 py-2 rounded-xl text-xs font-bold transition-all text-slate-600"
+                        style={dlStyle}>
                         ↓ Schedule PDF
                       </button>
                     );
                     if (dl === "Registration") return (
                       <button key="reg"
                         onClick={() => downloadEventPDF(ev.title, ev.date, ev.venue, ev.type, ev.desc, "Registration", ev.id)}
-                        className="px-4 py-2 rounded-xl text-xs font-bold transition-all"
-                        style={{ background: "rgba(255,255,255,0.05)", color: "#b0c4d8", border: "1px solid rgba(255,255,255,0.1)" }}>
+                        className="px-4 py-2 rounded-xl text-xs font-bold transition-all text-slate-600"
+                        style={dlStyle}>
                         ↓ Registration Form
                       </button>
                     );
                     if (dl === "Slides") return (
                       <button key="slides"
                         onClick={() => downloadEventPDF(ev.title, ev.date, ev.venue, ev.type, ev.desc, "Schedule", ev.id)}
-                        className="px-4 py-2 rounded-xl text-xs font-bold transition-all"
-                        style={{ background: "rgba(255,255,255,0.05)", color: "#b0c4d8", border: "1px solid rgba(255,255,255,0.1)" }}>
+                        className="px-4 py-2 rounded-xl text-xs font-bold transition-all text-slate-600"
+                        style={dlStyle}>
                         ↓ Presentation Slides
                       </button>
                     );
                     return (
                       <button key={dl}
-                        className="px-4 py-2 rounded-xl text-xs font-bold transition-all"
-                        style={{ background: "rgba(255,255,255,0.05)", color: "#b0c4d8", border: "1px solid rgba(255,255,255,0.1)" }}>
+                        className="px-4 py-2 rounded-xl text-xs font-bold transition-all text-slate-600"
+                        style={dlStyle}>
                         ↓ {dl} PDF
                       </button>
                     );
@@ -375,14 +371,14 @@ export default function EventsPage() {
       {/* ── CTA strip ── */}
       <section className="px-4 pb-16 max-w-6xl mx-auto">
         <div className="rounded-2xl p-8 text-center"
-          style={{ background: "linear-gradient(135deg,rgba(29,158,117,0.12),rgba(29,158,117,0.05))", border: "1px solid rgba(29,158,117,0.2)" }}>
-          <h2 className="text-white font-black text-2xl mb-2">Organise an Event with DeepEarthScience</h2>
-          <p className="text-sm mb-5" style={{ color: "#b0c4d8" }}>
+          style={{ background: "rgba(139,92,246,0.06)", border: "1px solid rgba(139,92,246,0.2)" }}>
+          <h2 className="text-slate-900 font-black text-2xl mb-2">Organise an Event with DeepEarthScience</h2>
+          <p className="text-sm mb-5 text-slate-500">
             Partner with us to host GIS workshops, training sessions, or conferences at your institution.
           </p>
           <a href="mailto:events@DeepEarthScience.com"
             className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-white text-sm"
-            style={{ background: "#1d9e75" }}>
+            style={{ background: "#8b5cf6" }}>
             Contact Events Team →
           </a>
         </div>

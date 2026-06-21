@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import SubpageHero from "@/components/SubpageHero";
 import {
   downloadPressRelease,
   downloadPublication,
@@ -17,12 +18,12 @@ import {
 } from "@/lib/gvpPDF";
 
 /* ── Design tokens ────────────────────────────────────────────────── */
-const BG      = "#0a1628";
+const BG      = "#ffffff";
 const ACCENT  = "#1d9e75";
-const TEXT    = "#b0c4d8";
-const CARD    = "#0f2035";
-const BORDER  = "rgba(29,158,117,0.18)";
-const HOVER_T = "#5dcaa5";
+const TEXT    = "#64748b";
+const CARD    = "rgba(255,255,255,0.97)";
+const BORDER  = "rgba(0,0,0,0.07)";
+const HOVER_T = "#059669";
 
 /* ── Section list ─────────────────────────────────────────────────── */
 const SECTIONS = [
@@ -147,7 +148,7 @@ function SectionHead({ id, title, sub }: { id: string; title: string; sub?: stri
   return (
     <div id={id} className="mb-8 scroll-mt-28">
       <div className="h-0.5 w-10 mb-4 rounded-full" style={{ background: ACCENT }} />
-      <h2 className="text-2xl md:text-3xl font-black text-white mb-2">{title}</h2>
+      <h2 className="text-2xl md:text-3xl font-black text-slate-900 mb-2">{title}</h2>
       {sub && <p className="text-sm" style={{ color: TEXT }}>{sub}</p>}
     </div>
   );
@@ -212,9 +213,9 @@ function OutBtn({ label, href = "#", onClick }: { label: string; href?: string; 
 function Card({ children, hover = true }: { children: React.ReactNode; hover?: boolean }) {
   return (
     <div className="rounded-xl p-5 flex flex-col gap-0 transition-all duration-200"
-      style={{ background: CARD, border: `1px solid ${BORDER}` }}
-      onMouseEnter={hover ? e => { (e.currentTarget as HTMLDivElement).style.borderColor = "rgba(29,158,117,0.35)"; } : undefined}
-      onMouseLeave={hover ? e => { (e.currentTarget as HTMLDivElement).style.borderColor = BORDER; } : undefined}
+      style={{ background: CARD, border: `1px solid ${BORDER}`, boxShadow: "0 2px 10px rgba(0,0,0,0.04)" }}
+      onMouseEnter={hover ? e => { (e.currentTarget as HTMLDivElement).style.borderColor = "rgba(29,158,117,0.3)"; (e.currentTarget as HTMLDivElement).style.boxShadow = "0 4px 20px rgba(0,0,0,0.08)"; } : undefined}
+      onMouseLeave={hover ? e => { (e.currentTarget as HTMLDivElement).style.borderColor = BORDER; (e.currentTarget as HTMLDivElement).style.boxShadow = "0 2px 10px rgba(0,0,0,0.04)"; } : undefined}
     >
       {children}
     </div>
@@ -261,12 +262,12 @@ export default function NewsPage() {
 
         {/* ── Sticky section tab nav ── */}
         <div className="sticky top-16 z-40 overflow-x-auto"
-          style={{ background: "#06101e", borderBottom: `1px solid ${BORDER}` }}>
+          style={{ background: "rgba(255,255,255,0.97)", backdropFilter: "blur(12px)", borderBottom: "1px solid #e8edf5", boxShadow: "0 1px 8px rgba(0,0,0,0.05)" }}>
           <div className="flex min-w-max px-4 md:px-8 max-w-7xl mx-auto">
             {SECTIONS.map(s => (
               <a key={s.id} href={`#${s.id}`}
                 className="flex-shrink-0 px-3.5 py-3 text-[11px] font-bold whitespace-nowrap transition-all duration-150 border-b-2"
-                style={{ color: active === s.id ? HOVER_T : TEXT, borderBottomColor: active === s.id ? ACCENT : "transparent" }}
+                style={{ color: active === s.id ? ACCENT : TEXT, borderBottomColor: active === s.id ? ACCENT : "transparent" }}
                 onMouseEnter={e => { if (active !== s.id) e.currentTarget.style.color = HOVER_T; }}
                 onMouseLeave={e => { if (active !== s.id) e.currentTarget.style.color = TEXT; }}
               >{s.label}</a>
@@ -274,25 +275,19 @@ export default function NewsPage() {
           </div>
         </div>
 
-        {/* ── Hero ── */}
-        <div className="relative overflow-hidden"
-          style={{ background: "linear-gradient(135deg,#071A2E 0%,#0a2540 50%,#06301e 100%)" }}>
-          <div className="absolute inset-0 pointer-events-none"
-            style={{ backgroundImage: `linear-gradient(${BORDER} 1px,transparent 1px),linear-gradient(90deg,${BORDER} 1px,transparent 1px)`, backgroundSize: "48px 48px" }} />
-          <div className="relative max-w-4xl mx-auto px-4 py-14 text-center">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold mb-5"
-              style={{ background: "rgba(29,158,117,0.12)", color: ACCENT, border: `1px solid rgba(29,158,117,0.3)` }}>
-              <span className="w-1.5 h-1.5 rounded-full animate-pulse inline-block" style={{ background: ACCENT }} />
-              All content fully downloadable
-            </div>
-            <h1 className="text-3xl md:text-5xl font-black text-white mb-4 leading-tight">
-              News &amp; <span style={{ color: ACCENT }}>Updates</span>
-            </h1>
-            <p className="text-sm md:text-base max-w-xl mx-auto" style={{ color: TEXT }}>
-              Every press release, report, video transcript, newsletter, and resource is available for instant download.
-            </p>
-          </div>
-        </div>
+        <SubpageHero
+          crumbs={[{ label: "Home", href: "/" }, { label: "News & Updates" }]}
+          badge="All content fully downloadable"
+          title="News & Updates"
+          highlight="Updates"
+          desc="Every press release, report, video transcript, newsletter, and resource is available for instant download."
+          accent={ACCENT}
+          stats={[{ val: "5", label: "Press Releases" }, { val: "5", label: "Publications" }, { val: "6", label: "Videos" }, { val: "6", label: "Newsletters" }]}
+          ctaLabel="Press Releases"
+          ctaHref="#press-releases"
+          secondLabel="Newsletters"
+          secondHref="#newsletters"
+        />
 
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-14">
 
@@ -302,7 +297,7 @@ export default function NewsPage() {
             {PRESS.map((p, i) => (
               <Card key={p.headline}>
                 <p className="text-[10px] font-bold uppercase tracking-widest mb-1.5" style={{ color: ACCENT }}>{p.date}</p>
-                <h3 className="text-base font-black text-white mb-2 leading-snug">{p.headline}</h3>
+                <h3 className="text-base font-black text-slate-900 mb-2 leading-snug">{p.headline}</h3>
                 <p className="text-sm leading-relaxed mb-4" style={{ color: TEXT }}>{p.body.substring(0, 180)}…</p>
                 <div className="flex flex-wrap gap-2">
                   <DlBtn label="Download PDF" onClick={() => downloadPressRelease(p.headline, p.date, p.body, i + 1)} />
@@ -324,7 +319,7 @@ export default function NewsPage() {
                   <Tag label={p.tag} />
                   <span className="text-[10px]" style={{ color: TEXT }}>{p.date}</span>
                 </div>
-                <h3 className="text-sm font-black text-white mb-2 leading-snug flex-1">{p.title}</h3>
+                <h3 className="text-sm font-black text-slate-900mb-2 leading-snug flex-1">{p.title}</h3>
                 <p className="text-xs leading-relaxed mb-3" style={{ color: TEXT }}>{p.desc}</p>
                 <div className="flex items-center gap-2 text-[10px] mb-4" style={{ color: TEXT }}>
                   <span>{p.pages} pages</span><span>·</span><span>{p.size}</span>
@@ -344,14 +339,14 @@ export default function NewsPage() {
               <Card key={v.title}>
                 {/* Thumbnail */}
                 <div className="w-full aspect-video rounded-lg mb-3 flex items-center justify-center relative overflow-hidden flex-shrink-0"
-                  style={{ background: "#0d1f38", border: `1px solid ${BORDER}` }}>
+                  style={{ background: "#f1f5f9", border: `1px solid ${BORDER}` }}>
                   <div className="absolute inset-0 opacity-15"
                     style={{ backgroundImage: `repeating-linear-gradient(45deg,${ACCENT}22 0,${ACCENT}22 1px,transparent 1px,transparent 8px)` }} />
                   <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ background: ACCENT }}>
                     <svg viewBox="0 0 16 16" fill="white" className="w-4 h-4 ml-0.5"><polygon points="4,2 14,8 4,14" /></svg>
                   </div>
                 </div>
-                <h3 className="text-sm font-black text-white mb-1.5 leading-snug">{v.title}</h3>
+                <h3 className="text-sm font-black text-slate-900mb-1.5 leading-snug">{v.title}</h3>
                 <div className="flex items-center justify-between mb-4">
                   <span className="text-[10px]" style={{ color: TEXT }}>{v.month}</span>
                   <span className="text-[10px] font-bold px-2 py-0.5 rounded" style={{ background: "rgba(29,158,117,0.1)", color: ACCENT }}>{v.duration}</span>
@@ -378,7 +373,7 @@ export default function NewsPage() {
                       <Tag label={p.type} color={p.type === "Podcast" ? "#7c3aed" : "#2563eb"} />
                       <span className="text-[10px]" style={{ color: TEXT }}>{p.date} · {p.duration}</span>
                     </div>
-                    <h3 className="text-sm font-black text-white">{p.title}</h3>
+                    <h3 className="text-sm font-black text-slate-900">{p.title}</h3>
                   </div>
                   <div className="flex flex-wrap gap-1.5 flex-shrink-0">
                     <DlBtn small label="Transcript" onClick={() => downloadTranscript(p.title, p.duration, "Transcript", i + 7)} />
@@ -401,7 +396,7 @@ export default function NewsPage() {
                   <Tag label={b.cat} color="#2563eb" />
                   <span className="text-[10px]" style={{ color: TEXT }}>{b.date}</span>
                 </div>
-                <h3 className="text-sm font-black text-white mb-1">{b.title}</h3>
+                <h3 className="text-sm font-black text-slate-900mb-1">{b.title}</h3>
                 <p className="text-[11px] mb-2" style={{ color: `${ACCENT}99` }}>by {b.author}</p>
                 <p className="text-xs leading-relaxed mb-4" style={{ color: TEXT }}>{b.excerpt}</p>
                 <div className="flex gap-2 flex-wrap">
@@ -427,7 +422,7 @@ export default function NewsPage() {
                     onMouseEnter={e => (e.currentTarget as HTMLDivElement).style.borderColor = "rgba(29,158,117,0.4)"}
                     onMouseLeave={e => (e.currentTarget as HTMLDivElement).style.borderColor = BORDER}>
                     <div>
-                      <p className="text-sm font-bold text-white">{n.title}</p>
+                      <p className="text-sm font-bold text-slate-900">{n.title}</p>
                       <p className="text-[10px] mt-0.5" style={{ color: TEXT }}>Edition #{n.edition} · {n.size}</p>
                     </div>
                     <DlBtn small label="PDF" onClick={() => downloadNewsletter(n.month, n.edition)} />
@@ -439,7 +434,7 @@ export default function NewsPage() {
 
             <div className="rounded-xl p-6" style={{ background: CARD, border: `1px solid rgba(29,158,117,0.28)` }}>
               <p className="text-[10px] font-black uppercase tracking-widest mb-1.5" style={{ color: ACCENT }}>Subscribe Free</p>
-              <h3 className="text-lg font-black text-white mb-2">Get the monthly digest</h3>
+              <h3 className="text-lg font-black text-slate-900mb-2">Get the monthly digest</h3>
               <p className="text-xs mb-5" style={{ color: TEXT }}>GIS insights, project updates, training alerts and field reports — delivered to your inbox every month.</p>
               {subDone ? (
                 <p className="font-bold" style={{ color: ACCENT }}>✓ Subscribed! Watch your inbox.</p>
@@ -447,10 +442,10 @@ export default function NewsPage() {
                 <form onSubmit={handleSub} className="flex flex-col gap-2">
                   <input type="text"  placeholder="Your name"  value={name}  onChange={e => setName(e.target.value)}
                     className="w-full px-3.5 py-2.5 rounded-xl text-sm outline-none"
-                    style={{ background: BG, border: `1px solid ${BORDER}`, color: "white" }} />
+                    style={{ background: "#f8fafc", border: `1px solid ${BORDER}`, color: "#0f172a" }} />
                   <input type="email" placeholder="Your email" value={email} onChange={e => setEmail(e.target.value)} required
                     className="w-full px-3.5 py-2.5 rounded-xl text-sm outline-none"
-                    style={{ background: BG, border: `1px solid ${BORDER}`, color: "white" }} />
+                    style={{ background: "#f8fafc", border: `1px solid ${BORDER}`, color: "#0f172a" }} />
                   <button type="submit"
                     className="px-4 py-2.5 rounded-xl text-sm font-black transition-all hover:opacity-90"
                     style={{ background: ACCENT, color: "#fff" }}>
@@ -470,7 +465,7 @@ export default function NewsPage() {
               <Card key={s.platform}>
                 <div className="flex items-center gap-2 mb-2">
                   <div className="w-2.5 h-2.5 rounded-full flex-shrink-0" style={{ background: s.dot }} />
-                  <h3 className="text-sm font-black text-white">{s.platform}</h3>
+                  <h3 className="text-sm font-black text-slate-900">{s.platform}</h3>
                 </div>
                 <p className="text-[11px] font-mono mb-2" style={{ color: ACCENT }}>{s.handle}</p>
                 <p className="text-xs leading-relaxed mb-4" style={{ color: TEXT }}>{s.desc}</p>
@@ -489,7 +484,7 @@ export default function NewsPage() {
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {MEDIA_ASSETS.map((m, i) => (
               <Card key={m.name}>
-                <h3 className="text-sm font-black text-white mb-1.5">{m.name}</h3>
+                <h3 className="text-sm font-black text-slate-900mb-1.5">{m.name}</h3>
                 <div className="flex items-center gap-2 mb-4">
                   <span className="text-[10px] font-mono" style={{ color: ACCENT }}>{m.formats}</span>
                   <span className="text-[10px]" style={{ color: TEXT }}>· {m.size}</span>
@@ -507,7 +502,7 @@ export default function NewsPage() {
             {EVENTS.map((ev, i) => (
               <Card key={ev.name}>
                 <div className="flex items-start justify-between gap-2 mb-2 flex-wrap">
-                  <h3 className="text-sm font-black text-white leading-snug flex-1">{ev.name}</h3>
+                  <h3 className="text-sm font-black text-slate-900leading-snug flex-1">{ev.name}</h3>
                   <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black flex-shrink-0"
                     style={{ background: `${EVENT_TYPE_COLOR[ev.type]}18`, color: EVENT_TYPE_COLOR[ev.type] }}>
                     {ev.type}
@@ -535,7 +530,7 @@ export default function NewsPage() {
               return (
                 <Card key={f.project}>
                   <div className="flex flex-wrap items-start gap-3 mb-2">
-                    <h3 className="text-sm font-black text-white flex-1 leading-snug">{f.project}</h3>
+                    <h3 className="text-sm font-black text-slate-900flex-1 leading-snug">{f.project}</h3>
                     <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black flex-shrink-0"
                       style={{ background: cfg.bg, color: cfg.color }}>
                       {f.status}
@@ -567,7 +562,7 @@ export default function NewsPage() {
                 { tier: "Platinum Partner", perks: ["All Gold perks", "Full research datasets", "Revenue-share projects", "Co-research publication", "5 free training seats"] },
               ].map(t => (
                 <div key={t.tier} className="mb-3 px-4 py-3.5 rounded-xl" style={{ background: CARD, border: `1px solid ${BORDER}` }}>
-                  <p className="text-sm font-black text-white mb-2">{t.tier}</p>
+                  <p className="text-sm font-black text-slate-900mb-2">{t.tier}</p>
                   <ul className="flex flex-col gap-0.5">
                     {t.perks.map(p => (
                       <li key={p} className="text-xs flex items-start gap-2" style={{ color: TEXT }}>
@@ -586,7 +581,7 @@ export default function NewsPage() {
                   <div key={k} className="flex items-center justify-between gap-3 px-4 py-3 rounded-xl"
                     style={{ background: CARD, border: `1px solid ${BORDER}` }}>
                     <div>
-                      <p className="text-sm font-bold text-white">Partner {k}</p>
+                      <p className="text-sm font-bold text-slate-900">Partner {k}</p>
                       <p className="text-[10px]" style={{ color: TEXT }}>
                         {k === "Brochure"     ? "Program overview & how to apply" :
                          k === "Agreement"    ? "MoU template for signing" :
@@ -605,10 +600,10 @@ export default function NewsPage() {
                 <div className="flex flex-col gap-2">
                   <input type="text"  placeholder="Organisation name" value={orgName}  onChange={e => setOrgName(e.target.value)}
                     className="w-full px-3.5 py-2.5 rounded-xl text-sm outline-none"
-                    style={{ background: BG, border: `1px solid ${BORDER}`, color: "white" }} />
+                    style={{ background: "#f8fafc", border: `1px solid ${BORDER}`, color: "#0f172a" }} />
                   <input type="email" placeholder="Contact email"     value={orgEmail} onChange={e => setOrgEmail(e.target.value)}
                     className="w-full px-3.5 py-2.5 rounded-xl text-sm outline-none"
-                    style={{ background: BG, border: `1px solid ${BORDER}`, color: "white" }} />
+                    style={{ background: "#f8fafc", border: `1px solid ${BORDER}`, color: "#0f172a" }} />
                   <button
                     className="px-4 py-2.5 rounded-xl text-sm font-black transition-all hover:opacity-90"
                     style={{ background: ACCENT, color: "#fff" }}>
@@ -623,13 +618,11 @@ export default function NewsPage() {
         </div>
 
         {/* Footer strip */}
-        <div className="text-center py-7 text-xs" style={{ color: `${TEXT}55`, borderTop: `1px solid ${BORDER}` }}>
-          <Link href="/" className="transition-colors" style={{ color: TEXT }}
-            onMouseEnter={e => (e.currentTarget.style.color = HOVER_T)}
-            onMouseLeave={e => (e.currentTarget.style.color = TEXT)}>
+        <div className="text-center py-7 text-xs text-slate-400 border-t border-black/[0.07]">
+          <Link href="/" className="transition-colors text-slate-500 hover:text-[#1d9e75]">
             ← Back to main site
           </Link>
-          <span className="mx-3" style={{ color: `${TEXT}22` }}>|</span>
+          <span className="mx-3 text-slate-200">|</span>
           © 2026 Deep Earth Science
         </div>
       </div>

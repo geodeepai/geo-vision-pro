@@ -2,6 +2,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { downloadCourseBrochure, downloadCertBrochure } from "@/lib/gvpPDF";
+import SubpageHero from "@/components/SubpageHero";
 
 /* ── Types ───────────────────────────────────────────────────────── */
 interface Course {
@@ -221,16 +222,16 @@ const CERTS: Cert[] = [
 
 /* ── Level colours ───────────────────────────────────────────────── */
 const lvlStyle: Record<string, string> = {
-  "Beginner":            "bg-emerald-500/20 text-emerald-400 border-emerald-500/30",
-  "Intermediate":        "bg-blue-500/20 text-blue-400 border-blue-500/30",
-  "Advanced":            "bg-purple-500/20 text-purple-400 border-purple-500/30",
-  "Beginner to Advanced":"bg-amber-500/20 text-amber-400 border-amber-500/30",
+  "Beginner":            "bg-emerald-50 text-emerald-700 border-emerald-200",
+  "Intermediate":        "bg-blue-50 text-blue-700 border-blue-200",
+  "Advanced":            "bg-purple-50 text-purple-700 border-purple-200",
+  "Beginner to Advanced":"bg-amber-50 text-amber-700 border-amber-200",
 };
 const lvlGrad: Record<string, string> = {
-  "Beginner":            "from-emerald-700 to-emerald-900",
-  "Intermediate":        "from-blue-700 to-blue-900",
-  "Advanced":            "from-purple-700 to-purple-900",
-  "Beginner to Advanced":"from-amber-700 to-amber-900",
+  "Beginner":            "from-emerald-50 to-emerald-100",
+  "Intermediate":        "from-blue-50 to-blue-100",
+  "Advanced":            "from-purple-50 to-purple-100",
+  "Beginner to Advanced":"from-amber-50 to-amber-100",
 };
 
 /* ══════════════════════════════════════════════════════════════════ */
@@ -245,38 +246,21 @@ export default function AcademyPage() {
   const refStr = (id: number) => `GVP-CRS-2026-${String(id).padStart(3, "0")}`;
 
   return (
-    <main style={{ background: "#0a1628", minHeight: "100vh", color: "#b0c4d8" }}>
+    <main style={{ background: "#ffffff", minHeight: "100vh" }}>
 
-      {/* ── Hero ── */}
-      <section style={{ background: "linear-gradient(135deg,#0a1628 0%,#0f2035 60%,#0a1628 100%)" }}
-        className="pt-8 pb-10 px-4 text-center">
-        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-4 text-xs font-bold uppercase tracking-widest"
-          style={{ background: "rgba(29,158,117,0.12)", border: "1px solid rgba(29,158,117,0.3)", color: "#1d9e75" }}>
-          <span className="w-1.5 h-1.5 rounded-full bg-[#1d9e75] animate-pulse inline-block" />
-          DeepEarthScience Academy
-        </div>
-        <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-white mb-3 leading-tight">
-          Learn GIS &amp; Remote Sensing
-          <br className="hidden sm:block" /> <span style={{ color: "#1d9e75" }}>from Experts</span>
-        </h1>
-        <p className="text-base max-w-2xl mx-auto leading-relaxed" style={{ color: "#b0c4d8" }}>
-          DeepEarthScience Academy offers professional courses in GIS, Remote Sensing, Satellite Mapping,
-          Drone Survey, and Geospatial Technology — designed for beginners, intermediates, and advanced professionals.
-        </p>
-      </section>
-
-      {/* ── Stats bar ── */}
-      <section style={{ background: "#0f2035", borderTop: "1px solid rgba(29,158,117,0.15)", borderBottom: "1px solid rgba(29,158,117,0.15)" }}
-        className="py-5 px-4">
-        <div className="max-w-6xl mx-auto grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-          {STATS.map(s => (
-            <div key={s.label} className="text-center">
-              <p className="text-2xl font-black" style={{ color: "#1d9e75" }}>{s.n}</p>
-              <p className="text-xs" style={{ color: "#b0c4d8" }}>{s.label}</p>
-            </div>
-          ))}
-        </div>
-      </section>
+      <SubpageHero
+        crumbs={[{ label: "Learn", href: "/learn/academy" }, { label: "Academy" }]}
+        badge="DeepEarthScience Academy"
+        title="Learn GIS & Remote Sensing from Experts"
+        highlight="from Experts"
+        desc="DeepEarthScience Academy offers professional courses in GIS, Remote Sensing, Satellite Mapping, Drone Survey, and Geospatial Technology — designed for beginners, intermediates, and advanced professionals."
+        accent="#1d9e75"
+        stats={[{ val: "50+", label: "Courses Available" }, { val: "10,000+", label: "Students Enrolled" }, { val: "25+", label: "Expert Instructors" }, { val: "15+", label: "Certifications" }]}
+        ctaLabel="Browse Courses"
+        ctaHref="#courses"
+        secondLabel="View Certifications"
+        secondHref="#certs"
+      />
 
       {/* ── Filter tabs ── */}
       <section className="px-4 py-6 max-w-6xl mx-auto">
@@ -285,9 +269,9 @@ export default function AcademyPage() {
             <button key={c} onClick={() => setCat(c)}
               className="px-4 py-1.5 rounded-full text-sm font-semibold border transition-all"
               style={{
-                background:   cat === c ? "#1d9e75" : "rgba(255,255,255,0.04)",
-                borderColor:  cat === c ? "#1d9e75" : "rgba(255,255,255,0.1)",
-                color:        cat === c ? "#fff"    : "#b0c4d8",
+                background:   cat === c ? "#1d9e75" : "rgba(0,0,0,0.03)",
+                borderColor:  cat === c ? "#1d9e75" : "rgba(0,0,0,0.1)",
+                color:        cat === c ? "#fff"    : "#64748b",
               }}>
               {c}
             </button>
@@ -300,32 +284,32 @@ export default function AcademyPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {filtered.map(course => (
             <div key={course.id}
-              style={{ background: "#0f2035", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 12 }}
-              className="flex flex-col overflow-hidden hover:border-[#1d9e75]/40 transition-all duration-200">
+              style={{ background: "#ffffff", border: "1px solid rgba(0,0,0,0.07)", borderRadius: 12, boxShadow: "0 2px 12px rgba(0,0,0,0.04)" }}
+              className="flex flex-col overflow-hidden hover:shadow-lg hover:border-[#1d9e75]/40 transition-all duration-200">
               {/* Card header strip */}
-              <div className={`bg-gradient-to-r ${lvlGrad[course.level] ?? "from-slate-700 to-slate-900"} px-4 pt-4 pb-3`}>
+              <div className={`bg-gradient-to-r ${lvlGrad[course.level] ?? "from-slate-50 to-slate-100"} px-4 pt-4 pb-3 border-b border-black/[0.06]`}>
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs font-black text-white/60 uppercase tracking-widest">
+                  <span className="text-xs font-black text-slate-400 uppercase tracking-widest">
                     {refStr(course.id)}
                   </span>
                   <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${lvlStyle[course.level] ?? ""}`}>
                     {course.level}
                   </span>
                 </div>
-                <h3 className="text-white font-black text-[15px] leading-snug">{course.title}</h3>
-                <p className="text-white/60 text-xs mt-1">{course.weeks} Weeks · {course.hours} Hours · {course.category}</p>
+                <h3 className="text-slate-900 font-black text-[15px] leading-snug">{course.title}</h3>
+                <p className="text-slate-500 text-xs mt-1">{course.weeks} Weeks · {course.hours} Hours · {course.category}</p>
               </div>
 
               {/* Body */}
               <div className="p-4 flex-1 flex flex-col gap-3">
-                <p className="text-xs leading-relaxed" style={{ color: "#8aa3be" }}>
+                <p className="text-xs leading-relaxed text-slate-500">
                   {course.content.substring(0, 130)}…
                 </p>
 
                 {/* Modules preview */}
                 <div className="space-y-1">
                   {course.modules.slice(0, 3).map((m, i) => (
-                    <div key={i} className="flex items-center gap-2 text-xs" style={{ color: "#b0c4d8" }}>
+                    <div key={i} className="flex items-center gap-2 text-xs text-slate-600">
                       <span style={{ color: "#1d9e75", fontWeight: 700 }}>{String(i + 1).padStart(2, "0")}</span>
                       <span className="truncate">{m.replace(/^Module \d+\s*[–\-]\s*/, "")}</span>
                     </div>
@@ -338,17 +322,16 @@ export default function AcademyPage() {
                 </div>
 
                 {/* Fee */}
-                <div className="flex items-center justify-between mt-auto pt-2"
-                  style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
-                  <span className="text-white font-black text-lg">{course.fee}</span>
-                  <span className="text-xs" style={{ color: "#8aa3be" }}>Online · Self-paced</span>
+                <div className="flex items-center justify-between mt-auto pt-2 border-t border-black/[0.06]">
+                  <span className="text-slate-900 font-black text-lg">{course.fee}</span>
+                  <span className="text-xs text-slate-400">Online · Self-paced</span>
                 </div>
 
                 {/* Buttons */}
                 <div className="grid grid-cols-3 gap-1.5">
                   <button onClick={() => setModal(course)}
                     className="col-span-1 py-2 rounded-lg text-xs font-bold transition-all"
-                    style={{ background: "rgba(29,158,117,0.12)", color: "#1d9e75", border: "1px solid rgba(29,158,117,0.25)" }}>
+                    style={{ background: "rgba(29,158,117,0.08)", color: "#1d9e75", border: "1px solid rgba(29,158,117,0.2)" }}>
                     Details
                   </button>
                   <Link href={`/enroll/${course.id}`}
@@ -361,8 +344,8 @@ export default function AcademyPage() {
                       course.title, course.level, `${course.weeks} Weeks | ${course.hours} Hours`,
                       course.fee, course.modules, course.content, course.cert, course.id
                     )}
-                    className="col-span-1 py-2 rounded-lg text-xs font-bold transition-all"
-                    style={{ background: "rgba(255,255,255,0.05)", color: "#b0c4d8", border: "1px solid rgba(255,255,255,0.1)" }}>
+                    className="col-span-1 py-2 rounded-lg text-xs font-bold transition-all text-slate-600"
+                    style={{ background: "rgba(0,0,0,0.04)", border: "1px solid rgba(0,0,0,0.08)" }}>
                     PDF
                   </button>
                 </div>
@@ -375,30 +358,30 @@ export default function AcademyPage() {
       {/* ── Certifications ── */}
       {(cat === "All" || cat === "Certification") && (
         <section className="px-4 pb-16 max-w-6xl mx-auto">
-          <div className="flex items-center gap-3 mb-6">
+          <div className="flex items-center gap-3 mb-6" id="certs">
             <div className="h-px flex-1" style={{ background: "rgba(29,158,117,0.2)" }} />
-            <h2 className="text-white font-black text-xl px-2">Certification Programs</h2>
+            <h2 className="text-slate-900 font-black text-xl px-2">Certification Programs</h2>
             <div className="h-px flex-1" style={{ background: "rgba(29,158,117,0.2)" }} />
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             {CERTS.map(c => (
               <div key={c.id}
-                style={{ background: "#0f2035", border: "1px solid rgba(29,158,117,0.2)", borderRadius: 12 }}
-                className="p-5 flex flex-col gap-3 hover:border-[#1d9e75]/50 transition-all">
+                style={{ background: "#ffffff", border: "1px solid rgba(0,0,0,0.07)", borderRadius: 12, boxShadow: "0 2px 12px rgba(0,0,0,0.04)" }}
+                className="p-5 flex flex-col gap-3 hover:shadow-lg hover:border-[#1d9e75]/40 transition-all">
                 <div>
                   <span className="text-[10px] font-bold uppercase tracking-widest" style={{ color: "#1d9e75" }}>
                     GVP-CERT-2026-{String(c.id).padStart(3, "0")}
                   </span>
-                  <h3 className="text-white font-black text-[15px] leading-snug mt-1">{c.title}</h3>
+                  <h3 className="text-slate-900 font-black text-[15px] leading-snug mt-1">{c.title}</h3>
                 </div>
                 <div style={{ borderLeft: "2px solid #1d9e75" }} className="pl-3 space-y-0.5">
                   {c.courses.split("+").map((course, i) => (
-                    <p key={i} className="text-xs" style={{ color: "#8aa3be" }}>{course.trim()}</p>
+                    <p key={i} className="text-xs text-slate-500">{course.trim()}</p>
                   ))}
                 </div>
-                <div className="flex items-center justify-between text-xs" style={{ color: "#b0c4d8" }}>
+                <div className="flex items-center justify-between text-xs text-slate-500">
                   <span>⏱ {c.duration}</span>
-                  <span className="font-black text-white text-base">{c.fee}</span>
+                  <span className="font-black text-slate-900 text-base">{c.fee}</span>
                 </div>
                 <div className="grid grid-cols-2 gap-2 mt-auto">
                   <Link href="/learn/academy#courses"
@@ -408,8 +391,8 @@ export default function AcademyPage() {
                   </Link>
                   <button
                     onClick={() => downloadCertBrochure(c.title, c.courses, c.duration, c.fee, c.id)}
-                    className="py-2 rounded-lg text-xs font-bold transition-all"
-                    style={{ background: "rgba(255,255,255,0.05)", color: "#b0c4d8", border: "1px solid rgba(255,255,255,0.1)" }}>
+                    className="py-2 rounded-lg text-xs font-bold transition-all text-slate-600"
+                    style={{ background: "rgba(0,0,0,0.04)", border: "1px solid rgba(0,0,0,0.08)" }}>
                     Brochure PDF
                   </button>
                 </div>

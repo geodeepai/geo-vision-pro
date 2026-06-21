@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from "react";
 import Link from "next/link";
+import SubpageHero from "@/components/SubpageHero";
 import {
   Search, Download, Eye, Pin, Bell, Filter,
   Calendar, Building2, ChevronDown, X, FileText,
@@ -399,55 +400,53 @@ function NoticeModal({ notice, onClose }: { notice: Notice; onClose: () => void 
       onClick={onClose}
     >
       <div
-        className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-3xl border shadow-2xl"
-        style={{ background: "#0a1628", borderColor: "rgba(255,255,255,0.1)" }}
+        className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-3xl border shadow-2xl bg-white"
+        style={{ borderColor: "rgba(0,0,0,0.08)" }}
         onClick={e => e.stopPropagation()}
       >
         {/* Close */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center transition-all z-10"
-          style={{ background: "rgba(255,255,255,0.08)", color: "#94a3b8" }}
+          className="absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center transition-all z-10 bg-slate-100 text-slate-400 hover:bg-slate-200"
         >
           <X size={16} />
         </button>
 
         {/* Header */}
-        <div className="px-7 pt-7 pb-5 border-b" style={{ borderColor: "rgba(255,255,255,0.08)" }}>
+        <div className="px-7 pt-7 pb-5 border-b border-black/[0.07] bg-slate-50 rounded-t-3xl">
           <div className="flex items-center gap-2 mb-3 flex-wrap">
-            <span className="text-xs font-black tracking-widest uppercase" style={{ color: "#64748b" }}>{notice.id}</span>
+            <span className="text-xs font-black tracking-widest uppercase text-slate-400">{notice.id}</span>
             <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider flex items-center gap-1"
-              style={{ background: pc.bg, color: pc.color, border: `1px solid ${pc.color}40` }}>
+              style={{ background: pc.bg, color: pc.color, border: `1px solid ${pc.color}35` }}>
               {pc.icon}{pc.label}
             </span>
             <span className="px-2.5 py-0.5 rounded-full text-[10px] font-semibold flex items-center gap-1"
-              style={{ background: "rgba(255,255,255,0.05)", color: cc.color, border: "1px solid rgba(255,255,255,0.08)" }}>
+              style={{ background: `${cc.color}10`, color: cc.color, border: `1px solid ${cc.color}25` }}>
               {cc.icon} {cc.label}
             </span>
           </div>
-          <h2 className="text-xl font-black leading-snug text-white mb-4">{notice.title}</h2>
-          <div className="flex flex-wrap gap-x-5 gap-y-1.5 text-xs" style={{ color: "#64748b" }}>
+          <h2 className="text-xl font-black leading-snug text-slate-900 mb-4">{notice.title}</h2>
+          <div className="flex flex-wrap gap-x-5 gap-y-1.5 text-xs text-slate-500">
             <span className="flex items-center gap-1.5"><Calendar size={12} />{new Date(notice.date).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" })}</span>
             <span className="flex items-center gap-1.5"><Building2 size={12} />{notice.department}</span>
             <span className="flex items-center gap-1.5"><Users size={12} />{notice.author}</span>
             <span className="flex items-center gap-1.5"><Eye size={12} />{notice.views.toLocaleString()} views</span>
             {notice.expiryDate && (
-              <span className="flex items-center gap-1.5 text-amber-400"><Clock size={12} />Expires {new Date(notice.expiryDate).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" })}</span>
+              <span className="flex items-center gap-1.5 text-amber-500"><Clock size={12} />Expires {new Date(notice.expiryDate).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" })}</span>
             )}
           </div>
         </div>
 
         {/* Body */}
         <div className="px-7 py-5">
-          <p className="text-sm leading-relaxed mb-5" style={{ color: "#94a3b8" }}>
+          <p className="text-sm leading-relaxed mb-5 text-slate-600">
             {notice.fullContent}
           </p>
 
           {/* Tags */}
           <div className="flex flex-wrap gap-2 mb-5">
             {notice.tags.map(tag => (
-              <span key={tag} className="text-xs px-2.5 py-0.5 rounded-full font-semibold"
-                style={{ background: "rgba(37,99,235,0.12)", color: "#93c5fd", border: "1px solid rgba(37,99,235,0.25)" }}>
+              <span key={tag} className="text-xs px-2.5 py-0.5 rounded-full font-semibold bg-blue-50 text-blue-600 border border-blue-100">
                 #{tag}
               </span>
             ))}
@@ -455,16 +454,15 @@ function NoticeModal({ notice, onClose }: { notice: Notice; onClose: () => void 
 
           {/* Attachment */}
           {notice.hasAttachment && (
-            <div className="flex items-center gap-3 p-3.5 rounded-xl mb-5"
-              style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}>
-              <FileText size={16} className="text-blue-400 flex-shrink-0" />
+            <div className="flex items-center gap-3 p-3.5 rounded-xl mb-5 bg-slate-50 border border-slate-200">
+              <FileText size={16} className="text-blue-500 flex-shrink-0" />
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold text-white truncate">{notice.attachmentName}</p>
-                <p className="text-xs" style={{ color: "#64748b" }}>{notice.attachmentSize}</p>
+                <p className="text-sm font-semibold text-slate-900 truncate">{notice.attachmentName}</p>
+                <p className="text-xs text-slate-400">{notice.attachmentSize}</p>
               </div>
               <button onClick={() => downloadPDF(notice)}
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-white transition-all hover:opacity-90"
-                style={{ background: "linear-gradient(135deg,#2563eb,#059669)" }}>
+                style={{ background: "#2563eb" }}>
                 <Download size={12} /> Download
               </button>
             </div>
@@ -474,12 +472,11 @@ function NoticeModal({ notice, onClose }: { notice: Notice; onClose: () => void 
           <div className="flex items-center gap-2.5 flex-wrap">
             <button onClick={() => downloadPDF(notice)}
               className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold text-white transition-all hover:opacity-90"
-              style={{ background: "linear-gradient(135deg,#1e3a8a,#059669)" }}>
+              style={{ background: "#2563eb" }}>
               <Printer size={14} /> Print / Save PDF
             </button>
             <button onClick={() => copyLink(notice.id)}
-              className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all hover:bg-white/10"
-              style={{ color: "#94a3b8", border: "1px solid rgba(255,255,255,0.1)" }}>
+              className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-600 border border-slate-200 transition-all hover:bg-slate-50">
               <Share2 size={14} /> Share
             </button>
           </div>
@@ -556,49 +553,25 @@ export default function NoticesPage() {
   return (
     <>
 
-      {/* ── Hero banner ── */}
-      <div className="relative overflow-hidden" style={{ background: "linear-gradient(135deg,#071A2E 0%,#0c2461 45%,#05471e 100%)" }}>
-        {/* Grid */}
-        <div className="absolute inset-0 pointer-events-none"
-          style={{ backgroundImage: "linear-gradient(rgba(0,119,255,0.06) 1px,transparent 1px),linear-gradient(90deg,rgba(0,119,255,0.06) 1px,transparent 1px)", backgroundSize: "40px 40px" }} />
-
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 py-14 md:py-20">
-          {/* Badge */}
-          <div className="flex justify-center mb-5">
-            <span className="flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold tracking-widest uppercase"
-              style={{ background: "rgba(37,99,235,0.15)", color: "#93c5fd", border: "1px solid rgba(37,99,235,0.3)" }}>
-              <Bell size={12} className="animate-pulse" /> Official Notices
-            </span>
-          </div>
-
-          <h1 className="text-3xl md:text-5xl font-black text-white text-center mb-4 leading-tight">
-            Notice <span style={{ background: "linear-gradient(135deg,#2563eb,#059669)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Board</span>
-          </h1>
-          <p className="text-center text-sm md:text-base mb-10 max-w-xl mx-auto" style={{ color: "#94a3b8" }}>
-            Official announcements, tenders, course updates, and institutional notices from Deep Earth Science
-          </p>
-
-          {/* Stats row */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 max-w-2xl mx-auto">
-            {[
-              { icon: <FileText size={16} />, value: NOTICES.length, label: "Total Notices", color: "#2563eb" },
-              { icon: <AlertTriangle size={16} />, value: urgentCount, label: "Urgent", color: "#dc2626" },
-              { icon: <Clock size={16} />, value: thisWeek, label: "This Week", color: "#059669" },
-              { icon: <Pin size={16} />, value: pinnedCount, label: "Pinned", color: "#f59e0b" },
-            ].map(s => (
-              <div key={s.label} className="rounded-2xl border p-4 text-center"
-                style={{ background: "rgba(255,255,255,0.05)", borderColor: "rgba(255,255,255,0.09)" }}>
-                <div className="flex justify-center mb-1" style={{ color: s.color }}>{s.icon}</div>
-                <div className="text-2xl font-black text-white">{s.value}</div>
-                <div className="text-xs mt-0.5" style={{ color: "#64748b" }}>{s.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
+      <SubpageHero
+        crumbs={[{ label: "Home", href: "/" }, { label: "Notice Board" }]}
+        badge="Official Notices"
+        title="Notice Board"
+        highlight="Board"
+        desc="Official announcements, tenders, course updates, and institutional notices from Deep Earth Science."
+        accent="#2563eb"
+        stats={[
+          { val: String(NOTICES.length), label: "Total Notices" },
+          { val: String(urgentCount), label: "Urgent" },
+          { val: String(thisWeek), label: "This Week" },
+          { val: String(pinnedCount), label: "Pinned" },
+        ]}
+        ctaLabel="Browse Notices"
+        ctaHref="#notices"
+      />
 
       {/* ── Main content ── */}
-      <div id="notices" className="min-h-screen" style={{ background: "#060f1c" }}>
+      <div id="notices" className="min-h-screen bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
 
           {/* ── Search + filters bar ── */}
@@ -607,17 +580,17 @@ export default function NoticesPage() {
             {/* Search row */}
             <div className="flex gap-2.5">
               <div className="flex-1 relative">
-                <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2" style={{ color: "#475569" }} />
+                <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
                 <input
                   type="text"
                   placeholder="Search notices by title, ID, department, keyword…"
                   value={search}
                   onChange={e => { setSearch(e.target.value); setPage(1); }}
-                  className="w-full pl-9 pr-4 py-2.5 rounded-xl text-sm outline-none transition-all"
-                  style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)", color: "#f1f5f9" }}
+                  className="w-full pl-9 pr-4 py-2.5 rounded-xl text-sm outline-none transition-all text-slate-900 bg-white"
+                  style={{ border: "1px solid rgba(0,0,0,0.1)" }}
                 />
                 {search && (
-                  <button onClick={() => setSearch("")} className="absolute right-3 top-1/2 -translate-y-1/2" style={{ color: "#475569" }}>
+                  <button onClick={() => setSearch("")} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400">
                     <X size={14} />
                   </button>
                 )}
@@ -628,9 +601,9 @@ export default function NoticesPage() {
                 onClick={() => setShowFilter(p => !p)}
                 className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all flex-shrink-0"
                 style={{
-                  background: showFilter ? "rgba(37,99,235,0.2)" : "rgba(255,255,255,0.06)",
-                  border: showFilter ? "1px solid rgba(37,99,235,0.4)" : "1px solid rgba(255,255,255,0.1)",
-                  color: showFilter ? "#93c5fd" : "#94a3b8",
+                  background: showFilter ? "rgba(37,99,235,0.08)" : "rgba(0,0,0,0.04)",
+                  border: showFilter ? "1px solid rgba(37,99,235,0.3)" : "1px solid rgba(0,0,0,0.09)",
+                  color: showFilter ? "#2563eb" : "#64748b",
                 }}
               >
                 <Filter size={14} />
@@ -642,26 +615,26 @@ export default function NoticesPage() {
 
               {/* Sort */}
               <div className="relative flex-shrink-0">
-                <ArrowUpDown size={13} className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: "#475569" }} />
+                <ArrowUpDown size={13} className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400" />
                 <select
                   value={sort}
                   onChange={e => setSort(e.target.value)}
-                  className="pl-8 pr-8 py-2.5 rounded-xl text-sm font-semibold outline-none appearance-none cursor-pointer"
-                  style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)", color: "#94a3b8" }}
+                  className="pl-8 pr-8 py-2.5 rounded-xl text-sm font-semibold outline-none appearance-none cursor-pointer text-slate-700 bg-white"
+                  style={{ border: "1px solid rgba(0,0,0,0.1)" }}
                 >
-                  {SORT_OPTIONS.map(o => <option key={o.value} value={o.value} style={{ background: "#0a1628" }}>{o.label}</option>)}
+                  {SORT_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
                 </select>
-                <ChevronDown size={13} className="absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: "#475569" }} />
+                <ChevronDown size={13} className="absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400" />
               </div>
             </div>
 
             {/* Expandable filter panel */}
             {showFilter && (
-              <div className="rounded-2xl border p-4 grid sm:grid-cols-2 gap-4"
-                style={{ background: "rgba(255,255,255,0.04)", borderColor: "rgba(255,255,255,0.08)" }}>
+              <div className="rounded-2xl border p-4 grid sm:grid-cols-2 gap-4 bg-slate-50"
+                style={{ borderColor: "rgba(0,0,0,0.07)" }}>
                 {/* Priority */}
                 <div>
-                  <p className="text-xs font-bold uppercase tracking-widest mb-2.5" style={{ color: "#64748b" }}>Priority</p>
+                  <p className="text-xs font-bold uppercase tracking-widest mb-2.5 text-slate-500">Priority</p>
                   <div className="flex flex-wrap gap-2">
                     {(["all", "urgent", "high", "medium", "low"] as const).map(p => {
                       const active = priority === p;
@@ -672,9 +645,9 @@ export default function NoticesPage() {
                           onClick={() => { setPriority(p); setPage(1); }}
                           className="px-3 py-1 rounded-lg text-xs font-bold transition-all capitalize flex items-center gap-1.5"
                           style={{
-                            background: active ? (cfg?.bg ?? "rgba(255,255,255,0.12)") : "rgba(255,255,255,0.04)",
-                            color: active ? (cfg?.color ?? "#f1f5f9") : "#64748b",
-                            border: `1px solid ${active ? (cfg?.color ?? "rgba(255,255,255,0.2)") + "50" : "rgba(255,255,255,0.08)"}`,
+                            background: active ? (cfg?.bg ?? "rgba(0,0,0,0.08)") : "rgba(0,0,0,0.04)",
+                            color: active ? (cfg?.color ?? "#0f172a") : "#64748b",
+                            border: `1px solid ${active ? (cfg?.color ?? "rgba(0,0,0,0.2)") + "50" : "rgba(0,0,0,0.08)"}`,
                           }}
                         >
                           {cfg?.icon} {p === "all" ? "All" : cfg?.label}
@@ -685,18 +658,18 @@ export default function NoticesPage() {
                 </div>
                 {/* Department */}
                 <div>
-                  <p className="text-xs font-bold uppercase tracking-widest mb-2.5" style={{ color: "#64748b" }}>Department</p>
+                  <p className="text-xs font-bold uppercase tracking-widest mb-2.5 text-slate-500">Department</p>
                   <div className="relative">
-                    <Building2 size={13} className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: "#475569" }} />
+                    <Building2 size={13} className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400" />
                     <select
                       value={department}
                       onChange={e => { setDepartment(e.target.value); setPage(1); }}
-                      className="w-full pl-8 pr-8 py-2 rounded-xl text-xs font-semibold outline-none appearance-none cursor-pointer"
-                      style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)", color: "#94a3b8" }}
+                      className="w-full pl-8 pr-8 py-2 rounded-xl text-xs font-semibold outline-none appearance-none cursor-pointer text-slate-700 bg-white"
+                      style={{ border: "1px solid rgba(0,0,0,0.1)" }}
                     >
-                      {DEPARTMENTS.map(d => <option key={d} value={d} style={{ background: "#0a1628" }}>{d}</option>)}
+                      {DEPARTMENTS.map(d => <option key={d} value={d}>{d}</option>)}
                     </select>
-                    <ChevronDown size={12} className="absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: "#475569" }} />
+                    <ChevronDown size={12} className="absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400" />
                   </div>
                 </div>
                 {/* Clear */}
@@ -723,14 +696,14 @@ export default function NoticesPage() {
                     onClick={() => { setCategory(c.id); setPage(1); }}
                     className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all flex-shrink-0"
                     style={{
-                      background: active ? "linear-gradient(135deg,rgba(37,99,235,0.25),rgba(5,150,105,0.25))" : "rgba(255,255,255,0.04)",
-                      color: active ? "#93c5fd" : "#64748b",
-                      border: active ? "1px solid rgba(37,99,235,0.35)" : "1px solid rgba(255,255,255,0.07)",
+                      background: active ? "rgba(37,99,235,0.08)" : "rgba(0,0,0,0.03)",
+                      color: active ? "#2563eb" : "#64748b",
+                      border: active ? "1px solid rgba(37,99,235,0.25)" : "1px solid rgba(0,0,0,0.07)",
                     }}
                   >
                     {c.icon} {c.label}
                     <span className="px-1.5 py-0.5 rounded-md text-[9px] font-black"
-                      style={{ background: active ? "rgba(37,99,235,0.3)" : "rgba(255,255,255,0.06)", color: active ? "#93c5fd" : "#475569" }}>
+                      style={{ background: active ? "rgba(37,99,235,0.15)" : "rgba(0,0,0,0.05)", color: active ? "#2563eb" : "#64748b" }}>
                       {count}
                     </span>
                   </button>
@@ -741,8 +714,8 @@ export default function NoticesPage() {
 
           {/* ── Results header ── */}
           <div className="flex items-center justify-between mb-5">
-            <p className="text-sm font-semibold" style={{ color: "#64748b" }}>
-              Showing <span className="text-white">{paginated.length}</span> of <span className="text-white">{filtered.length}</span> notices
+            <p className="text-sm font-semibold text-slate-500">
+              Showing <span className="text-slate-900">{paginated.length}</span> of <span className="text-slate-900">{filtered.length}</span> notices
             </p>
             {(search || activeFilters > 0) && (
               <button
@@ -757,10 +730,10 @@ export default function NoticesPage() {
 
           {/* ── Notice cards grid ── */}
           {paginated.length === 0 ? (
-            <div className="text-center py-24 rounded-3xl border" style={{ borderColor: "rgba(255,255,255,0.07)", background: "rgba(255,255,255,0.02)" }}>
+            <div className="text-center py-24 rounded-3xl border border-slate-200 bg-slate-50">
               <div className="text-5xl mb-4">📋</div>
-              <h3 className="text-lg font-black text-white mb-2">No notices found</h3>
-              <p className="text-sm" style={{ color: "#64748b" }}>Try different search terms or clear the filters.</p>
+              <h3 className="text-lg font-black text-slate-900 mb-2">No notices found</h3>
+              <p className="text-sm text-slate-400">Try different search terms or clear the filters.</p>
             </div>
           ) : (
             <div id="pinned" className="grid md:grid-cols-2 xl:grid-cols-3 gap-4">
@@ -770,41 +743,41 @@ export default function NoticesPage() {
                 return (
                   <div
                     key={notice.id}
-                    className="group relative rounded-2xl border overflow-hidden flex flex-col transition-all duration-300 hover:-translate-y-1"
-                    style={{ background: "rgba(255,255,255,0.035)", borderColor: "rgba(255,255,255,0.08)" }}
-                    onMouseEnter={e => (e.currentTarget.style.borderColor = `${pc.color}40`)}
-                    onMouseLeave={e => (e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)")}
+                    className="group relative rounded-2xl border overflow-hidden flex flex-col transition-all duration-300 hover:-translate-y-1 bg-white"
+                    style={{ borderColor: "rgba(0,0,0,0.07)", boxShadow: "0 2px 10px rgba(0,0,0,0.04)" }}
+                    onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.borderColor = `${pc.color}35`; (e.currentTarget as HTMLDivElement).style.boxShadow = `0 8px 24px rgba(0,0,0,0.08)`; }}
+                    onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.borderColor = "rgba(0,0,0,0.07)"; (e.currentTarget as HTMLDivElement).style.boxShadow = "0 2px 10px rgba(0,0,0,0.04)"; }}
                   >
                     {/* Top priority accent */}
                     <div className="h-0.5 w-full" style={{ background: `linear-gradient(90deg,${pc.color},${pc.color}44)` }} />
 
                     {/* Card header */}
-                    <div className="px-5 pt-4 pb-3 border-b" style={{ borderColor: "rgba(255,255,255,0.06)", background: "rgba(0,0,0,0.15)" }}>
+                    <div className="px-5 pt-4 pb-3 border-b border-black/[0.05] bg-slate-50">
                       <div className="flex items-start justify-between gap-2 mb-2">
                         <div className="flex items-center gap-2 flex-wrap">
                           {notice.isPinned && (
                             <span className="flex items-center gap-1 text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full"
-                              style={{ background: "rgba(245,158,11,0.15)", color: "#f59e0b", border: "1px solid rgba(245,158,11,0.3)" }}>
+                              style={{ background: "rgba(245,158,11,0.1)", color: "#d97706", border: "1px solid rgba(245,158,11,0.25)" }}>
                               <Pin size={8} /> Pinned
                             </span>
                           )}
                           {notice.isNew && (
                             <span className="flex items-center gap-1 text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full animate-pulse"
-                              style={{ background: "rgba(5,150,105,0.15)", color: "#34d399", border: "1px solid rgba(5,150,105,0.3)" }}>
+                              style={{ background: "rgba(5,150,105,0.1)", color: "#059669", border: "1px solid rgba(5,150,105,0.2)" }}>
                               ✦ New
                             </span>
                           )}
                         </div>
-                        <span className="text-[10px] font-black tracking-wider flex-shrink-0" style={{ color: "#334155" }}>{notice.id}</span>
+                        <span className="text-[10px] font-black tracking-wider flex-shrink-0 text-slate-400">{notice.id}</span>
                       </div>
 
                       <div className="flex items-center gap-2">
                         <span className="flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider"
-                          style={{ background: pc.bg, color: pc.color, border: `1px solid ${pc.color}40` }}>
+                          style={{ background: pc.bg, color: pc.color, border: `1px solid ${pc.color}35` }}>
                           {pc.icon} {pc.label}
                         </span>
                         <span className="flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-semibold"
-                          style={{ background: "rgba(255,255,255,0.05)", color: cc.color }}>
+                          style={{ background: `${cc.color}10`, color: cc.color, border: `1px solid ${cc.color}25` }}>
                           {cc.icon} {cc.label}
                         </span>
                       </div>
@@ -812,60 +785,59 @@ export default function NoticesPage() {
 
                     {/* Card body */}
                     <div className="px-5 py-4 flex-1 flex flex-col">
-                      <h3 className="font-black text-sm leading-snug mb-2 text-white line-clamp-2">{notice.title}</h3>
-                      <p className="text-xs leading-relaxed mb-4 line-clamp-3 flex-1" style={{ color: "#64748b" }}>{notice.summary}</p>
+                      <h3 className="font-black text-sm leading-snug mb-2 text-slate-900 line-clamp-2">{notice.title}</h3>
+                      <p className="text-xs leading-relaxed mb-4 line-clamp-3 flex-1 text-slate-500">{notice.summary}</p>
 
                       {/* Meta */}
-                      <div className="flex flex-wrap gap-x-3 gap-y-1 text-[10px] mb-4" style={{ color: "#475569" }}>
+                      <div className="flex flex-wrap gap-x-3 gap-y-1 text-[10px] mb-4 text-slate-400">
                         <span className="flex items-center gap-1"><Calendar size={10} />{new Date(notice.date).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" })}</span>
                         <span className="flex items-center gap-1"><Building2 size={10} />{notice.department.split(" ")[0]}</span>
                         <span className="flex items-center gap-1"><Eye size={10} />{notice.views.toLocaleString()}</span>
                         {notice.expiryDate && (
-                          <span className="flex items-center gap-1" style={{ color: "#d97706" }}><Clock size={10} />Exp. {new Date(notice.expiryDate).toLocaleDateString("en-IN", { day: "2-digit", month: "short" })}</span>
+                          <span className="flex items-center gap-1 text-amber-500"><Clock size={10} />Exp. {new Date(notice.expiryDate).toLocaleDateString("en-IN", { day: "2-digit", month: "short" })}</span>
                         )}
                       </div>
 
                       {/* Attachment chip */}
                       {notice.hasAttachment && (
                         <div className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg mb-3 w-fit"
-                          style={{ background: "rgba(37,99,235,0.1)", border: "1px solid rgba(37,99,235,0.2)" }}>
-                          <FileText size={10} className="text-blue-400" />
-                          <span className="text-[10px] font-semibold text-blue-300 truncate max-w-[160px]">{notice.attachmentName}</span>
-                          <span className="text-[9px]" style={{ color: "#475569" }}>{notice.attachmentSize}</span>
+                          style={{ background: "rgba(37,99,235,0.06)", border: "1px solid rgba(37,99,235,0.15)" }}>
+                          <FileText size={10} className="text-blue-500" />
+                          <span className="text-[10px] font-semibold text-blue-600 truncate max-w-[160px]">{notice.attachmentName}</span>
+                          <span className="text-[9px] text-slate-400">{notice.attachmentSize}</span>
                         </div>
                       )}
 
                       {/* Tags */}
                       <div className="flex flex-wrap gap-1.5 mb-4">
                         {notice.tags.slice(0, 3).map(tag => (
-                          <span key={tag} className="text-[9px] px-2 py-0.5 rounded-full font-semibold"
-                            style={{ background: "rgba(255,255,255,0.05)", color: "#475569", border: "1px solid rgba(255,255,255,0.07)" }}>
+                          <span key={tag} className="text-[9px] px-2 py-0.5 rounded-full font-semibold bg-slate-100 text-slate-500 border border-slate-200">
                             #{tag}
                           </span>
                         ))}
                       </div>
 
                       {/* Actions */}
-                      <div className="flex items-center gap-2 pt-3 border-t" style={{ borderColor: "rgba(255,255,255,0.06)" }}>
+                      <div className="flex items-center gap-2 pt-3 border-t border-black/[0.06]">
                         <button
                           onClick={() => setModal(notice)}
                           className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl text-xs font-bold transition-all hover:opacity-90"
-                          style={{ background: "linear-gradient(135deg,rgba(30,58,138,0.8),rgba(5,71,30,0.8))", color: "#fff", border: "1px solid rgba(37,99,235,0.25)" }}
+                          style={{ background: "#2563eb", color: "#fff" }}
                         >
                           <ChevronRight size={13} /> View Details
                         </button>
                         <button
                           onClick={() => downloadPDF(notice)}
                           className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold transition-all hover:opacity-90 flex-shrink-0"
-                          style={{ background: "linear-gradient(135deg,#2563eb,#059669)", color: "#fff" }}
+                          style={{ background: "#059669", color: "#fff" }}
                           title="Download PDF"
                         >
                           <Download size={13} /> PDF
                         </button>
                         <button
                           onClick={() => handleCopy(notice.id)}
-                          className="w-8 h-8 rounded-xl flex items-center justify-center transition-all flex-shrink-0"
-                          style={{ background: "rgba(255,255,255,0.05)", color: copied === notice.id ? "#34d399" : "#475569", border: "1px solid rgba(255,255,255,0.07)" }}
+                          className="w-8 h-8 rounded-xl flex items-center justify-center transition-all flex-shrink-0 bg-slate-100 border border-slate-200"
+                          style={{ color: copied === notice.id ? "#059669" : "#64748b" }}
                           title="Copy link"
                         >
                           {copied === notice.id ? <CheckCircle size={13} /> : <Share2 size={13} />}
@@ -883,8 +855,8 @@ export default function NoticesPage() {
             <div className="flex justify-center mt-8">
               <button
                 onClick={() => setPage(p => p + 1)}
-                className="flex items-center gap-2 px-8 py-3 rounded-2xl font-bold text-sm transition-all hover:opacity-90 hover:-translate-y-0.5"
-                style={{ background: "linear-gradient(135deg,#1e3a8a,#059669)", color: "#fff", boxShadow: "0 8px 28px rgba(37,99,235,0.25)" }}
+                className="flex items-center gap-2 px-8 py-3 rounded-2xl font-bold text-sm transition-all hover:opacity-90 hover:-translate-y-0.5 text-white"
+                style={{ background: "#2563eb", boxShadow: "0 4px 16px rgba(37,99,235,0.3)" }}
               >
                 <ChevronDown size={16} /> Load More ({filtered.length - paginated.length} remaining)
               </button>
@@ -892,11 +864,10 @@ export default function NoticesPage() {
           )}
 
           {/* ── Back to home ── */}
-          <div className="flex justify-center mt-12 pt-8 border-t" style={{ borderColor: "rgba(255,255,255,0.07)" }}>
+          <div className="flex justify-center mt-12 pt-8 border-t border-black/[0.07]">
             <Link
               href="/"
-              className="flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-semibold transition-all hover:opacity-80"
-              style={{ color: "#64748b", border: "1px solid rgba(255,255,255,0.08)" }}
+              className="flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-semibold text-slate-500 border border-slate-200 hover:border-slate-300 transition-all"
             >
               ← Back to Main Site
             </Link>

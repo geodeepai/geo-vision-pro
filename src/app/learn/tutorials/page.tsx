@@ -1,6 +1,7 @@
 ﻿"use client";
 import { useState } from "react";
 import { downloadTutorialPDF } from "@/lib/gvpPDF";
+import SubpageHero from "@/components/SubpageHero";
 
 /* ── Types ───────────────────────────────────────────────────────── */
 interface Tutorial {
@@ -154,8 +155,8 @@ const TUTORIALS: Tutorial[] = [
 
 /* ── Level badge ─────────────────────────────────────────────────── */
 const lvlBadge = {
-  Beginner:     "bg-emerald-500/15 text-emerald-400 border-emerald-500/25",
-  Intermediate: "bg-blue-500/15 text-blue-400 border-blue-500/25",
+  Beginner:     "bg-emerald-50 text-emerald-700 border-emerald-200",
+  Intermediate: "bg-blue-50 text-blue-700 border-blue-200",
 };
 
 const catColors: Record<string, string> = {
@@ -176,36 +177,30 @@ export default function TutorialsPage() {
   const refStr   = (id: number) => `GVP-TUT-2026-${String(id).padStart(3, "0")}`;
 
   return (
-    <main style={{ background: "#0a1628", minHeight: "100vh", color: "#b0c4d8" }}>
+    <main style={{ background: "#ffffff", minHeight: "100vh" }}>
 
-      {/* ── Hero ── */}
-      <section style={{ background: "linear-gradient(135deg,#0a1628 0%,#0f2035 60%,#0a1628 100%)" }}
-        className="pt-8 pb-10 px-4 text-center">
-        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-4 text-xs font-bold uppercase tracking-widest"
-          style={{ background: "rgba(29,158,117,0.12)", border: "1px solid rgba(29,158,117,0.3)", color: "#1d9e75" }}>
-          <span className="w-1.5 h-1.5 rounded-full bg-[#1d9e75] animate-pulse inline-block" />
-          DeepEarthScience Tutorials
-        </div>
-        <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-white mb-3 leading-tight">
-          Step-by-Step GIS &amp;
-          <br className="hidden sm:block" /> <span style={{ color: "#1d9e75" }}>Remote Sensing Guides</span>
-        </h1>
-        <p className="text-base max-w-2xl mx-auto leading-relaxed" style={{ color: "#b0c4d8" }}>
-          Practical tutorials written by DeepEarthScience experts. Download each tutorial as a professional PDF
-          reference guide for offline use.
-        </p>
-      </section>
+      <SubpageHero
+        crumbs={[{ label: "Learn", href: "/learn/tutorials" }, { label: "Tutorials" }]}
+        badge="DeepEarthScience Tutorials"
+        title="Step-by-Step GIS & Remote Sensing Guides"
+        highlight="Remote Sensing Guides"
+        desc="Practical tutorials written by DeepEarthScience experts. Download each tutorial as a professional PDF reference guide for offline use."
+        accent="#3b82f6"
+        stats={[{ val: "7+", label: "Tutorials" }, { val: "6", label: "Software Tools" }, { val: "PDF", label: "Downloadable" }, { val: "Free", label: "Access" }]}
+        ctaLabel="Browse Tutorials"
+        ctaHref="#tutorials"
+      />
 
       {/* ── Filter tabs ── */}
-      <section className="px-4 py-6 max-w-5xl mx-auto">
+      <section className="px-4 py-6 max-w-5xl mx-auto" id="tutorials">
         <div className="flex flex-wrap gap-2">
           {TUT_CATS.map(c => (
             <button key={c} onClick={() => setCat(c)}
               className="px-4 py-1.5 rounded-full text-sm font-semibold border transition-all"
               style={{
-                background:  cat === c ? "#1d9e75" : "rgba(255,255,255,0.04)",
-                borderColor: cat === c ? "#1d9e75" : "rgba(255,255,255,0.1)",
-                color:       cat === c ? "#fff"    : "#b0c4d8",
+                background:  cat === c ? "#3b82f6" : "rgba(0,0,0,0.03)",
+                borderColor: cat === c ? "#3b82f6" : "rgba(0,0,0,0.1)",
+                color:       cat === c ? "#fff"    : "#64748b",
               }}>
               {c}
             </button>
@@ -217,34 +212,34 @@ export default function TutorialsPage() {
       <section className="px-4 pb-16 max-w-5xl mx-auto space-y-4">
         {filtered.map(tut => {
           const isOpen = expanded === tut.id;
-          const accent = catColors[tut.category] ?? "#1d9e75";
+          const accent = catColors[tut.category] ?? "#3b82f6";
 
           return (
             <div key={tut.id}
-              style={{ background: "#0f2035", border: `1px solid ${isOpen ? accent + "55" : "rgba(255,255,255,0.07)"}`, borderRadius: 12 }}
+              style={{ background: "#ffffff", border: `1px solid ${isOpen ? accent + "40" : "rgba(0,0,0,0.07)"}`, borderRadius: 12, boxShadow: isOpen ? `0 4px 20px ${accent}15` : "0 2px 8px rgba(0,0,0,0.04)" }}
               className="overflow-hidden transition-all duration-200">
               {/* Card header — always visible */}
               <button
                 className="w-full text-left px-5 py-4 flex items-start gap-4"
                 onClick={() => setExpanded(isOpen ? null : tut.id)}>
                 {/* Number badge */}
-                <div className="flex-shrink-0 w-9 h-9 rounded-xl flex items-center justify-center text-xs font-black text-white"
-                  style={{ background: accent + "25", border: `1px solid ${accent}55`, color: accent }}>
+                <div className="flex-shrink-0 w-9 h-9 rounded-xl flex items-center justify-center text-xs font-black"
+                  style={{ background: accent + "15", border: `1px solid ${accent}35`, color: accent }}>
                   {String(tut.id).padStart(2, "0")}
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex flex-wrap items-center gap-2 mb-1">
                     <span className="text-[10px] font-bold px-2 py-0.5 rounded-full"
-                      style={{ background: accent + "18", color: accent, border: `1px solid ${accent}33` }}>
+                      style={{ background: accent + "12", color: accent, border: `1px solid ${accent}28` }}>
                       {tut.category}
                     </span>
                     <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${lvlBadge[tut.level]}`}>
                       {tut.level}
                     </span>
-                    <span className="text-[10px]" style={{ color: "#8aa3be" }}>{tut.duration}</span>
-                    <span className="text-[10px] font-semibold" style={{ color: "#8aa3be" }}>{refStr(tut.id)}</span>
+                    <span className="text-[10px] text-slate-400">{tut.duration}</span>
+                    <span className="text-[10px] font-semibold text-slate-400">{refStr(tut.id)}</span>
                   </div>
-                  <h3 className="text-white font-black text-[15px] leading-snug pr-4">{tut.title}</h3>
+                  <h3 className="text-slate-900 font-black text-[15px] leading-snug pr-4">{tut.title}</h3>
                 </div>
                 <span className="flex-shrink-0 text-xl leading-none font-light mt-1 transition-transform duration-200"
                   style={{ color: accent, transform: isOpen ? "rotate(45deg)" : "none" }}>+</span>
@@ -252,8 +247,7 @@ export default function TutorialsPage() {
 
               {/* Expanded content */}
               {isOpen && (
-                <div className="px-5 pb-5 space-y-5"
-                  style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+                <div className="px-5 pb-5 space-y-5 border-t border-black/[0.06]">
                   {/* Steps */}
                   <div className="pt-4">
                     <p className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: accent }}>
@@ -262,11 +256,11 @@ export default function TutorialsPage() {
                     <div className="space-y-2">
                       {tut.steps.map((step, i) => (
                         <div key={i} className="flex gap-3 text-sm">
-                          <span className="flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-black text-white mt-0.5"
-                            style={{ background: accent + "30", color: accent }}>
+                          <span className="flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-black mt-0.5"
+                            style={{ background: accent + "18", color: accent }}>
                             {i + 1}
                           </span>
-                          <p style={{ color: "#b0c4d8" }} className="leading-relaxed">
+                          <p className="text-slate-600 leading-relaxed">
                             {step.replace(/^Step \d+\s*[–\-]\s*/, "")}
                           </p>
                         </div>
@@ -274,14 +268,14 @@ export default function TutorialsPage() {
                     </div>
                   </div>
 
-                  {/* Code block */}
+                  {/* Code block — intentionally dark */}
                   {tut.code && (
                     <div>
                       <p className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: accent }}>
                         Code Reference
                       </p>
                       <pre className="text-xs leading-relaxed overflow-x-auto rounded-xl p-4"
-                        style={{ background: "#061020", color: "#a8d8a8", border: "1px solid rgba(29,158,117,0.2)", fontFamily: "monospace" }}>
+                        style={{ background: "#0f172a", color: "#86efac", border: `1px solid ${accent}25`, fontFamily: "monospace" }}>
                         {tut.code}
                       </pre>
                     </div>
@@ -290,13 +284,13 @@ export default function TutorialsPage() {
                   {/* Common issues */}
                   {tut.issues.length > 0 && (
                     <div>
-                      <p className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: "#f59e0b" }}>
+                      <p className="text-xs font-bold uppercase tracking-widest mb-2 text-amber-600">
                         Common Issues &amp; Fixes
                       </p>
                       <div className="space-y-2">
                         {tut.issues.map((issue, i) => (
-                          <div key={i} className="flex gap-2 text-xs" style={{ color: "#b0c4d8" }}>
-                            <span style={{ color: "#f59e0b" }} className="flex-shrink-0 mt-0.5">⚠</span>
+                          <div key={i} className="flex gap-2 text-xs text-slate-600">
+                            <span className="text-amber-500 flex-shrink-0 mt-0.5">⚠</span>
                             <span>{issue}</span>
                           </div>
                         ))}
@@ -305,22 +299,22 @@ export default function TutorialsPage() {
                   )}
 
                   {/* Download button */}
-                  <div className="flex gap-3 pt-2" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+                  <div className="flex gap-3 pt-2 border-t border-black/[0.06]">
                     <button
                       onClick={() => downloadTutorialPDF(
                         tut.title, tut.level, tut.software,
                         tut.steps, tut.issues, tut.id
                       )}
                       className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold text-white transition-all hover:opacity-90"
-                      style={{ background: "#1d9e75" }}>
+                      style={{ background: accent }}>
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                         <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
                       </svg>
                       Download PDF ({refStr(tut.id)})
                     </button>
                     <a href="mailto:academy@DeepEarthScience.com"
-                      className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold transition-all"
-                      style={{ background: "rgba(255,255,255,0.05)", color: "#b0c4d8", border: "1px solid rgba(255,255,255,0.1)" }}>
+                      className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold text-slate-600 transition-all"
+                      style={{ background: "rgba(0,0,0,0.04)", border: "1px solid rgba(0,0,0,0.08)" }}>
                       Ask a Question
                     </a>
                   </div>
@@ -332,7 +326,7 @@ export default function TutorialsPage() {
 
         {filtered.length === 0 && (
           <div className="text-center py-16">
-            <p style={{ color: "#8aa3be" }}>No tutorials found in this category.</p>
+            <p className="text-slate-400">No tutorials found in this category.</p>
           </div>
         )}
       </section>
