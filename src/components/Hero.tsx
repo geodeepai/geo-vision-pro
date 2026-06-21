@@ -116,6 +116,14 @@ export default function Hero() {
           }}
         />
 
+        {/* Keyframes for earth rotation */}
+        <style>{`
+          @keyframes earthSpin {
+            from { background-position-x: 0%; }
+            to   { background-position-x: 200%; }
+          }
+        `}</style>
+
         {/* Globe sphere */}
         <div
           style={{
@@ -128,17 +136,27 @@ export default function Hero() {
               "0 0 0 1px rgba(148,187,233,0.25), 0 20px 80px rgba(30,58,138,0.22), 0 60px 120px rgba(0,0,0,0.14)",
           }}
         >
-          {/* Earth texture image */}
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/earth-map.jpg"
-            alt="Earth"
+          {/* Rotating earth texture */}
+          <div
             style={{
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-              objectPosition: "55% 35%",
-              display: "block",
+              position: "absolute",
+              inset: 0,
+              backgroundImage: "url(/earth-map.jpg)",
+              backgroundSize: "200% 100%",
+              backgroundRepeat: "repeat-x",
+              backgroundPositionY: "35%",
+              animation: "earthSpin 36s linear infinite",
+            }}
+          />
+
+          {/* Night-side dark fade on the right edge */}
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              background:
+                "radial-gradient(circle at 80% 50%, rgba(0,0,0,0.35) 0%, transparent 55%)",
+              pointerEvents: "none",
             }}
           />
 
@@ -147,9 +165,8 @@ export default function Hero() {
             style={{
               position: "absolute",
               inset: 0,
-              borderRadius: "50%",
               background:
-                "radial-gradient(circle at 33% 26%, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.06) 35%, transparent 58%)",
+                "radial-gradient(circle at 33% 26%, rgba(255,255,255,0.28) 0%, rgba(255,255,255,0.06) 35%, transparent 58%)",
               pointerEvents: "none",
             }}
           />
@@ -159,9 +176,8 @@ export default function Hero() {
             style={{
               position: "absolute",
               inset: 0,
-              borderRadius: "50%",
               background:
-                "radial-gradient(circle at center, transparent 58%, rgba(120,180,255,0.28) 73%, rgba(186,220,255,0.52) 86%, rgba(214,233,255,0.78) 95%)",
+                "radial-gradient(circle at center, transparent 58%, rgba(120,180,255,0.28) 73%, rgba(186,220,255,0.52) 86%, rgba(214,233,255,0.80) 95%)",
               pointerEvents: "none",
             }}
           />
