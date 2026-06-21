@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { CheckCircle, Mail, Phone, MapPin } from "lucide-react";
 import ConsultationSection from "@/components/ConsultationSection";
+import SubpageHero from "@/components/SubpageHero";
 
 const COLOR  = "#7c3aed";
 const BG     = "#f5f3ff";
@@ -65,42 +66,20 @@ const DELIVERABLES = [
 
 export default function GISPage() {
   return (
-    <div className="min-h-screen" style={{ background: "#f5f3ff" }}>
-      {/* Hero */}
-      <div className="relative overflow-hidden" style={{ background: "linear-gradient(135deg,#1e1b4b 0%,#2e1065 60%,#1e1b4b 100%)" }}>
-        <div className="absolute inset-0 opacity-[0.05]" style={{ backgroundImage: `linear-gradient(rgba(196,181,254,.9) 1px,transparent 1px),linear-gradient(90deg,rgba(196,181,254,.9) 1px,transparent 1px)`, backgroundSize: "40px 40px" }} />
-        <div className="absolute top-0 left-1/3 w-72 h-72 rounded-full pointer-events-none" style={{ background: `radial-gradient(circle,${COLOR},transparent 70%)`, filter: "blur(80px)", opacity: 0.18 }} />
-        <div className="max-w-7xl mx-auto px-6 py-16 relative z-10">
-          <div className="flex flex-wrap items-center justify-between gap-10">
-            <div className="max-w-2xl">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold mb-5" style={{ background: "rgba(124,58,237,0.2)", color: "#c4b5fd", border: "1px solid rgba(124,58,237,0.35)" }}>📍 Geospatial Data Services</span>
-              <h1 className="text-3xl md:text-4xl font-black text-white mb-4 leading-tight">
-                GIS & Spatial{" "}
-                <span style={{ background: "linear-gradient(135deg,#c4b5fd,#a78bfa)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Analysis</span>
-              </h1>
-              <p className="text-slate-300 text-base leading-relaxed mb-7 max-w-xl">
-                End-to-end geographic information system services — geodatabase design, network analysis, spatial modelling, 3D terrain, and premium cartographic outputs for engineering, planning, and research.
-              </p>
-              <div className="flex flex-wrap gap-3">
-                <a href="/consultancy#consultation" className="flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-white text-sm hover:opacity-90 transition-all" style={{ background: `linear-gradient(135deg,${COLOR},#5b21b6)`, boxShadow: `0 4px 16px rgba(124,58,237,0.4)` }}>
-                  <Mail size={15} /> Request a Consultation
-                </a>
-                <a href="#offerings" className="flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-slate-300 text-sm border border-white/15 hover:bg-white/10 transition-all">
-                  Explore Services →
-                </a>
-              </div>
-            </div>
-            <div className="grid grid-cols-2 gap-3 flex-shrink-0">
-              {[{ val: "400+", label: "GIS Projects" }, { val: "15+", label: "Software Tools" }, { val: "7 Days", label: "Avg Turnaround" }, { val: "6+", label: "Sectors Served" }].map((s) => (
-                <div key={s.label} className="p-4 rounded-2xl border text-center" style={{ background: "rgba(255,255,255,0.05)", borderColor: "rgba(255,255,255,0.1)" }}>
-                  <p className="text-2xl font-black mb-0.5" style={{ color: "#c4b5fd" }}>{s.val}</p>
-                  <p className="text-slate-400 text-[11px] font-medium leading-snug">{s.label}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
+    <div className="min-h-screen bg-white">
+      <SubpageHero
+        crumbs={[{ label: "Services", href: "/#services" }, { label: "GIS & Spatial Analysis" }]}
+        badge="Geospatial Data Services"
+        title="GIS & Spatial Analysis"
+        highlight="Analysis"
+        desc="End-to-end geographic information system services — geodatabase design, network analysis, spatial modelling, 3D terrain, and premium cartographic outputs for engineering, planning, and research."
+        accent={COLOR}
+        stats={[{ val: "400+", label: "GIS Projects" }, { val: "15+", label: "Software Tools" }, { val: "7 Days", label: "Avg Turnaround" }, { val: "6+", label: "Sectors Served" }]}
+        ctaLabel="Request a Consultation"
+        ctaHref="/consultancy#consultation"
+        secondLabel="Explore Services"
+        secondHref="#offerings"
+      />
 
       <div className="max-w-7xl mx-auto px-6 py-12 space-y-12">
 
@@ -177,16 +156,15 @@ export default function GISPage() {
 
         {/* CTA */}
         <section>
-          <div className="relative overflow-hidden rounded-2xl p-8 text-center" style={{ background: "linear-gradient(135deg,#1e1b4b,#2e1065)" }}>
-            <div className="absolute inset-0 opacity-[0.05]" style={{ backgroundImage: `linear-gradient(rgba(196,181,254,.9) 1px,transparent 1px),linear-gradient(90deg,rgba(196,181,254,.9) 1px,transparent 1px)`, backgroundSize: "36px 36px" }} />
+          <div className="relative overflow-hidden rounded-2xl p-8 text-center border" style={{ background: `${COLOR}08`, borderColor: `${COLOR}25` }}>
             <div className="relative z-10">
-              <h2 className="text-2xl font-black text-white mb-3">Have a GIS Challenge?</h2>
-              <p className="text-slate-400 text-sm max-w-lg mx-auto mb-7">Share your spatial data requirements and project scope — we'll deliver precise, analysis-ready GIS outputs on schedule.</p>
+              <h2 className="text-2xl font-black text-slate-900 mb-3">Have a GIS Challenge?</h2>
+              <p className="text-slate-500 text-sm max-w-lg mx-auto mb-7">Share your spatial data requirements and project scope — we'll deliver precise, analysis-ready GIS outputs on schedule.</p>
               <div className="flex flex-wrap justify-center gap-3">
-                <a href="/consultancy#consultation" className="flex items-center gap-2 px-7 py-3 rounded-xl font-bold text-white text-sm hover:opacity-90 transition-all" style={{ background: `linear-gradient(135deg,${COLOR},#5b21b6)`, boxShadow: `0 4px 16px rgba(124,58,237,0.4)` }}>
+                <a href="/consultancy#consultation" className="flex items-center gap-2 px-7 py-3 rounded-xl font-bold text-white text-sm hover:opacity-90 transition-all" style={{ background: COLOR, boxShadow: `0 4px 16px ${COLOR}40` }}>
                   <Mail size={15} /> Request a Consultation
                 </a>
-                <Link href="/consultancy" className="flex items-center gap-2 px-7 py-3 rounded-xl font-semibold text-slate-300 text-sm border border-white/15 hover:bg-white/10 transition-all">
+                <Link href="/consultancy" className="flex items-center gap-2 px-7 py-3 rounded-xl font-semibold text-sm border hover:opacity-90 transition-all" style={{ color: COLOR, borderColor: `${COLOR}35`, background: `${COLOR}10` }}>
                   View All Services →
                 </Link>
               </div>
@@ -198,23 +176,6 @@ export default function GISPage() {
         <ConsultationSection />
 
       </div>
-
-      <footer className="mt-12 border-t border-slate-200 bg-white">
-        <div className="max-w-7xl mx-auto px-6 py-8 flex flex-wrap items-center justify-between gap-4">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
-              <svg viewBox="0 0 24 24" fill="none" className="w-4 h-4"><circle cx="12" cy="12" r="9" stroke="white" strokeWidth="1.5" /><path d="M4 12 Q8 6 12 12 Q16 18 20 12" stroke="white" strokeWidth="1.8" fill="none" strokeLinecap="round" /></svg>
-            </div>
-            <span className="text-sm font-bold text-slate-800">Deep Earth Science</span>
-          </div>
-          <div className="flex items-center gap-5 text-xs text-slate-500">
-            <a href="mailto:DeepEarthScience@email.com" className="flex items-center gap-1 hover:text-blue-600 transition-colors"><Mail size={11} /> DeepEarthScience@email.com</a>
-            <a href="tel:+91XXXXXXXXXX" className="flex items-center gap-1 hover:text-blue-600 transition-colors"><Phone size={11} /> +91 XXXX XXX XXX</a>
-            <span className="flex items-center gap-1"><MapPin size={11} /> India</span>
-          </div>
-          <Link href="/" className="text-xs text-blue-600 hover:underline font-semibold">← Back to Home</Link>
-        </div>
-      </footer>
     </div>
   );
 }

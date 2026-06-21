@@ -3,6 +3,7 @@
 import { useState, useRef } from "react";
 import Link from "next/link";
 import { motion, useInView, AnimatePresence } from "framer-motion";
+import SubpageHero from "@/components/SubpageHero";
 import {
   CheckCircle, Satellite, Layers, BarChart2,
   FileText, Leaf, Building2, Droplets, Mountain, AlertTriangle,
@@ -738,87 +739,21 @@ const CONSULTANCY_NAV = [
 
 export default function ConsultancyPage() {
   return (
-    <div className="min-h-screen" style={{ background: "#f0f4f8" }}>
+    <div className="min-h-screen bg-white">
 
-
-      {/* ── Hero ──────────────────────────────────────────────── */}
-      <div
-        className="relative overflow-hidden"
-        style={{ background: "linear-gradient(135deg,#060d1f 0%,#0f2044 60%,#060d1f 100%)" }}
-      >
-        {/* Grid overlay */}
-        <div
-          className="absolute inset-0 opacity-[0.05]"
-          style={{
-            backgroundImage: `linear-gradient(rgba(148,198,255,1) 1px,transparent 1px),linear-gradient(90deg,rgba(148,198,255,1) 1px,transparent 1px)`,
-            backgroundSize: "40px 40px",
-          }}
-        />
-        {/* Glow orbs */}
-        <div className="absolute top-0 left-1/4 w-72 h-72 rounded-full pointer-events-none"
-          style={{ background: "radial-gradient(circle,#2563eb,transparent 70%)", filter: "blur(80px)", opacity: 0.18 }} />
-        <div className="absolute bottom-0 right-1/4 w-56 h-56 rounded-full pointer-events-none"
-          style={{ background: "radial-gradient(circle,#4f46e5,transparent 70%)", filter: "blur(70px)", opacity: 0.14 }} />
-
-        <div className="max-w-7xl mx-auto px-6 py-16 relative z-10">
-          <div className="flex flex-wrap items-center justify-between gap-10">
-            {/* Left text */}
-            <div className="max-w-2xl">
-              <span
-                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold mb-5"
-                style={{ background: "rgba(37,99,235,0.2)", color: "#93c5fd", border: "1px solid rgba(37,99,235,0.35)" }}
-              >
-                <Satellite size={11} /> Professional Geospatial Services
-              </span>
-              <h1 className="text-3xl md:text-4xl font-black text-white mb-4 leading-tight">
-                Remote Sensing{" "}
-                <span style={{ background: "linear-gradient(135deg,#60a5fa,#818cf8)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
-                  Consultancy
-                </span>
-              </h1>
-              <p className="text-slate-300 text-base leading-relaxed mb-7 max-w-xl">
-                Advanced satellite and aerial imagery analysis — from raw data acquisition through pre-processing,
-                classification, change detection, and publication-ready reporting — for governments, research
-                institutions, NGOs, and private enterprises.
-              </p>
-              <div className="flex flex-wrap gap-3">
-                <a
-                  href="#consultation"
-                  className="flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-white text-sm hover:opacity-90 transition-all"
-                  style={{ background: "linear-gradient(135deg,#2563eb,#4f46e5)", boxShadow: "0 4px 16px rgba(37,99,235,0.4)" }}
-                >
-                  <Mail size={15} /> Request a Consultation
-                </a>
-                <a
-                  href="#services-detail"
-                  className="flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-slate-300 text-sm border border-white/15 hover:bg-white/10 transition-all"
-                >
-                  Explore Services <ChevronRight size={15} />
-                </a>
-              </div>
-            </div>
-
-            {/* Right stat cards */}
-            <div className="grid grid-cols-2 gap-3 flex-shrink-0">
-              {[
-                { val: "100+", label: "Projects Delivered", color: "#60a5fa" },
-                { val: ">90%", label: "Classification Accuracy", color: "#34d399" },
-                { val: "15 Days", label: "Avg Turnaround", color: "#fbbf24" },
-                { val: "8+", label: "Industry Sectors", color: "#a78bfa" },
-              ].map((s) => (
-                <div
-                  key={s.label}
-                  className="p-4 rounded-2xl border text-center"
-                  style={{ background: "rgba(255,255,255,0.05)", borderColor: "rgba(255,255,255,0.1)" }}
-                >
-                  <p className="text-2xl font-black mb-0.5" style={{ color: s.color }}>{s.val}</p>
-                  <p className="text-slate-400 text-[11px] font-medium leading-snug">{s.label}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
+      <SubpageHero
+        crumbs={[{ label: "Services", href: "/#services" }, { label: "Remote Sensing Consultancy" }]}
+        badge="Professional Geospatial Services"
+        title="Remote Sensing Consultancy"
+        highlight="Consultancy"
+        desc="Advanced satellite and aerial imagery analysis — from raw data acquisition through pre-processing, classification, change detection, and publication-ready reporting — for governments, research institutions, NGOs, and private enterprises."
+        accent="#2563eb"
+        stats={[{ val: "100+", label: "Projects Delivered" }, { val: ">90%", label: "Classification Accuracy" }, { val: "15 Days", label: "Avg Turnaround" }, { val: "8+", label: "Industry Sectors" }]}
+        ctaLabel="Request a Consultation"
+        ctaHref="#consultation"
+        secondLabel="Explore Services"
+        secondHref="#services-detail"
+      />
 
       <div className="max-w-7xl mx-auto px-6 py-12 space-y-12">
 
@@ -1043,34 +978,6 @@ export default function ConsultancyPage() {
 
       </div>
 
-      {/* ── Simple page footer ────────────────────────────────── */}
-      <footer className="mt-12 border-t border-slate-200 bg-white">
-        <div className="max-w-7xl mx-auto px-6 py-8 flex flex-wrap items-center justify-between gap-4">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
-              <svg viewBox="0 0 24 24" fill="none" className="w-4 h-4">
-                <circle cx="12" cy="12" r="9" stroke="white" strokeWidth="1.5" />
-                <path d="M4 12 Q8 6 12 12 Q16 18 20 12" stroke="white" strokeWidth="1.8" fill="none" strokeLinecap="round" />
-              </svg>
-            </div>
-            <span className="text-sm font-bold text-slate-800">Deep Earth Science</span>
-          </div>
-          <div className="flex items-center gap-5 text-xs text-slate-500">
-            <a href="mailto:DeepEarthScience@email.com" className="flex items-center gap-1 hover:text-blue-600 transition-colors">
-              <Mail size={11} /> DeepEarthScience@email.com
-            </a>
-            <a href="tel:+91XXXXXXXXXX" className="flex items-center gap-1 hover:text-blue-600 transition-colors">
-              <Phone size={11} /> +91 XXXX XXX XXX
-            </a>
-            <a href="#" className="flex items-center gap-1 hover:text-blue-600 transition-colors">
-              <MapPin size={11} /> India
-            </a>
-          </div>
-          <Link href="/" className="text-xs text-blue-600 hover:underline font-semibold">
-            ← Back to Home
-          </Link>
-        </div>
-      </footer>
 
     </div>
   );

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { CheckCircle, Mail, Phone, MapPin } from "lucide-react";
 import ConsultationSection from "@/components/ConsultationSection";
+import SubpageHero from "@/components/SubpageHero";
 
 const COLOR  = "#0891b2";
 const BG     = "#ecfeff";
@@ -65,42 +66,20 @@ const DELIVERABLES = [
 
 export default function AIGeoPage() {
   return (
-    <div className="min-h-screen" style={{ background: "#ecfeff" }}>
-      {/* Hero */}
-      <div className="relative overflow-hidden" style={{ background: "linear-gradient(135deg,#082f49 0%,#0c4a6e 60%,#082f49 100%)" }}>
-        <div className="absolute inset-0 opacity-[0.05]" style={{ backgroundImage: `linear-gradient(rgba(165,243,252,.9) 1px,transparent 1px),linear-gradient(90deg,rgba(165,243,252,.9) 1px,transparent 1px)`, backgroundSize: "40px 40px" }} />
-        <div className="absolute top-0 left-1/3 w-72 h-72 rounded-full pointer-events-none" style={{ background: `radial-gradient(circle,${COLOR},transparent 70%)`, filter: "blur(80px)", opacity: 0.18 }} />
-        <div className="max-w-7xl mx-auto px-6 py-16 relative z-10">
-          <div className="flex flex-wrap items-center justify-between gap-10">
-            <div className="max-w-2xl">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold mb-5" style={{ background: "rgba(8,145,178,0.2)", color: "#67e8f9", border: "1px solid rgba(8,145,178,0.35)" }}>🤖 Machine Learning for Geospatial</span>
-              <h1 className="text-3xl md:text-4xl font-black text-white mb-4 leading-tight">
-                AI-Powered{" "}
-                <span style={{ background: "linear-gradient(135deg,#67e8f9,#22d3ee)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Geo-Analytics</span>
-              </h1>
-              <p className="text-slate-300 text-base leading-relaxed mb-7 max-w-xl">
-                Deep learning, machine learning, and big data geoprocessing for automated feature extraction, predictive modelling, time-series analysis, and large-scale satellite data analytics on Google Earth Engine.
-              </p>
-              <div className="flex flex-wrap gap-3">
-                <a href="/consultancy#consultation" className="flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-white text-sm hover:opacity-90 transition-all" style={{ background: `linear-gradient(135deg,${COLOR},#0e7490)`, boxShadow: `0 4px 16px rgba(8,145,178,0.4)` }}>
-                  <Mail size={15} /> Request a Consultation
-                </a>
-                <a href="#offerings" className="flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-slate-300 text-sm border border-white/15 hover:bg-white/10 transition-all">
-                  Explore Services →
-                </a>
-              </div>
-            </div>
-            <div className="grid grid-cols-2 gap-3 flex-shrink-0">
-              {[{ val: "200+", label: "AI/ML Projects" }, { val: "95%+", label: "Model Accuracy" }, { val: "10 Days", label: "Avg Delivery" }, { val: "6+", label: "Sectors Served" }].map((s) => (
-                <div key={s.label} className="p-4 rounded-2xl border text-center" style={{ background: "rgba(255,255,255,0.05)", borderColor: "rgba(255,255,255,0.1)" }}>
-                  <p className="text-2xl font-black mb-0.5" style={{ color: "#67e8f9" }}>{s.val}</p>
-                  <p className="text-slate-400 text-[11px] font-medium leading-snug">{s.label}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
+    <div className="min-h-screen bg-white">
+      <SubpageHero
+        crumbs={[{ label: "Services", href: "/#services" }, { label: "AI-Powered Geo-Analytics" }]}
+        badge="Machine Learning for Geospatial"
+        title="AI-Powered Geo-Analytics"
+        highlight="Geo-Analytics"
+        desc="Deep learning, machine learning, and big data geoprocessing for automated feature extraction, predictive modelling, time-series analysis, and large-scale satellite data analytics on Google Earth Engine."
+        accent={COLOR}
+        stats={[{ val: "200+", label: "AI/ML Projects" }, { val: "95%+", label: "Model Accuracy" }, { val: "10 Days", label: "Avg Delivery" }, { val: "6+", label: "Sectors Served" }]}
+        ctaLabel="Request a Consultation"
+        ctaHref="/consultancy#consultation"
+        secondLabel="Explore Services"
+        secondHref="#offerings"
+      />
 
       <div className="max-w-7xl mx-auto px-6 py-12 space-y-12">
 
@@ -177,16 +156,15 @@ export default function AIGeoPage() {
 
         {/* CTA */}
         <section>
-          <div className="relative overflow-hidden rounded-2xl p-8 text-center" style={{ background: "linear-gradient(135deg,#082f49,#0c4a6e)" }}>
-            <div className="absolute inset-0 opacity-[0.05]" style={{ backgroundImage: `linear-gradient(rgba(165,243,252,.9) 1px,transparent 1px),linear-gradient(90deg,rgba(165,243,252,.9) 1px,transparent 1px)`, backgroundSize: "36px 36px" }} />
+          <div className="relative overflow-hidden rounded-2xl p-8 text-center border" style={{ background: `${COLOR}08`, borderColor: `${COLOR}25` }}>
             <div className="relative z-10">
-              <h2 className="text-2xl font-black text-white mb-3">Ready to Unlock AI-Driven Geospatial Insights?</h2>
-              <p className="text-slate-400 text-sm max-w-lg mx-auto mb-7">Tell us your task, data availability, and accuracy targets — we'll engineer a custom AI pipeline that delivers results at scale.</p>
+              <h2 className="text-2xl font-black text-slate-900 mb-3">Ready to Unlock AI-Driven Geospatial Insights?</h2>
+              <p className="text-slate-500 text-sm max-w-lg mx-auto mb-7">Tell us your task, data availability, and accuracy targets — we'll engineer a custom AI pipeline that delivers results at scale.</p>
               <div className="flex flex-wrap justify-center gap-3">
-                <a href="/consultancy#consultation" className="flex items-center gap-2 px-7 py-3 rounded-xl font-bold text-white text-sm hover:opacity-90 transition-all" style={{ background: `linear-gradient(135deg,${COLOR},#0e7490)`, boxShadow: `0 4px 16px rgba(8,145,178,0.4)` }}>
+                <a href="/consultancy#consultation" className="flex items-center gap-2 px-7 py-3 rounded-xl font-bold text-white text-sm hover:opacity-90 transition-all" style={{ background: COLOR, boxShadow: `0 4px 16px ${COLOR}40` }}>
                   <Mail size={15} /> Request a Consultation
                 </a>
-                <Link href="/consultancy" className="flex items-center gap-2 px-7 py-3 rounded-xl font-semibold text-slate-300 text-sm border border-white/15 hover:bg-white/10 transition-all">
+                <Link href="/consultancy" className="flex items-center gap-2 px-7 py-3 rounded-xl font-semibold text-sm border hover:opacity-90 transition-all" style={{ color: COLOR, borderColor: `${COLOR}35`, background: `${COLOR}10` }}>
                   View All Services →
                 </Link>
               </div>
@@ -198,23 +176,6 @@ export default function AIGeoPage() {
         <ConsultationSection />
 
       </div>
-
-      <footer className="mt-12 border-t border-slate-200 bg-white">
-        <div className="max-w-7xl mx-auto px-6 py-8 flex flex-wrap items-center justify-between gap-4">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
-              <svg viewBox="0 0 24 24" fill="none" className="w-4 h-4"><circle cx="12" cy="12" r="9" stroke="white" strokeWidth="1.5" /><path d="M4 12 Q8 6 12 12 Q16 18 20 12" stroke="white" strokeWidth="1.8" fill="none" strokeLinecap="round" /></svg>
-            </div>
-            <span className="text-sm font-bold text-slate-800">Deep Earth Science</span>
-          </div>
-          <div className="flex items-center gap-5 text-xs text-slate-500">
-            <a href="mailto:DeepEarthScience@email.com" className="flex items-center gap-1 hover:text-blue-600 transition-colors"><Mail size={11} /> DeepEarthScience@email.com</a>
-            <a href="tel:+91XXXXXXXXXX" className="flex items-center gap-1 hover:text-blue-600 transition-colors"><Phone size={11} /> +91 XXXX XXX XXX</a>
-            <span className="flex items-center gap-1"><MapPin size={11} /> India</span>
-          </div>
-          <Link href="/" className="text-xs text-blue-600 hover:underline font-semibold">← Back to Home</Link>
-        </div>
-      </footer>
     </div>
   );
 }
