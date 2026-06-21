@@ -592,10 +592,10 @@ export default function Navbar() {
 
           {/* GEO+ LIVE */}
           <li>
-            <Link href="/live" className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg ml-1 text-[16px] font-bold transition-all hover:opacity-85">
+            <a href="https://www.youtube.com/@earthscience_lab" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg ml-1 text-[16px] font-bold transition-all hover:opacity-85">
               <span style={{ color: TEXT_HI }}>GEO+</span>
               <span className="px-1.5 py-0.5 rounded text-[10px] font-black uppercase tracking-widest" style={{ border: "1.5px solid #ef4444", color: "#ef4444", lineHeight: 1 }}>LIVE</span>
-            </Link>
+            </a>
           </li>
 
           {/* Divider */}
