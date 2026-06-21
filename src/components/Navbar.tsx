@@ -459,7 +459,7 @@ export default function Navbar() {
               className="flex items-center gap-1 px-3.5 py-2 rounded-lg transition-all text-[16px] font-semibold"
               style={navBtn(svc.open)}
             >
-              Services
+              Our Services
               <ChevronDown size={12} className={`transition-transform duration-200 ${svc.open ? "rotate-180" : ""}`} style={{ color: TEXT_MID }} />
             </button>
             {svc.open && (
@@ -504,7 +504,7 @@ export default function Navbar() {
               className="flex items-center gap-1 px-3.5 py-2 rounded-lg transition-all text-[16px] font-semibold whitespace-nowrap"
               style={navBtn(news.open)}
             >
-              News &amp; Events
+              News &amp; Updates
               <ChevronDown size={12} className={`transition-transform duration-200 ${news.open ? "rotate-180" : ""}`} style={{ color: TEXT_MID }} />
             </button>
             {news.open && (
@@ -689,7 +689,7 @@ export default function Navbar() {
                 style={{ color: newsMob ? "#1d9e75" : TEXT_HI }}
               >
                 <span className="flex items-center gap-2">
-                  <IconNews size={14} color="#1d9e75" stroke={1.7} /> News &amp; Events
+                  <IconNews size={14} color="#1d9e75" stroke={1.7} /> News &amp; Updates
                 </span>
                 <ChevronDown size={15} className={`transition-transform duration-200 ${newsMob ? "rotate-180" : ""}`} style={{ color: "#1d9e75" }} />
               </button>
