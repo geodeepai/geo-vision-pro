@@ -384,400 +384,358 @@ export default function Navbar() {
   }
 
   return (
-    <nav
-      className="fixed top-0 left-0 right-0 z-50"
-      style={{ background: NAV_BG, borderBottom: `1px solid ${NAV_BDR}`, backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)" }}
-    >
-      {/* ── Desktop bar ─────────────────────────────────────────── */}
-      <div className="relative h-14 flex items-center px-5 sm:px-8">
+    <>
+      {/* Spacer so page content starts below the floating bar */}
+      <div style={{ height: 72 }} aria-hidden />
 
-        {/* LEFT: Explore + Search */}
-        <div className="hidden lg:flex items-center gap-3 z-10">
+      <nav
+        className="fixed z-50"
+        style={{
+          top: 12,
+          left: "50%",
+          transform: "translateX(-50%)",
+          width: "calc(100% - 24px)",
+          maxWidth: 1200,
+          borderRadius: 16,
+          background: "rgba(8,10,18,0.82)",
+          backdropFilter: "blur(28px)",
+          WebkitBackdropFilter: "blur(28px)",
+          border: "1px solid rgba(255,255,255,0.09)",
+          boxShadow: "0 8px 40px rgba(0,0,0,0.45), 0 1px 0 rgba(255,255,255,0.05) inset",
+        }}
+      >
+        {/* ── Desktop bar ─────────────────────────────────────────── */}
+        <div className="hidden lg:flex items-center gap-2 px-4 h-14">
 
-          {/* Explore dropdown */}
-          <li ref={explore.ref} className="list-none relative">
-            <button
-              onMouseEnter={explore.enter} onMouseLeave={explore.leave} onClick={explore.toggle}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-all text-[16px] font-bold tracking-wide"
-              style={navBtn(explore.open)}
-            >
-              <Compass size={14} strokeWidth={2} style={{ color: TEXT_MID }} />
-              Explore
-            </button>
-            {explore.open && (
-              <div
-                onMouseEnter={explore.enter} onMouseLeave={explore.leave}
-                className="absolute top-full left-0 mt-2 w-48 rounded-xl overflow-hidden"
-                style={{ background: PANEL_BG, border: `1px solid ${PANEL_BDR}`, boxShadow: "0 20px 60px rgba(0,0,0,0.5)", animation: "fadeSlideDown 0.15s ease-out forwards" }}
-              >
-                <p className="px-4 pt-3 pb-2 text-[10px] font-black uppercase tracking-widest" style={{ color: TEXT_MID }}>Quick Links</p>
-                {EXPLORE_SECTIONS.map(s => (
-                  <a key={s.label} href={s.href} onClick={explore.close}
-                    className="flex items-center gap-2 px-4 py-2 text-[13px] font-medium transition-colors"
-                    style={{ color: TEXT_HI }}
-                    onMouseEnter={e => (e.currentTarget.style.background = HOVER_BG)}
-                    onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
-                  >
-                    <span style={{ width: 4, height: 4, borderRadius: "50%", background: "#60a5fa", opacity: 0.6, flexShrink: 0 }} />
-                    {s.label}
-                  </a>
-                ))}
-              </div>
-            )}
-          </li>
+          {/* LEFT: Logo */}
+          <a href="/" className="flex items-center gap-2.5 mr-4 flex-shrink-0" aria-label="DeepEarthScience Home">
+            <div className="w-8 h-8 rounded-xl flex items-center justify-center" style={{ background: "linear-gradient(135deg,#2563eb,#4f46e5)", boxShadow: "0 0 16px rgba(79,70,229,0.45)" }}>
+              <svg viewBox="0 0 24 24" fill="none" className="w-[18px] h-[18px]">
+                <circle cx="12" cy="12" r="9" stroke="white" strokeWidth="1.5" />
+                <path d="M4 12 Q8 6 12 12 Q16 18 20 12" stroke="white" strokeWidth="1.8" fill="none" strokeLinecap="round" />
+                <circle cx="12" cy="12" r="2" fill="white" />
+              </svg>
+            </div>
+            <span className="font-bold text-[15px] tracking-tight" style={{ color: "#fff" }}>
+              DeepEarth<span style={{ color: "#60a5fa" }}>Science</span>
+            </span>
+          </a>
 
-          {/* Search */}
-          <SearchBox />
-        </div>
+          {/* CENTER: Nav links */}
+          <ul className="flex items-center gap-0.5 flex-1 justify-center">
 
-        {/* CENTER: Logo */}
-        <a href="#home" className="absolute left-1/2 -translate-x-1/2 flex items-center gap-2.5 z-10" aria-label="DeepEarthScience Home">
-          <div className="w-8 h-8 rounded-lg flex items-center justify-center shadow-lg" style={{ background: "linear-gradient(135deg,#2563eb,#4f46e5)" }}>
-            <svg viewBox="0 0 24 24" fill="none" className="w-[18px] h-[18px]">
-              <circle cx="12" cy="12" r="9" stroke="white" strokeWidth="1.5" />
-              <path d="M4 12 Q8 6 12 12 Q16 18 20 12" stroke="white" strokeWidth="1.8" fill="none" strokeLinecap="round" />
-              <circle cx="12" cy="12" r="2" fill="white" />
-            </svg>
-          </div>
-          <span className="font-bold text-[16px] tracking-tight hidden sm:inline" style={{ color: "#fff" }}>
-            DeepEarth<span style={{ color: "#60a5fa" }}>Science</span>
-          </span>
-        </a>
-
-        {/* RIGHT: Nav items */}
-        <ul className="hidden lg:flex items-center gap-0.5 ml-auto z-10">
-
-          {/* Services */}
-          <li ref={svc.ref} className="relative">
-            <button onMouseEnter={svc.enter} onMouseLeave={svc.leave} onClick={svc.toggle}
-              className="flex items-center gap-1 px-3.5 py-2 rounded-lg transition-all text-[16px] font-semibold"
-              style={navBtn(svc.open)}
-            >
-              Our Services
-              <ChevronDown size={12} className={`transition-transform duration-200 ${svc.open ? "rotate-180" : ""}`} style={{ color: TEXT_MID }} />
-            </button>
-            {svc.open && (
-              <div onMouseEnter={svc.enter} onMouseLeave={svc.leave}
-                className="absolute top-full right-0 mt-2 w-[min(580px,90vw)] rounded-2xl overflow-hidden"
-                style={{ background: PANEL_BG, border: `1px solid ${PANEL_BDR}`, boxShadow: "0 24px 72px rgba(0,0,0,0.55)", animation: "fadeSlideDown 0.17s ease-out forwards" }}
-              >
-                <div className="px-5 py-3 flex items-center justify-between" style={{ borderBottom: `1px solid ${PANEL_BDR}`, background: "rgba(255,255,255,0.03)" }}>
-                  <div>
-                    <p className="text-sm font-black" style={{ color: TEXT_HI }}>Our Services</p>
-                    <p className="text-[11px] mt-0.5" style={{ color: TEXT_MID }}>Click any service to explore full details</p>
-                  </div>
-                  <Link href="/consultancy" onClick={svc.close} className="flex items-center gap-1 text-xs font-bold text-blue-400 hover:text-blue-300">
-                    View All <ArrowRight size={12} />
-                  </Link>
-                </div>
-                <div className="grid grid-cols-3 gap-px" style={{ background: PANEL_BDR }}>
-                  {SERVICE_LINKS.map(s => (
-                    <Link key={s.label} href={s.href} onClick={svc.close}
-                      className="flex items-start p-4 transition-all group"
-                      style={{ background: PANEL_BG }}
-                      onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,0.05)")}
-                      onMouseLeave={e => (e.currentTarget.style.background = PANEL_BG)}
-                    >
-                      <p className="font-bold text-[12.5px] leading-snug group-hover:text-blue-400 transition-colors" style={{ color: TEXT_HI }}>{s.label}</p>
-                    </Link>
-                  ))}
-                </div>
-                <div className="px-5 py-2.5 flex items-center gap-2" style={{ borderTop: `1px solid ${PANEL_BDR}`, background: "rgba(255,255,255,0.02)" }}>
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                  <p className="text-[11px]" style={{ color: TEXT_MID }}>
-                    All services available <span style={{ color: TEXT_HI, fontWeight: 600 }}>online & on-site</span> across India
-                  </p>
-                </div>
-              </div>
-            )}
-          </li>
-
-          {/* News & Events */}
-          <li ref={news.ref} className="relative">
-            <button onMouseEnter={news.enter} onMouseLeave={news.leave} onClick={news.toggle}
-              className="flex items-center gap-1 px-3.5 py-2 rounded-lg transition-all text-[16px] font-semibold whitespace-nowrap"
-              style={navBtn(news.open)}
-            >
-              News &amp; Updates
-              <ChevronDown size={12} className={`transition-transform duration-200 ${news.open ? "rotate-180" : ""}`} style={{ color: TEXT_MID }} />
-            </button>
-            {news.open && (
-              <div onMouseEnter={news.enter} onMouseLeave={news.leave}
-                className="absolute top-full right-0 mt-2 w-[min(540px,92vw)] rounded-2xl overflow-hidden"
-                style={{ background: PANEL_BG, border: `1px solid ${PANEL_BDR}`, boxShadow: "0 24px 72px rgba(0,0,0,0.55)", animation: "fadeSlideDown 0.17s ease-out forwards" }}
-              >
-                <div className="px-5 py-3.5 flex items-center justify-between" style={{ borderBottom: "1px solid rgba(29,158,117,0.22)", background: "rgba(29,158,117,0.07)" }}>
-                  <div className="flex items-center gap-2.5">
-                    <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: "rgba(29,158,117,0.20)", border: "1px solid rgba(29,158,117,0.35)" }}>
-                      <IconNews size={15} color="#1d9e75" stroke={1.8} />
-                    </div>
-                    <div>
-                      <p className="text-sm font-black" style={{ color: TEXT_HI }}>News &amp; Updates</p>
-                      <p className="text-[11px]" style={{ color: TEXT_MID }}>Stay informed with Deep Earth Science</p>
-                    </div>
-                  </div>
-                  <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[9px] font-black uppercase tracking-widest" style={{ background: "rgba(29,158,117,0.18)", color: "#1d9e75", border: "1px solid rgba(29,158,117,0.35)" }}>
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#1d9e75] animate-pulse inline-block" /> Live
-                  </span>
-                </div>
-                <div className="grid grid-cols-2 p-3 gap-0.5">
-                  {NEWS_LINKS.map(({ label, href, icon: Icon, desc }) => (
-                    <Link key={label} href={href} onClick={news.close}
-                      className="group flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition-all"
-                      onMouseEnter={e => (e.currentTarget.style.background = "rgba(29,158,117,0.09)")}
-                      onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
-                    >
-                      <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: "rgba(255,255,255,0.06)", border: `1px solid ${PANEL_BDR}` }}>
-                        <Icon size={16} color="#1d9e75" stroke={1.6} />
-                      </div>
-                      <div className="min-w-0">
-                        <p className="text-[12.5px] font-bold leading-none mb-0.5 group-hover:text-[#1d9e75] transition-colors" style={{ color: TEXT_HI }}>{label}</p>
-                        <p className="text-[10px] leading-snug truncate" style={{ color: TEXT_MID }}>{desc}</p>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-                <div className="px-5 py-2.5 flex items-center justify-between" style={{ borderTop: "1px solid rgba(29,158,117,0.15)", background: "rgba(0,0,0,0.25)" }}>
-                  <p className="text-[10px]" style={{ color: TEXT_MID }}>Fresh content published weekly</p>
-                  <Link href="/news" onClick={news.close} className="flex items-center gap-1 text-[11px] font-bold text-[#1d9e75] hover:text-emerald-400">
-                    Subscribe <ArrowRight size={11} />
-                  </Link>
-                </div>
-              </div>
-            )}
-          </li>
-
-          {/* Learn */}
-          <li ref={learn.ref} className="relative">
-            <button onMouseEnter={learn.enter} onMouseLeave={learn.leave} onClick={learn.toggle}
-              className="flex items-center gap-1 px-3.5 py-2 rounded-lg transition-all text-[16px] font-semibold"
-              style={navBtn(learn.open)}
-            >
-              Learn
-              <ChevronDown size={12} className={`transition-transform duration-200 ${learn.open ? "rotate-180" : ""}`} style={{ color: TEXT_MID }} />
-            </button>
-            {learn.open && (
-              <div onMouseEnter={learn.enter} onMouseLeave={learn.leave}
-                className="absolute top-full right-0 mt-2 w-52 rounded-xl overflow-hidden"
-                style={{ background: PANEL_BG, border: `1px solid ${PANEL_BDR}`, boxShadow: "0 16px 48px rgba(0,0,0,0.50)", animation: "fadeSlideDown 0.17s ease-out forwards" }}
-              >
-                <div className="px-4 py-3 flex items-center justify-between" style={{ borderBottom: `1px solid ${PANEL_BDR}` }}>
-                  <span className="text-sm font-black" style={{ color: TEXT_HI }}>Learn</span>
-                  <Link href="/learn" onClick={learn.close}
-                    className="w-6 h-6 rounded-full flex items-center justify-center bg-[#1d9e75] hover:opacity-90">
-                    <ArrowRight size={12} color="#fff" />
-                  </Link>
-                </div>
-                <div className="py-1.5">
-                  {LEARN_LINKS.map(item => (
-                    <Link key={item.label} href={item.href} onClick={learn.close}
-                      className="block px-4 py-2.5 text-[13px] font-medium transition-all rounded-lg mx-1.5"
-                      style={{ color: TEXT_HI }}
-                      onMouseEnter={e => { e.currentTarget.style.background = "rgba(29,158,117,0.12)"; e.currentTarget.style.color = "#1d9e75"; }}
-                      onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = TEXT_HI; }}
-                    >
-                      {item.label}
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            )}
-          </li>
-
-          {/* GEO+ LIVE */}
-          <li>
-            <a href="https://www.youtube.com/@earthscience_lab" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg ml-1 text-[16px] font-bold transition-all hover:opacity-85">
-              <span style={{ color: TEXT_HI }}>GEO+</span>
-              <span className="px-1.5 py-0.5 rounded text-[10px] font-black uppercase tracking-widest" style={{ border: "1.5px solid #ef4444", color: "#ef4444", lineHeight: 1 }}>LIVE</span>
-            </a>
-          </li>
-
-          {/* Divider */}
-          <li className="w-px h-5 mx-1" style={{ background: PANEL_BDR }} aria-hidden />
-
-          {/* Theme */}
-          <li><ThemeToggle /></li>
-
-          {/* Auth */}
-          <li>
-            {user ? (
-              <div className="flex items-center gap-1">
-                <Link href="/profile"
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[16px] font-semibold transition-all"
-                  style={{ color: TEXT_HI }}
-                  onMouseEnter={e => (e.currentTarget.style.background = HOVER_BG)}
-                  onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
-                >
-                  <UserCircle2 size={14} /> Profile
-                </Link>
-                <button onClick={handleLogout}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[16px] font-semibold transition-all"
-                  style={{ color: TEXT_MID }}
-                  onMouseEnter={e => (e.currentTarget.style.background = HOVER_BG)}
-                  onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
-                >
-                  <LogOut size={13} />
-                </button>
-              </div>
-            ) : (
-              <Link href="/login"
-                className="flex items-center gap-1.5 px-4 py-1.5 rounded-lg text-[16px] font-bold transition-all ml-1 text-white"
-                style={{ background: "rgba(37,99,235,0.85)", boxShadow: "0 2px 12px rgba(37,99,235,0.30)" }}
-                onMouseEnter={e => (e.currentTarget.style.background = "rgba(37,99,235,1)")}
-                onMouseLeave={e => (e.currentTarget.style.background = "rgba(37,99,235,0.85)")}
-              >
-                <LogIn size={13} /> Log In
-              </Link>
-            )}
-          </li>
-        </ul>
-
-        {/* Mobile right */}
-        <div className="lg:hidden flex items-center gap-2 ml-auto z-10">
-          <ThemeToggle />
-          <button
-            className="p-2 rounded-lg transition-all"
-            style={{ color: TEXT_HI, background: HOVER_BG }}
-            onClick={() => setMobileOpen(p => !p)}
-            aria-label="Toggle menu"
-          >
-            {mobileOpen ? <X size={20} /> : <Menu size={20} />}
-          </button>
-        </div>
-      </div>
-
-      {/* ── Mobile drawer ─────────────────────────────────────────── */}
-      {mobileOpen && (
-        <div className="lg:hidden border-t px-5 pb-6 shadow-2xl" style={{ background: PANEL_BG, borderColor: PANEL_BDR }}>
-          {/* Mobile search */}
-          <div className="mt-4 mb-3">
-            <SearchBox mobile onNavigate={closeMobile} />
-          </div>
-
-          <ul className="flex flex-col gap-0.5">
             {/* Services */}
-            <li>
-              <button onClick={() => setSvcMob(p => !p)}
-                className="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-[14px] font-semibold"
-                style={{ color: TEXT_HI }}
+            <li ref={svc.ref} className="relative">
+              <button onMouseEnter={svc.enter} onMouseLeave={svc.leave} onClick={svc.toggle}
+                className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-[13.5px] font-semibold transition-all"
+                style={{ color: svc.open ? "#fff" : TEXT_MID, background: svc.open ? "rgba(255,255,255,0.08)" : "transparent" }}
               >
-                Services
-                <ChevronDown size={15} className={`transition-transform duration-200 ${svcMob ? "rotate-180" : ""}`} style={{ color: TEXT_MID }} />
+                Our Services
+                <ChevronDown size={12} className={`transition-transform duration-200 ${svc.open ? "rotate-180" : ""}`} />
               </button>
-              {svcMob && (
-                <div className="ml-3 mt-1 mb-2 rounded-xl overflow-hidden" style={{ background: "rgba(255,255,255,0.04)", border: `1px solid ${PANEL_BDR}` }}>
-                  {SERVICE_LINKS.map(s => (
-                    <Link key={s.label} href={s.href} onClick={() => { closeMobile(); setSvcMob(false); }}
-                      className="block px-4 py-2.5 text-[13px] font-medium transition-colors hover:text-blue-400"
-                      style={{ color: TEXT_HI, borderBottom: `1px solid ${PANEL_BDR}` }}
-                    >{s.label}</Link>
-                  ))}
+              {svc.open && (
+                <div onMouseEnter={svc.enter} onMouseLeave={svc.leave}
+                  className="absolute top-full left-1/2 -translate-x-1/2 mt-3 w-[560px] rounded-2xl overflow-hidden"
+                  style={{ background: PANEL_BG, border: `1px solid ${PANEL_BDR}`, boxShadow: "0 24px 72px rgba(0,0,0,0.6)", animation: "fadeSlideDown 0.15s ease-out forwards" }}
+                >
+                  <div className="px-5 py-3 flex items-center justify-between" style={{ borderBottom: `1px solid ${PANEL_BDR}` }}>
+                    <p className="text-[11px] font-black uppercase tracking-widest" style={{ color: TEXT_MID }}>Our Services</p>
+                    <Link href="/consultancy" onClick={svc.close} className="flex items-center gap-1 text-[11px] font-bold text-blue-400 hover:text-blue-300 transition-colors">
+                      View All <ArrowRight size={11} />
+                    </Link>
+                  </div>
+                  <div className="grid grid-cols-3 gap-px p-1" style={{ background: "transparent" }}>
+                    {SERVICE_LINKS.map(s => (
+                      <Link key={s.label} href={s.href} onClick={svc.close}
+                        className="flex items-center gap-2.5 px-4 py-3 rounded-xl transition-all group"
+                        onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,0.06)")}
+                        onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
+                      >
+                        <span className="w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0" />
+                        <p className="font-semibold text-[12.5px] leading-snug group-hover:text-blue-400 transition-colors" style={{ color: TEXT_HI }}>{s.label}</p>
+                      </Link>
+                    ))}
+                  </div>
+                  <div className="px-5 py-2.5 flex items-center gap-2" style={{ borderTop: `1px solid ${PANEL_BDR}` }}>
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                    <p className="text-[11px]" style={{ color: TEXT_MID }}>Available <span style={{ color: TEXT_HI, fontWeight: 600 }}>online & on-site</span> across India</p>
+                  </div>
                 </div>
               )}
             </li>
 
-            {/* News */}
-            <li>
-              <button onClick={() => setNewsMob(p => !p)}
-                className="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-[14px] font-semibold"
-                style={{ color: newsMob ? "#1d9e75" : TEXT_HI }}
+            {/* News & Updates */}
+            <li ref={news.ref} className="relative">
+              <button onMouseEnter={news.enter} onMouseLeave={news.leave} onClick={news.toggle}
+                className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-[13.5px] font-semibold transition-all whitespace-nowrap"
+                style={{ color: news.open ? "#fff" : TEXT_MID, background: news.open ? "rgba(255,255,255,0.08)" : "transparent" }}
               >
-                <span className="flex items-center gap-2">
-                  <IconNews size={14} color="#1d9e75" stroke={1.7} /> News &amp; Updates
-                </span>
-                <ChevronDown size={15} className={`transition-transform duration-200 ${newsMob ? "rotate-180" : ""}`} style={{ color: "#1d9e75" }} />
+                News &amp; Updates
+                <ChevronDown size={12} className={`transition-transform duration-200 ${news.open ? "rotate-180" : ""}`} />
               </button>
-              {newsMob && (
-                <div className="ml-3 mt-1 mb-2 rounded-xl overflow-hidden" style={{ background: "rgba(255,255,255,0.04)", border: `1px solid ${PANEL_BDR}` }}>
-                  {NEWS_LINKS.map(({ label, href, icon: Icon }) => (
-                    <Link key={label} href={href} onClick={() => { closeMobile(); setNewsMob(false); }}
-                      className="flex items-center gap-3 px-4 py-2.5 transition-colors"
-                      style={{ borderBottom: `1px solid ${PANEL_BDR}` }}
-                      onMouseEnter={e => (e.currentTarget.style.background = "rgba(29,158,117,0.07)")}
-                      onMouseLeave={e => (e.currentTarget.style.background = "")}
-                    >
-                      <Icon size={14} color="#1d9e75" stroke={1.6} />
-                      <span className="text-[13px] font-medium" style={{ color: TEXT_HI }}>{label}</span>
+              {news.open && (
+                <div onMouseEnter={news.enter} onMouseLeave={news.leave}
+                  className="absolute top-full left-1/2 -translate-x-1/2 mt-3 w-[520px] rounded-2xl overflow-hidden"
+                  style={{ background: PANEL_BG, border: `1px solid ${PANEL_BDR}`, boxShadow: "0 24px 72px rgba(0,0,0,0.6)", animation: "fadeSlideDown 0.15s ease-out forwards" }}
+                >
+                  <div className="px-5 py-3 flex items-center justify-between" style={{ borderBottom: `1px solid ${PANEL_BDR}` }}>
+                    <div className="flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                      <p className="text-[11px] font-black uppercase tracking-widest" style={{ color: TEXT_MID }}>News &amp; Updates</p>
+                    </div>
+                    <Link href="/news" onClick={news.close} className="text-[11px] font-bold text-emerald-400 hover:text-emerald-300 flex items-center gap-1">
+                      All News <ArrowRight size={11} />
                     </Link>
-                  ))}
+                  </div>
+                  <div className="grid grid-cols-2 p-2 gap-0.5">
+                    {NEWS_LINKS.map(({ label, href, icon: Icon, desc }) => (
+                      <Link key={label} href={href} onClick={news.close}
+                        className="group flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition-all"
+                        onMouseEnter={e => (e.currentTarget.style.background = "rgba(29,158,117,0.09)")}
+                        onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
+                      >
+                        <div className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: "rgba(29,158,117,0.15)" }}>
+                          <Icon size={14} color="#1d9e75" stroke={1.6} />
+                        </div>
+                        <div className="min-w-0">
+                          <p className="text-[12px] font-semibold leading-none mb-0.5 group-hover:text-emerald-400 transition-colors" style={{ color: TEXT_HI }}>{label}</p>
+                          <p className="text-[10px] truncate" style={{ color: TEXT_MID }}>{desc}</p>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
                 </div>
               )}
             </li>
 
             {/* Learn */}
-            <li>
-              <button onClick={() => setLearnMob(p => !p)}
-                className="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-[14px] font-semibold"
-                style={{ color: learnMob ? "#1d9e75" : TEXT_HI }}
+            <li ref={learn.ref} className="relative">
+              <button onMouseEnter={learn.enter} onMouseLeave={learn.leave} onClick={learn.toggle}
+                className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-[13.5px] font-semibold transition-all"
+                style={{ color: learn.open ? "#fff" : TEXT_MID, background: learn.open ? "rgba(255,255,255,0.08)" : "transparent" }}
               >
                 Learn
-                <ChevronDown size={15} className={`transition-transform duration-200 ${learnMob ? "rotate-180" : ""}`} style={{ color: learnMob ? "#1d9e75" : TEXT_MID }} />
+                <ChevronDown size={12} className={`transition-transform duration-200 ${learn.open ? "rotate-180" : ""}`} />
               </button>
-              {learnMob && (
-                <div className="ml-3 mt-1 mb-2 rounded-xl overflow-hidden" style={{ background: "rgba(255,255,255,0.04)", border: `1px solid ${PANEL_BDR}` }}>
-                  {LEARN_LINKS.map(item => (
-                    <Link key={item.label} href={item.href} onClick={() => { closeMobile(); setLearnMob(false); }}
-                      className="block px-4 py-2.5 text-[13px] font-medium transition-colors"
-                      style={{ color: TEXT_HI, borderBottom: `1px solid ${PANEL_BDR}` }}
-                      onMouseEnter={e => { e.currentTarget.style.color = "#1d9e75"; }}
-                      onMouseLeave={e => { e.currentTarget.style.color = TEXT_HI; }}
-                    >{item.label}</Link>
-                  ))}
+              {learn.open && (
+                <div onMouseEnter={learn.enter} onMouseLeave={learn.leave}
+                  className="absolute top-full left-1/2 -translate-x-1/2 mt-3 w-52 rounded-2xl overflow-hidden"
+                  style={{ background: PANEL_BG, border: `1px solid ${PANEL_BDR}`, boxShadow: "0 16px 48px rgba(0,0,0,0.55)", animation: "fadeSlideDown 0.15s ease-out forwards" }}
+                >
+                  <div className="p-2">
+                    {LEARN_LINKS.map(item => (
+                      <Link key={item.label} href={item.href} onClick={learn.close}
+                        className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-[13px] font-semibold transition-all"
+                        style={{ color: TEXT_HI }}
+                        onMouseEnter={e => { e.currentTarget.style.background = "rgba(29,158,117,0.10)"; e.currentTarget.style.color = "#34d399"; }}
+                        onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = TEXT_HI; }}
+                      >
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 flex-shrink-0" />
+                        {item.label}
+                      </Link>
+                    ))}
+                  </div>
                 </div>
               )}
             </li>
 
-            {/* Quick links grid */}
+            {/* GEO+ LIVE */}
             <li>
-              <p className="px-3 pt-3 pb-1.5 text-[10px] font-black uppercase tracking-widest" style={{ color: TEXT_MID }}>Quick Links</p>
-              <div className="grid grid-cols-3 gap-1.5">
-                {EXPLORE_SECTIONS.map(s => (
-                  <a key={s.label} href={s.href} onClick={closeMobile}
-                    className="px-3 py-2 rounded-lg text-[12px] font-medium text-center transition-colors"
-                    style={{ background: "rgba(255,255,255,0.05)", color: TEXT_HI, border: `1px solid ${PANEL_BDR}` }}
-                    onMouseEnter={e => (e.currentTarget.style.color = "#60a5fa")}
-                    onMouseLeave={e => (e.currentTarget.style.color = TEXT_HI)}
-                  >{s.label}</a>
-                ))}
-              </div>
+              <a href="https://www.youtube.com/@earthscience_lab" target="_blank" rel="noopener noreferrer"
+                className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-[13.5px] font-semibold transition-all"
+                style={{ color: TEXT_MID }}
+                onMouseEnter={e => { e.currentTarget.style.color = "#ef4444"; e.currentTarget.style.background = "rgba(239,68,68,0.08)"; }}
+                onMouseLeave={e => { e.currentTarget.style.color = TEXT_MID; e.currentTarget.style.background = "transparent"; }}
+              >
+                GEO+
+                <span className="px-1.5 py-0.5 rounded-md text-[9px] font-black uppercase tracking-widest" style={{ border: "1px solid rgba(239,68,68,0.6)", color: "#ef4444", background: "rgba(239,68,68,0.10)" }}>
+                  LIVE
+                </span>
+              </a>
             </li>
           </ul>
 
-          {/* Auth */}
-          <div className="mt-4 pt-4 space-y-2" style={{ borderTop: `1px solid ${PANEL_BDR}` }}>
+          {/* RIGHT: Search + Theme + Auth */}
+          <div className="flex items-center gap-2 flex-shrink-0">
+            <SearchBox />
+            <div style={{ width: 1, height: 20, background: "rgba(255,255,255,0.10)" }} aria-hidden />
+            <ThemeToggle />
             {user ? (
-              <>
-                <Link href="/profile" onClick={closeMobile}
-                  className="flex items-center justify-center gap-2 w-full px-4 py-2.5 rounded-xl text-sm font-semibold"
-                  style={{ background: "rgba(255,255,255,0.06)", border: `1px solid ${PANEL_BDR}`, color: TEXT_HI }}
+              <div className="flex items-center gap-1">
+                <Link href="/profile"
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[13px] font-semibold transition-all"
+                  style={{ color: TEXT_MID }}
+                  onMouseEnter={e => { e.currentTarget.style.background = HOVER_BG; e.currentTarget.style.color = "#fff"; }}
+                  onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = TEXT_MID; }}
                 >
-                  <UserCircle2 size={15} /> My Profile
+                  <UserCircle2 size={14} /> Profile
                 </Link>
-                <button onClick={() => { closeMobile(); handleLogout(); }}
-                  className="flex items-center justify-center gap-2 w-full px-4 py-2.5 rounded-xl text-sm font-semibold"
-                  style={{ background: "rgba(255,255,255,0.06)", border: `1px solid ${PANEL_BDR}`, color: TEXT_MID }}
+                <button onClick={handleLogout}
+                  className="p-2 rounded-xl transition-all"
+                  style={{ color: TEXT_MID }}
+                  onMouseEnter={e => { e.currentTarget.style.background = HOVER_BG; e.currentTarget.style.color = "#fff"; }}
+                  onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = TEXT_MID; }}
                 >
-                  <LogOut size={15} /> Log Out
+                  <LogOut size={14} />
                 </button>
-              </>
+              </div>
             ) : (
-              <Link href="/login" onClick={closeMobile}
-                className="flex items-center justify-center gap-2 w-full px-4 py-2.5 rounded-xl text-sm font-bold text-white"
-                style={{ background: "linear-gradient(135deg,#2563eb,#4f46e5)", boxShadow: "0 4px 16px rgba(37,99,235,0.30)" }}
+              <Link href="/login"
+                className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-[13px] font-bold text-white transition-all"
+                style={{ background: "linear-gradient(135deg,#2563eb,#4f46e5)", boxShadow: "0 2px 12px rgba(79,70,229,0.35)" }}
+                onMouseEnter={e => (e.currentTarget.style.opacity = "0.88")}
+                onMouseLeave={e => (e.currentTarget.style.opacity = "1")}
               >
-                <LogIn size={15} /> Log In
+                <LogIn size={13} /> Log In
               </Link>
             )}
           </div>
         </div>
-      )}
+
+        {/* ── Mobile bar ───────────────────────────────────────────── */}
+        <div className="lg:hidden flex items-center justify-between px-4 h-14">
+          <a href="/" className="flex items-center gap-2.5" aria-label="DeepEarthScience Home">
+            <div className="w-8 h-8 rounded-xl flex items-center justify-center" style={{ background: "linear-gradient(135deg,#2563eb,#4f46e5)" }}>
+              <svg viewBox="0 0 24 24" fill="none" className="w-[18px] h-[18px]">
+                <circle cx="12" cy="12" r="9" stroke="white" strokeWidth="1.5" />
+                <path d="M4 12 Q8 6 12 12 Q16 18 20 12" stroke="white" strokeWidth="1.8" fill="none" strokeLinecap="round" />
+                <circle cx="12" cy="12" r="2" fill="white" />
+              </svg>
+            </div>
+            <span className="font-bold text-[15px]" style={{ color: "#fff" }}>
+              DeepEarth<span style={{ color: "#60a5fa" }}>Science</span>
+            </span>
+          </a>
+          <div className="flex items-center gap-2">
+            <ThemeToggle />
+            <button
+              className="p-2 rounded-xl transition-all"
+              style={{ color: TEXT_HI, background: HOVER_BG }}
+              onClick={() => setMobileOpen(p => !p)}
+              aria-label="Toggle menu"
+            >
+              {mobileOpen ? <X size={18} /> : <Menu size={18} />}
+            </button>
+          </div>
+        </div>
+
+        {/* ── Mobile drawer ─────────────────────────────────────────── */}
+        {mobileOpen && (
+          <div className="lg:hidden border-t px-4 pb-5" style={{ borderColor: "rgba(255,255,255,0.08)" }}>
+            <div className="mt-3 mb-3">
+              <SearchBox mobile onNavigate={closeMobile} />
+            </div>
+
+            <div className="flex flex-col gap-0.5">
+              {/* Services */}
+              <button onClick={() => setSvcMob(p => !p)}
+                className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-[14px] font-semibold"
+                style={{ color: TEXT_HI }}
+              >
+                Our Services
+                <ChevronDown size={14} className={`transition-transform ${svcMob ? "rotate-180" : ""}`} style={{ color: TEXT_MID }} />
+              </button>
+              {svcMob && (
+                <div className="ml-2 mb-1 rounded-xl overflow-hidden" style={{ background: "rgba(255,255,255,0.04)", border: `1px solid ${PANEL_BDR}` }}>
+                  {SERVICE_LINKS.map(s => (
+                    <Link key={s.label} href={s.href} onClick={() => { closeMobile(); setSvcMob(false); }}
+                      className="flex items-center gap-2.5 px-4 py-2.5 text-[13px] font-medium transition-colors"
+                      style={{ color: TEXT_HI, borderBottom: `1px solid ${PANEL_BDR}` }}
+                      onMouseEnter={e => (e.currentTarget.style.color = "#60a5fa")}
+                      onMouseLeave={e => (e.currentTarget.style.color = TEXT_HI)}
+                    >
+                      <span className="w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0" />
+                      {s.label}
+                    </Link>
+                  ))}
+                </div>
+              )}
+
+              {/* News */}
+              <button onClick={() => setNewsMob(p => !p)}
+                className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-[14px] font-semibold"
+                style={{ color: TEXT_HI }}
+              >
+                News &amp; Updates
+                <ChevronDown size={14} className={`transition-transform ${newsMob ? "rotate-180" : ""}`} style={{ color: TEXT_MID }} />
+              </button>
+              {newsMob && (
+                <div className="ml-2 mb-1 rounded-xl overflow-hidden" style={{ background: "rgba(255,255,255,0.04)", border: `1px solid ${PANEL_BDR}` }}>
+                  {NEWS_LINKS.map(({ label, href, icon: Icon }) => (
+                    <Link key={label} href={href} onClick={() => { closeMobile(); setNewsMob(false); }}
+                      className="flex items-center gap-3 px-4 py-2.5 text-[13px] font-medium transition-colors"
+                      style={{ color: TEXT_HI, borderBottom: `1px solid ${PANEL_BDR}` }}
+                    >
+                      <Icon size={13} color="#1d9e75" stroke={1.6} />
+                      {label}
+                    </Link>
+                  ))}
+                </div>
+              )}
+
+              {/* Learn */}
+              <button onClick={() => setLearnMob(p => !p)}
+                className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-[14px] font-semibold"
+                style={{ color: TEXT_HI }}
+              >
+                Learn
+                <ChevronDown size={14} className={`transition-transform ${learnMob ? "rotate-180" : ""}`} style={{ color: TEXT_MID }} />
+              </button>
+              {learnMob && (
+                <div className="ml-2 mb-1 rounded-xl overflow-hidden" style={{ background: "rgba(255,255,255,0.04)", border: `1px solid ${PANEL_BDR}` }}>
+                  {LEARN_LINKS.map(item => (
+                    <Link key={item.label} href={item.href} onClick={() => { closeMobile(); setLearnMob(false); }}
+                      className="block px-4 py-2.5 text-[13px] font-medium transition-colors"
+                      style={{ color: TEXT_HI, borderBottom: `1px solid ${PANEL_BDR}` }}
+                    >{item.label}</Link>
+                  ))}
+                </div>
+              )}
+
+              <a href="https://www.youtube.com/@earthscience_lab" target="_blank" rel="noopener noreferrer"
+                onClick={closeMobile}
+                className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-[14px] font-semibold"
+                style={{ color: "#ef4444" }}
+              >
+                GEO+ <span className="text-[10px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded" style={{ border: "1px solid rgba(239,68,68,0.5)", background: "rgba(239,68,68,0.10)" }}>LIVE</span>
+              </a>
+            </div>
+
+            <div className="mt-3 pt-3 space-y-2" style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}>
+              {user ? (
+                <>
+                  <Link href="/profile" onClick={closeMobile}
+                    className="flex items-center justify-center gap-2 w-full px-4 py-2.5 rounded-xl text-sm font-semibold"
+                    style={{ background: "rgba(255,255,255,0.06)", border: `1px solid ${PANEL_BDR}`, color: TEXT_HI }}
+                  >
+                    <UserCircle2 size={15} /> My Profile
+                  </Link>
+                  <button onClick={() => { closeMobile(); handleLogout(); }}
+                    className="flex items-center justify-center gap-2 w-full px-4 py-2.5 rounded-xl text-sm font-semibold"
+                    style={{ background: "rgba(255,255,255,0.06)", border: `1px solid ${PANEL_BDR}`, color: TEXT_MID }}
+                  >
+                    <LogOut size={15} /> Log Out
+                  </button>
+                </>
+              ) : (
+                <Link href="/login" onClick={closeMobile}
+                  className="flex items-center justify-center gap-2 w-full px-4 py-2.5 rounded-xl text-sm font-bold text-white"
+                  style={{ background: "linear-gradient(135deg,#2563eb,#4f46e5)", boxShadow: "0 4px 16px rgba(37,99,235,0.30)" }}
+                >
+                  <LogIn size={15} /> Log In
+                </Link>
+              )}
+            </div>
+          </div>
+        )}
+      </nav>
 
       <style>{`
         @keyframes fadeSlideDown {
-          from { opacity: 0; transform: translateY(-6px); }
+          from { opacity: 0; transform: translateY(-8px); }
           to   { opacity: 1; transform: translateY(0); }
         }
       `}</style>
-    </nav>
+    </>
   );
 }
