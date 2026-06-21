@@ -20,8 +20,8 @@ function YTIcon({ size = 20, color = "#fff" }: { size?: number; color?: string }
    YOUTUBE_CHANNEL_ID  →  find it at youtube.com → your channel → About
    YOUTUBE_CHANNEL_URL →  your channel's public URL (/@handle or /channel/ID)
 ───────────────────────────────────────────────────────────────────── */
-const YOUTUBE_CHANNEL_URL = "https://www.youtube.com/@earthscience_lab";
-const YOUTUBE_LIVE_URL    = "https://www.youtube.com/@earthscience_lab/live";
+const YOUTUBE_CHANNEL_URL = "https://www.youtube.com/@DeepEarthScience";
+const YOUTUBE_LIVE_URL    = "https://www.youtube.com/@DeepEarthScience/live";
 
 const UPCOMING = [
   { date: "Coming Soon", title: "Google Earth Engine: Beginner to Advanced",  desc: "Live workshop — cloud-based geospatial analysis" },
@@ -167,7 +167,7 @@ export default function LivePage() {
 
           <p className="relative z-10 text-white font-black text-xl mb-2">Watch Live on YouTube</p>
           <p className="relative z-10 text-sm mb-6" style={{ color: "rgba(255,255,255,0.55)" }}>
-            @earthscience_lab — Click to open the live stream in YouTube
+            @DeepEarthScience — Click to open the live stream in YouTube
           </p>
 
           <div
