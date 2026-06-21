@@ -1,9 +1,9 @@
-export const dynamic = "force-dynamic";
+﻿export const dynamic = "force-dynamic";
 
 export async function GET() {
   try {
     const res = await fetch(
-      "https://api.counterapi.dev/v1/geovisionpro-site/visitors/hit",
+      "https://api.counterapi.dev/v1/DeepEarthScience-site/visitors/hit",
       { cache: "no-store" }
     );
     if (!res.ok) throw new Error("counter api failed");

@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { ArrowLeft, Mail, MessageCircle, ChevronDown } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -31,7 +31,7 @@ const FAQ_GROUPS: { category: string; items: { q: string; a: string }[] }[] = [
     category: "Technical Issues",
     items: [
       { q: "The site isn't loading properly — what should I try?", a: "Try refreshing the page or clearing your browser cache. If the issue persists, contact our support team with details of what you were doing and any error message you saw." },
-      { q: "I'm not receiving emails from GeoVisionPro.", a: "Check your spam/junk folder first. If you still don't see emails, confirm your registered email address under Edit Profile and reach out to support." },
+      { q: "I'm not receiving emails from DeepEarthScience.", a: "Check your spam/junk folder first. If you still don't see emails, confirm your registered email address under Edit Profile and reach out to support." },
     ],
   },
 ];

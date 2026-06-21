@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { useState } from "react";
 import { downloadEventPDF, downloadICS } from "@/lib/gvpPDF";
 
@@ -27,7 +27,7 @@ const EVENTS: LearnEvent[] = [
     id: 1, title: "Remote Sensing Workshop",
     type: "Workshop", status: "Upcoming",
     date: "05 July 2026", dateISO: "2026-07-05",
-    venue: "GeoVisionPro Office, Kolkata",
+    venue: "DeepEarthScience Office, Kolkata",
     time: "10:00 AM – 05:00 PM",
     fee: "₹1,500 per participant",
     capacity: "30 participants",
@@ -63,15 +63,15 @@ const EVENTS: LearnEvent[] = [
     btnLabel: "Register Now",
   },
   {
-    id: 3, title: "GeoVisionPro Annual Meet 2026",
+    id: 3, title: "DeepEarthScience Annual Meet 2026",
     type: "Conference", status: "Upcoming",
     date: "20 September 2026", dateISO: "2026-09-20",
     venue: "Hotel Lalit Ashok, Bangalore",
     time: "10:00 AM – 08:00 PM",
     fee: "By Invitation / Partner Only",
-    desc: "The GeoVisionPro Annual Meet brings together team members, partners, clients, and stakeholders for a full day of presentations, recognition awards, networking, and strategic planning for the year ahead. Includes evening gala dinner.",
+    desc: "The DeepEarthScience Annual Meet brings together team members, partners, clients, and stakeholders for a full day of presentations, recognition awards, networking, and strategic planning for the year ahead. Includes evening gala dinner.",
     agenda: [
-      "Annual review of GeoVisionPro projects and milestones",
+      "Annual review of DeepEarthScience projects and milestones",
       "Partner and client appreciation awards ceremony",
       "Strategic roadmap presentation for 2027",
       "Networking sessions and breakout discussions",
@@ -88,10 +88,10 @@ const EVENTS: LearnEvent[] = [
     venue: "Bombay Exhibition Centre, Mumbai",
     time: "09:00 AM – 06:00 PM",
     fee: "₹500 (Entry) / Free for students",
-    desc: "India's premier drone and UAV mapping exhibition showcasing the latest drone hardware, software, and survey technologies. GeoVisionPro will be exhibiting at Stall No. B-24 with live drone demonstrations, product launches, and free consultations.",
+    desc: "India's premier drone and UAV mapping exhibition showcasing the latest drone hardware, software, and survey technologies. DeepEarthScience will be exhibiting at Stall No. B-24 with live drone demonstrations, product launches, and free consultations.",
     agenda: [
       "Live drone demonstrations by leading manufacturers",
-      "GeoVisionPro Stall B-24: product launches & free consultations",
+      "DeepEarthScience Stall B-24: product launches & free consultations",
       "Technical seminars on LiDAR and photogrammetry",
       "DGCA regulatory updates and compliance workshop",
       "Networking lunch for registered exhibitors",
@@ -171,14 +171,14 @@ export default function EventsPage() {
         <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-4 text-xs font-bold uppercase tracking-widest"
           style={{ background: "rgba(29,158,117,0.12)", border: "1px solid rgba(29,158,117,0.3)", color: "#1d9e75" }}>
           <span className="w-1.5 h-1.5 rounded-full bg-[#1d9e75] animate-pulse inline-block" />
-          GeoVisionPro Events
+          DeepEarthScience Events
         </div>
         <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-white mb-3 leading-tight">
           Events &amp; Conferences
           <br className="hidden sm:block" /> <span style={{ color: "#1d9e75" }}>Across India</span>
         </h1>
         <p className="text-base max-w-2xl mx-auto leading-relaxed" style={{ color: "#b0c4d8" }}>
-          Join GeoVisionPro at workshops, conferences, expos, and seminars — network with GIS professionals,
+          Join DeepEarthScience at workshops, conferences, expos, and seminars — network with GIS professionals,
           learn from experts, and stay ahead in geospatial technology.
         </p>
       </section>
@@ -376,11 +376,11 @@ export default function EventsPage() {
       <section className="px-4 pb-16 max-w-6xl mx-auto">
         <div className="rounded-2xl p-8 text-center"
           style={{ background: "linear-gradient(135deg,rgba(29,158,117,0.12),rgba(29,158,117,0.05))", border: "1px solid rgba(29,158,117,0.2)" }}>
-          <h2 className="text-white font-black text-2xl mb-2">Organise an Event with GeoVisionPro</h2>
+          <h2 className="text-white font-black text-2xl mb-2">Organise an Event with DeepEarthScience</h2>
           <p className="text-sm mb-5" style={{ color: "#b0c4d8" }}>
             Partner with us to host GIS workshops, training sessions, or conferences at your institution.
           </p>
-          <a href="mailto:events@geovisionpro.com"
+          <a href="mailto:events@DeepEarthScience.com"
             className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-white text-sm"
             style={{ background: "#1d9e75" }}>
             Contact Events Team →

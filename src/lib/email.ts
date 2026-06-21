@@ -1,10 +1,10 @@
-import { Resend } from "resend";
+﻿import { Resend } from "resend";
 
 function getResend() {
   return new Resend(process.env.RESEND_API_KEY);
 }
 
-const FROM = "GeoVisionPro Academy <onboarding@resend.dev>";
+const FROM = "DeepEarthScience Academy <onboarding@resend.dev>";
 
 export interface EnrollmentEmailData {
   studentName: string;
@@ -28,14 +28,14 @@ function wrapper(title: string, bodyHtml: string) {
   <div style="background:#0a1628;padding:32px 16px;font-family:Arial,Helvetica,sans-serif;">
     <div style="max-width:520px;margin:0 auto;background:#0f2035;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.08);">
       <div style="background:linear-gradient(135deg,#22c48a,#1d9e75);padding:20px 28px;">
-        <p style="margin:0;color:#fff;font-weight:800;font-size:18px;">GeoVisionPro Academy</p>
+        <p style="margin:0;color:#fff;font-weight:800;font-size:18px;">DeepEarthScience Academy</p>
       </div>
       <div style="padding:28px;color:#b0c4d8;font-size:14px;line-height:1.6;">
         <h2 style="color:#fff;margin:0 0 16px;font-size:20px;">${title}</h2>
         ${bodyHtml}
       </div>
       <div style="padding:16px 28px;border-top:1px solid rgba(255,255,255,0.08);color:#566b82;font-size:11px;">
-        GeoVisionPro Academy &middot; portal.geovisionpro.com
+        DeepEarthScience Academy &middot; portal.DeepEarthScience.com
       </div>
     </div>
   </div>`;
@@ -59,7 +59,7 @@ export async function sendLearnerConfirmation(data: EnrollmentEmailData) {
        ${detailRow("Payment Method", data.paymentMethod)}
        ${detailRow("Amount Paid", fmt(data.total))}
      </div>
-     <p>Login credentials and your batch details will follow shortly. You can access your course anytime at <strong style="color:#1d9e75;">portal.geovisionpro.com</strong>.</p>`
+     <p>Login credentials and your batch details will follow shortly. You can access your course anytime at <strong style="color:#1d9e75;">portal.DeepEarthScience.com</strong>.</p>`
   );
 
   if (!process.env.RESEND_API_KEY) return;
@@ -120,7 +120,7 @@ export async function sendContactAcknowledgment(data: ContactEmailData) {
   return getResend().emails.send({
     from: FROM,
     to: data.email,
-    subject: "We received your message — GeoVisionPro",
+    subject: "We received your message — DeepEarthScience",
     html,
   });
 }

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { useState } from "react";
 import Link from "next/link";
 import { downloadCourseBrochure, downloadCertBrochure } from "@/lib/gvpPDF";
@@ -253,14 +253,14 @@ export default function AcademyPage() {
         <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-4 text-xs font-bold uppercase tracking-widest"
           style={{ background: "rgba(29,158,117,0.12)", border: "1px solid rgba(29,158,117,0.3)", color: "#1d9e75" }}>
           <span className="w-1.5 h-1.5 rounded-full bg-[#1d9e75] animate-pulse inline-block" />
-          GeoVisionPro Academy
+          DeepEarthScience Academy
         </div>
         <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-white mb-3 leading-tight">
           Learn GIS &amp; Remote Sensing
           <br className="hidden sm:block" /> <span style={{ color: "#1d9e75" }}>from Experts</span>
         </h1>
         <p className="text-base max-w-2xl mx-auto leading-relaxed" style={{ color: "#b0c4d8" }}>
-          GeoVisionPro Academy offers professional courses in GIS, Remote Sensing, Satellite Mapping,
+          DeepEarthScience Academy offers professional courses in GIS, Remote Sensing, Satellite Mapping,
           Drone Survey, and Geospatial Technology — designed for beginners, intermediates, and advanced professionals.
         </p>
       </section>

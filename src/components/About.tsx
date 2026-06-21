@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useRef } from "react";
 import { useInView } from "framer-motion";
@@ -82,7 +82,7 @@ export default function About() {
             Across India
           </h2>
           <p className="text-base leading-relaxed" style={{ color: "var(--body-text)" }}>
-            GeoVision Pro is a premier remote sensing consultancy and geospatial training institute.
+            Deep Earth Science is a premier remote sensing consultancy and geospatial training institute.
             For over 15 years we have translated satellite data, drone imagery, and AI analytics
             into decisions that shape infrastructure, policy, and environmental stewardship.
           </p>
@@ -161,7 +161,7 @@ export default function About() {
               <span className="gradient-text">Real-World Impact</span>
             </h3>
             <p className="leading-relaxed mb-5" style={{ color: "var(--body-text)" }}>
-              Founded by a team of remote sensing scientists and civil engineers, GeoVision Pro was built on a single belief: geospatial intelligence should be accessible, actionable, and affordable for every organisation — from government bodies to startups.
+              Founded by a team of remote sensing scientists and civil engineers, Deep Earth Science was built on a single belief: geospatial intelligence should be accessible, actionable, and affordable for every organisation — from government bodies to startups.
             </p>
             <p className="leading-relaxed mb-8" style={{ color: "var(--body-text)" }}>
               Today our consultants, trainers, and analysts work together across LULC mapping, drone photogrammetry, AI feature extraction, and structural engineering — delivering end-to-end geospatial solutions that are IS-code compliant and stamp-ready.
@@ -195,7 +195,7 @@ export default function About() {
         <div className="mb-20">
           <div className="text-center mb-10">
             <h3 className="text-2xl md:text-3xl font-black mb-2" style={{ color: "var(--heading)" }}>Why Organisations Choose Us</h3>
-            <p className="text-sm" style={{ color: "var(--body-text)" }}>Four pillars that set GeoVision Pro apart</p>
+            <p className="text-sm" style={{ color: "var(--body-text)" }}>Four pillars that set Deep Earth Science apart</p>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {PILLARS.map(({ icon: Icon, title, desc, color }) => (

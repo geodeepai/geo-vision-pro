@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { useState } from "react";
 import { downloadTutorialPDF } from "@/lib/gvpPDF";
 
@@ -184,14 +184,14 @@ export default function TutorialsPage() {
         <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-4 text-xs font-bold uppercase tracking-widest"
           style={{ background: "rgba(29,158,117,0.12)", border: "1px solid rgba(29,158,117,0.3)", color: "#1d9e75" }}>
           <span className="w-1.5 h-1.5 rounded-full bg-[#1d9e75] animate-pulse inline-block" />
-          GeoVisionPro Tutorials
+          DeepEarthScience Tutorials
         </div>
         <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-white mb-3 leading-tight">
           Step-by-Step GIS &amp;
           <br className="hidden sm:block" /> <span style={{ color: "#1d9e75" }}>Remote Sensing Guides</span>
         </h1>
         <p className="text-base max-w-2xl mx-auto leading-relaxed" style={{ color: "#b0c4d8" }}>
-          Practical tutorials written by GeoVisionPro experts. Download each tutorial as a professional PDF
+          Practical tutorials written by DeepEarthScience experts. Download each tutorial as a professional PDF
           reference guide for offline use.
         </p>
       </section>
@@ -318,7 +318,7 @@ export default function TutorialsPage() {
                       </svg>
                       Download PDF ({refStr(tut.id)})
                     </button>
-                    <a href="mailto:academy@geovisionpro.com"
+                    <a href="mailto:academy@DeepEarthScience.com"
                       className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold transition-all"
                       style={{ background: "rgba(255,255,255,0.05)", color: "#b0c4d8", border: "1px solid rgba(255,255,255,0.1)" }}>
                       Ask a Question

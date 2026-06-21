@@ -47,7 +47,7 @@ export default function Footer() {
                 </svg>
               </div>
               <span className="font-bold text-lg" style={{ color: "var(--heading)" }}>
-                GeoVision<span className="text-blue-600">Pro</span>
+                DeepEarth<span className="text-blue-600">Science</span>
               </span>
             </a>
             <p className="text-sm leading-relaxed mb-5 max-w-xs" style={{ color: "var(--body-text)" }}>
@@ -97,8 +97,8 @@ export default function Footer() {
           style={{ background: "var(--card-bg)", border: "1px solid var(--card-border)" }}
         >
           {[
-            { label: "Email", value: "info@geovisionpro.com" },
-            { label: "Training", value: "training@geovisionpro.com" },
+            { label: "Email", value: "info@DeepEarthScience.com" },
+            { label: "Training", value: "training@DeepEarthScience.com" },
             { label: "Coverage", value: "Pan India & Global" },
           ].map(({ label, value }) => (
             <div key={label}>
@@ -110,7 +110,7 @@ export default function Footer() {
 
         {/* Bottom bar */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs pt-6" style={{ borderTop: "1px solid var(--divider)", color: "var(--muted)" }}>
-          <p>&copy; 2026 GeoVision Pro. All rights reserved.</p>
+          <p>&copy; 2026 Deep Earth Science. All rights reserved.</p>
           <VisitorCount />
           <div className="flex gap-4">
             <Link href="/privacy" className="hover:text-blue-600 transition-colors">Privacy</Link>

@@ -135,7 +135,7 @@ function RegisterForm() {
                 <circle cx="12" cy="12" r="2" fill="white" />
               </svg>
             </div>
-            <span className="font-bold text-slate-900">GeoVision<span className="text-blue-600">Pro</span></span>
+            <span className="font-bold text-slate-900">DeepEarth<span className="text-blue-600">Science</span></span>
           </Link>
           <Link href="/" className="hidden lg:flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-900 transition-colors">
             <ArrowLeft size={15} /> Back to site
@@ -158,7 +158,7 @@ function RegisterForm() {
                   </svg>
                 </div>
                 <h2 className="text-2xl font-bold text-slate-900 mb-2">Account Created!</h2>
-                <p className="text-slate-500 mb-2">Welcome to GeoVision Pro, {f.name.split(" ")[0]}.</p>
+                <p className="text-slate-500 mb-2">Welcome to Deep Earth Science, {f.name.split(" ")[0]}.</p>
                 <p className="text-sm text-slate-400 mb-6">Check your inbox to verify your email address.</p>
                 <Link href={loginHref} className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold hover:opacity-90 transition-all">
                   Sign In Now
@@ -168,7 +168,7 @@ function RegisterForm() {
               <>
                 <div className="mb-7">
                   <h1 className="text-3xl font-bold text-slate-900 mb-1">Create Account</h1>
-                  <p className="text-slate-500 text-sm">Join GeoVision Pro to access all courses and consultancy services.</p>
+                  <p className="text-slate-500 text-sm">Join Deep Earth Science to access all courses and consultancy services.</p>
                 </div>
                 <p className="text-xs text-slate-400 mb-6">
                   <span className="text-red-500 font-semibold">*</span> indicates a required field.
@@ -294,7 +294,7 @@ function RegisterForm() {
         </div>
 
         <div className="px-8 py-4 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-400">
-          <span>&copy; 2025 GeoVision Pro</span>
+          <span>&copy; 2025 Deep Earth Science</span>
           <div className="flex gap-4">
             <Link href="/privacy" className="hover:text-slate-600 transition-colors">Privacy Policy</Link>
             <Link href="/terms" className="hover:text-slate-600 transition-colors">Terms of Service</Link>

@@ -490,7 +490,7 @@ export default function EnrollPage() {
             {[
               "Lifetime access to all course materials & future updates",
               "Live doubt-clearing sessions every Saturday",
-              "GeoVisionPro Academy Certificate of Completion",
+              "DeepEarthScience Academy Certificate of Completion",
               "Hands-on projects with real satellite & GIS datasets",
               "WhatsApp batch group & alumni network access",
               "Job placement assistance for graduates",
@@ -643,7 +643,7 @@ export default function EnrollPage() {
                     <span className="underline cursor-pointer" style={{ color: "#1d9e75" }}>Terms & Conditions</span>
                     {" "}and{" "}
                     <span className="underline cursor-pointer" style={{ color: "#1d9e75" }}>Privacy Policy</span>
-                    {" "}of GeoVisionPro Academy. <span style={{ color: "#ef4444" }}>*</span>
+                    {" "}of DeepEarthScience Academy. <span style={{ color: "#ef4444" }}>*</span>
                   </span>
                 </label>
                 <Err k="agreeTerms" />
@@ -915,14 +915,14 @@ export default function EnrollPage() {
 
     /* ── UPI ── */
     if (payMethod === "upi") {
-      const upiPayee = "academy@geovisionpro";
-      const upiStr   = `upi://pay?pa=${upiPayee}&pn=GeoVisionPro%20Academy&am=${total}&cu=INR&tn=Course%20${encodeURIComponent(course.ref)}`;
+      const upiPayee = "academy@deepearthscience";
+      const upiStr   = `upi://pay?pa=${upiPayee}&pn=DeepEarthScience%20Academy&am=${total}&cu=INR&tn=Course%20${encodeURIComponent(course.ref)}`;
       const qrUrl    = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&color=1d9e75&bgcolor=0f2035&data=${encodeURIComponent(upiStr)}`;
 
       const UPI_APPS = [
-        { name: "Google Pay",  link: `gpay://upi/pay?pa=${upiPayee}&pn=GeoVisionPro%20Academy&am=${total}&cu=INR&tn=Enrollment`,   fallback: upiStr },
-        { name: "PhonePe",     link: `phonepe://pay?pa=${upiPayee}&pn=GeoVisionPro%20Academy&am=${total}&cu=INR`,                   fallback: upiStr },
-        { name: "Paytm",       link: `paytmmp://pay?pa=${upiPayee}&pn=GeoVisionPro%20Academy&am=${total}&cu=INR`,                   fallback: upiStr },
+        { name: "Google Pay",  link: `gpay://upi/pay?pa=${upiPayee}&pn=DeepEarthScience%20Academy&am=${total}&cu=INR&tn=Enrollment`,   fallback: upiStr },
+        { name: "PhonePe",     link: `phonepe://pay?pa=${upiPayee}&pn=DeepEarthScience%20Academy&am=${total}&cu=INR`,                   fallback: upiStr },
+        { name: "Paytm",       link: `paytmmp://pay?pa=${upiPayee}&pn=DeepEarthScience%20Academy&am=${total}&cu=INR`,                   fallback: upiStr },
         { name: "BHIM / UPI",  link: upiStr,                                                                                        fallback: upiStr },
       ];
 
@@ -1160,11 +1160,11 @@ export default function EnrollPage() {
               style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}>
               <p className="text-xs font-black uppercase tracking-wider" style={{ color: "#1d9e75" }}>Transfer Details</p>
               {[
-                ["Bank Name",       "GeoVisionPro Academy — HDFC Bank"],
+                ["Bank Name",       "DeepEarthScience Academy — HDFC Bank"],
                 ["Account Number",  "50200012345678"],
                 ["IFSC Code",       "HDFC0001234"],
                 ["Account Type",    "Current"],
-                ["Account Name",    "GeoVisionPro Edu Pvt Ltd"],
+                ["Account Name",    "DeepEarthScience Edu Pvt Ltd"],
                 ["Amount",          fmt(total)],
                 ["Reference / Remarks", neftRef],
               ].map(([l, v]) => (
@@ -1205,11 +1205,11 @@ export default function EnrollPage() {
             <div className="rounded-xl p-4 mb-4 text-sm"
               style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}>
               <p className="text-xs font-black uppercase mb-2" style={{ color: "#1d9e75" }}>DD / Cheque should be drawn in favour of:</p>
-              <p className="font-bold text-white text-base mb-1">GeoVisionPro Edu Pvt Ltd</p>
+              <p className="font-bold text-white text-base mb-1">DeepEarthScience Edu Pvt Ltd</p>
               <p style={{ color: "#8aa3be" }}>Amount: <strong className="text-white">{fmt(total)}</strong></p>
               <div className="h-px my-3" style={{ background: "rgba(255,255,255,0.06)" }} />
               <p className="text-xs font-black uppercase mb-1" style={{ color: "#1d9e75" }}>Send to:</p>
-              <p style={{ color: "#b0c4d8" }}>GeoVisionPro Academy, 4th Floor, Tech Park, Sector 62, Noida — 201309, Uttar Pradesh</p>
+              <p style={{ color: "#b0c4d8" }}>DeepEarthScience Academy, 4th Floor, Tech Park, Sector 62, Noida — 201309, Uttar Pradesh</p>
             </div>
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
@@ -1366,7 +1366,7 @@ export default function EnrollPage() {
           </div>
           <div>
             <h2 className="text-white font-black text-3xl">Enrollment Successful!</h2>
-            <p className="text-sm mt-2" style={{ color: "#b0c4d8" }}>Welcome to GeoVisionPro Academy, {form.name.split(" ")[0]}! 🎓</p>
+            <p className="text-sm mt-2" style={{ color: "#b0c4d8" }}>Welcome to DeepEarthScience Academy, {form.name.split(" ")[0]}! 🎓</p>
           </div>
         </div>
 
@@ -1404,14 +1404,14 @@ export default function EnrollPage() {
           <p className="font-bold text-white text-xs uppercase tracking-wider mb-2">Next Steps</p>
           <p>✉ Check your email <strong style={{ color: "#1d9e75" }}>{form.email}</strong> for login credentials.</p>
           <p>💬 Join your batch WhatsApp group via the link in the email.</p>
-          <p>🖥 Access your course at <strong style={{ color: "#1d9e75" }}>portal.geovisionpro.com</strong></p>
+          <p>🖥 Access your course at <strong style={{ color: "#1d9e75" }}>portal.deepearthscience.com</strong></p>
         </div>
 
         {/* Redirect countdown */}
         <div className="rounded-xl p-3 mb-4 flex items-center justify-between gap-3"
           style={{ background: "rgba(29,158,117,0.08)", border: "1px solid rgba(29,158,117,0.2)" }}>
           <p className="text-xs" style={{ color: "#8aa3be" }}>
-            Returning to <strong className="text-white">GeoVisionPro</strong> in{" "}
+            Returning to <strong className="text-white">DeepEarthScience</strong> in{" "}
             <strong style={{ color: "#1d9e75" }}>{redirectCount}s</strong>…
           </p>
           <button onClick={() => router.push("/")}
@@ -1492,7 +1492,7 @@ export default function EnrollPage() {
             style={{ background: "rgba(255,255,255,0.06)", color: "#b0c4d8", border: "1px solid rgba(255,255,255,0.1)" }}>
             Use Different Payment Method
           </button>
-          <a href="mailto:academy@geovisionpro.com"
+          <a href="mailto:academy@deepearthscience.com"
             className="block w-full py-3 rounded-2xl font-bold text-sm text-center transition-all hover:opacity-80"
             style={{ color: "#8aa3be" }}>
             Contact Support

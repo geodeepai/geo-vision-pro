@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { MapPin, Mail, Phone, Monitor, Send, CheckCircle2 } from "lucide-react";
@@ -14,7 +14,7 @@ const infoItems = [
     icon: <Mail size={20} />,
     color: "#059669",
     title: "Email",
-    lines: ["info@geovisionpro.com", "training@geovisionpro.com"],
+    lines: ["info@DeepEarthScience.com", "training@DeepEarthScience.com"],
   },
   {
     icon: <Phone size={20} />,

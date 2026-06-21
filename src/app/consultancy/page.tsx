@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useRef } from "react";
 import Link from "next/link";
@@ -378,7 +378,7 @@ function ConsultationSection() {
             {/* Contact info */}
             <div className="relative z-10 space-y-3">
               {[
-                { Icon: Mail, label: "Email", val: "geovisionpro@email.com", href: "mailto:geovisionpro@email.com" },
+                { Icon: Mail, label: "Email", val: "DeepEarthScience@email.com", href: "mailto:DeepEarthScience@email.com" },
                 { Icon: PhoneCall, label: "Phone", val: "+91 XXXX XXX XXX", href: "tel:+91XXXXXXXXXX" },
                 { Icon: MapPin, label: "Location", val: "India (Remote & On-site)", href: "#" },
               ].map(({ Icon, label, val, href }) => (
@@ -950,7 +950,7 @@ export default function ConsultancyPage() {
         {/* ── Why Choose Us ─────────────────────────────────────── */}
         <section id="why-us">
           <div className="mb-6">
-            <h2 className="text-xl font-black text-slate-900 mb-1">Why Choose GeoVision Pro</h2>
+            <h2 className="text-xl font-black text-slate-900 mb-1">Why Choose Deep Earth Science</h2>
             <p className="text-sm text-slate-500">What sets our remote sensing consultancy apart</p>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
@@ -1029,7 +1029,7 @@ export default function ConsultancyPage() {
               </div>
               <div className="flex flex-col gap-3 flex-shrink-0">
                 <a
-                  href="mailto:geovisionpro@email.com"
+                  href="mailto:DeepEarthScience@email.com"
                   className="flex items-center gap-2 px-7 py-3.5 rounded-xl font-bold text-white text-sm hover:opacity-90 transition-all"
                   style={{ background: "linear-gradient(135deg,#2563eb,#4f46e5)", boxShadow: "0 4px 16px rgba(37,99,235,0.35)" }}
                 >
@@ -1061,11 +1061,11 @@ export default function ConsultancyPage() {
                 <path d="M4 12 Q8 6 12 12 Q16 18 20 12" stroke="white" strokeWidth="1.8" fill="none" strokeLinecap="round" />
               </svg>
             </div>
-            <span className="text-sm font-bold text-slate-800">GeoVision Pro</span>
+            <span className="text-sm font-bold text-slate-800">Deep Earth Science</span>
           </div>
           <div className="flex items-center gap-5 text-xs text-slate-500">
-            <a href="mailto:geovisionpro@email.com" className="flex items-center gap-1 hover:text-blue-600 transition-colors">
-              <Mail size={11} /> geovisionpro@email.com
+            <a href="mailto:DeepEarthScience@email.com" className="flex items-center gap-1 hover:text-blue-600 transition-colors">
+              <Mail size={11} /> DeepEarthScience@email.com
             </a>
             <a href="tel:+91XXXXXXXXXX" className="flex items-center gap-1 hover:text-blue-600 transition-colors">
               <Phone size={11} /> +91 XXXX XXX XXX

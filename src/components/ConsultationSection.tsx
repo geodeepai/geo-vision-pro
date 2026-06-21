@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useRef } from "react";
 import { motion, useInView, AnimatePresence } from "framer-motion";
@@ -153,7 +153,7 @@ export default function ConsultationSection() {
 
             <div className="relative z-10 space-y-3">
               {[
-                { Icon: Mail,      label: "Email",    val: "geovisionpro@email.com",  href: "mailto:geovisionpro@email.com" },
+                { Icon: Mail,      label: "Email",    val: "DeepEarthScience@email.com",  href: "mailto:DeepEarthScience@email.com" },
                 { Icon: PhoneCall, label: "Phone",    val: "+91 XXXX XXX XXX",         href: "tel:+91XXXXXXXXXX" },
                 { Icon: MapPin,    label: "Location", val: "India (Remote & On-site)", href: "#" },
               ].map(({ Icon, label, val, href }) => (

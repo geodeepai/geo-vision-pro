@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import Link from "next/link";
@@ -103,7 +103,7 @@ export default function LivePage() {
           </div>
 
           <h1 className="font-black text-white mb-4" style={{ fontSize: "clamp(1.8rem,4vw,3rem)", lineHeight: 1.1 }}>
-            GeoVisionPro <span style={{ color: "#ef4444" }}>Live</span>
+            DeepEarthScience <span style={{ color: "#ef4444" }}>Live</span>
           </h1>
           <p className="text-[15px] leading-relaxed mb-8" style={{ color: "rgba(255,255,255,0.55)" }}>
             Watch live workshops, webinars, and expert Q&amp;A sessions on remote sensing, GIS, drone mapping, and AI geospatial analytics — directly on our YouTube channel.
@@ -191,7 +191,7 @@ export default function LivePage() {
               <YTIcon size={20} color="#fff" />
             </div>
             <div>
-              <p className="font-black text-sm" style={{ color: "var(--heading)" }}>GeoVisionPro Official</p>
+              <p className="font-black text-sm" style={{ color: "var(--heading)" }}>DeepEarthScience Official</p>
               <p className="text-xs" style={{ color: "var(--muted)" }}>Subscribe for live sessions, tutorials & project walkthroughs</p>
             </div>
           </div>
@@ -297,7 +297,7 @@ export default function LivePage() {
                 </p>
                 <div className="flex items-center gap-3 text-[11px]" style={{ color: "var(--muted)" }}>
                   <span className="flex items-center gap-1"><Users size={11} /> {v.views} views</span>
-                  <span className="flex items-center gap-1"><YTIcon size={11} /> GeoVisionPro</span>
+                  <span className="flex items-center gap-1"><YTIcon size={11} /> DeepEarthScience</span>
                 </div>
               </div>
             </a>

@@ -76,7 +76,7 @@ export default function ResetPasswordPage() {
             </svg>
           </div>
           <span className="font-bold text-slate-900 text-lg tracking-tight">
-            GeoVision<span className="text-blue-600">Pro</span>
+            DeepEarth<span className="text-blue-600">Science</span>
           </span>
         </Link>
         <Link href="/login" className="flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-900 transition-colors font-medium">
@@ -177,7 +177,7 @@ export default function ResetPasswordPage() {
       </div>
 
       <footer className="py-5 text-center text-xs text-slate-400">
-        &copy; 2025 GeoVision Pro
+        &copy; 2025 Deep Earth Science
       </footer>
     </div>
   );

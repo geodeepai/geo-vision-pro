@@ -91,15 +91,15 @@ function generatePNG(name: string, c: CertProps) {
   ctx.restore();
   ctx.beginPath(); ctx.arc(logX, logY, 5, 0, Math.PI*2); ctx.fillStyle = "#fff"; ctx.fill();
 
-  /* "GeoVisionPro" */
+  /* "DeepEarthScience" */
   ctx.textAlign = "center"; ctx.font = "bold 22px Arial,sans-serif";
-  const gvpText = "GeoVisionPro";
-  const gvpW = ctx.measureText("GeoVision").width + ctx.measureText("Pro").width;
+  const gvpText = "DeepEarthScience";
+  const gvpW = ctx.measureText("DeepEarth").width + ctx.measureText("science").width;
   ctx.fillStyle = "#93c5fd";
   ctx.textAlign = "left";
-  ctx.fillText("GeoVision", cx - gvpW/2, logY + 67);
+  ctx.fillText("DeepEarth", cx - gvpW/2, logY + 67);
   ctx.fillStyle = "#3b82f6";
-  ctx.fillText("Pro", cx - gvpW/2 + ctx.measureText("GeoVision").width, logY + 67);
+  ctx.fillText("science", cx - gvpW/2 + ctx.measureText("DeepEarth").width, logY + 67);
   ctx.textAlign = "center";
 
   /* CERTIFICATE */
@@ -189,7 +189,7 @@ function generatePNG(name: string, c: CertProps) {
   ctx.beginPath(); ctx.moveTo(148, 882); ctx.lineTo(360, 882); ctx.stroke();
   ctx.font = "13px Arial,sans-serif";
   ctx.fillStyle = "rgba(100,116,139,0.65)";
-  ctx.fillText("Director, GeoVision Pro", 148, 900);
+  ctx.fillText("Director, Deep Earth Science", 148, 900);
 
   /* center — official seal */
   const sX=cx, sY=845, sR=60;
@@ -231,11 +231,11 @@ function generatePNG(name: string, c: CertProps) {
   ctx.textAlign = "center";
   ctx.font = "12px Arial,sans-serif";
   ctx.fillStyle = "rgba(100,116,139,0.36)";
-  ctx.fillText("GeoVision Pro  ·  Remote Sensing & GIS Consultancy  ·  geovisionpro.com", cx, 952);
+  ctx.fillText("Deep Earth Science  ·  Remote Sensing & GIS Consultancy  ·  DeepEarthScience.com", cx, 952);
 
   /* trigger download */
   const a = document.createElement("a");
-  a.download = `GeoVisionPro_Certificate_${name.replace(/\s+/g,"_")}.png`;
+  a.download = `DeepEarthScience_Certificate_${name.replace(/\s+/g,"_")}.png`;
   a.href = canvas.toDataURL("image/png", 1.0);
   a.click();
 }
@@ -371,7 +371,7 @@ export default function CertificateModal({
               </svg>
             </div>
             <p className="text-sm font-bold mt-1.5" style={{ letterSpacing: 0.5 }}>
-              <span style={{ color: "#93c5fd" }}>GeoVision</span>
+              <span style={{ color: "#93c5fd" }}>DeepEarth</span>
               <span style={{ color: "#3b82f6" }}>Pro</span>
             </p>
           </div>
@@ -435,7 +435,7 @@ export default function CertificateModal({
               <p style={{ fontSize: 10, color: "rgba(148,163,184,0.5)", letterSpacing: "0.1em", fontWeight: 700, textTransform: "uppercase" }}>Date of Issue</p>
               <p style={{ fontSize: 16, color: "#fff", fontFamily: "Georgia,serif", fontWeight: 700, marginTop: 3 }}>{cert.date}</p>
               <div style={{ height: 14 }} />
-              <p style={{ fontSize: 11, color: "rgba(100,116,139,0.6)" }}>Director, GeoVision Pro</p>
+              <p style={{ fontSize: 11, color: "rgba(100,116,139,0.6)" }}>Director, Deep Earth Science</p>
             </div>
 
             {/* seal */}
@@ -463,7 +463,7 @@ export default function CertificateModal({
           {/* fine print */}
           <div className="absolute bottom-0 left-0 right-0 text-center" style={{ paddingBottom: 10 }}>
             <p style={{ fontSize: 9, color: "rgba(100,116,139,0.3)", letterSpacing: "0.04em" }}>
-              GeoVision Pro &nbsp;·&nbsp; Remote Sensing & GIS Consultancy &nbsp;·&nbsp; geovisionpro.com
+              Deep Earth Science &nbsp;·&nbsp; Remote Sensing & GIS Consultancy &nbsp;·&nbsp; DeepEarthScience.com
             </p>
           </div>
         </div>

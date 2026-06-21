@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
@@ -44,11 +44,11 @@ const SECTIONS = [
    DATA
    ══════════════════════════════════════════════════════════════════ */
 const PRESS = [
-  { headline: "GeoVisionPro Launches New Satellite Mapping Platform",      date: "June 10, 2026", body: "GeoVisionPro announced the launch of its next-generation satellite mapping platform, offering real-time imagery processing and AI-driven land analysis across India, covering over 3.2 million sq km. The platform integrates Sentinel-2, Landsat-9, and ISRO Resourcesat-2A data streams with cloud-based processing, reducing turnaround time for LULC deliverables by up to 70%. Clients across agriculture, urban planning, and disaster management sectors will have access to the platform from July 2026." },
-  { headline: "GeoVisionPro Partners with National Survey Authority",       date: "May 22, 2026",  body: "GeoVisionPro has entered a strategic MoU with the National Survey of India to deliver high-accuracy cadastral mapping for 12 states, benefiting 40 million land parcels across urban and rural zones. Under the agreement, GeoVisionPro will provide satellite imagery analysis, ground-truth verification, and GIS database integration using the NSI's national coordinate framework." },
-  { headline: "GeoVisionPro Wins Best GIS Innovation Award 2026",          date: "April 14, 2026", body: "At the Annual Geospatial Excellence Awards held in New Delhi, GeoVisionPro received the Best GIS Innovation award for its AI-powered urban change detection system, beating 27 other nominees. The system uses deep-learning classification on multi-temporal Sentinel-2 imagery to detect and flag urban expansion with 94.6% accuracy at 10 m resolution." },
-  { headline: "GeoVisionPro Expands to Northeast India Operations",        date: "March 5, 2026",  body: "GeoVisionPro has established regional offices in Guwahati and Shillong to serve the growing demand for geospatial services across the eight northeastern states. The expansion includes dedicated teams for forest cover monitoring, terrain mapping, and disaster risk assessment — critical needs for this ecologically sensitive and topographically complex region." },
-  { headline: "New GIS Data Portal Launch Announcement",                   date: "February 18, 2026", body: "GeoVisionPro has launched a new client-facing GIS data portal at portal.geovisionpro.com, enabling direct download of project deliverables, live survey dashboards, and curated satellite imagery subsets. The portal features role-based access control, project tracking, and a metadata catalogue aligned with OGC and ISO 19115 standards." },
+  { headline: "DeepEarthScience Launches New Satellite Mapping Platform",      date: "June 10, 2026", body: "DeepEarthScience announced the launch of its next-generation satellite mapping platform, offering real-time imagery processing and AI-driven land analysis across India, covering over 3.2 million sq km. The platform integrates Sentinel-2, Landsat-9, and ISRO Resourcesat-2A data streams with cloud-based processing, reducing turnaround time for LULC deliverables by up to 70%. Clients across agriculture, urban planning, and disaster management sectors will have access to the platform from July 2026." },
+  { headline: "DeepEarthScience Partners with National Survey Authority",       date: "May 22, 2026",  body: "DeepEarthScience has entered a strategic MoU with the National Survey of India to deliver high-accuracy cadastral mapping for 12 states, benefiting 40 million land parcels across urban and rural zones. Under the agreement, DeepEarthScience will provide satellite imagery analysis, ground-truth verification, and GIS database integration using the NSI's national coordinate framework." },
+  { headline: "DeepEarthScience Wins Best GIS Innovation Award 2026",          date: "April 14, 2026", body: "At the Annual Geospatial Excellence Awards held in New Delhi, DeepEarthScience received the Best GIS Innovation award for its AI-powered urban change detection system, beating 27 other nominees. The system uses deep-learning classification on multi-temporal Sentinel-2 imagery to detect and flag urban expansion with 94.6% accuracy at 10 m resolution." },
+  { headline: "DeepEarthScience Expands to Northeast India Operations",        date: "March 5, 2026",  body: "DeepEarthScience has established regional offices in Guwahati and Shillong to serve the growing demand for geospatial services across the eight northeastern states. The expansion includes dedicated teams for forest cover monitoring, terrain mapping, and disaster risk assessment — critical needs for this ecologically sensitive and topographically complex region." },
+  { headline: "New GIS Data Portal Launch Announcement",                   date: "February 18, 2026", body: "DeepEarthScience has launched a new client-facing GIS data portal at portal.DeepEarthScience.com, enabling direct download of project deliverables, live survey dashboards, and curated satellite imagery subsets. The portal features role-based access control, project tracking, and a metadata catalogue aligned with OGC and ISO 19115 standards." },
 ];
 
 const PUBLISHED = [
@@ -87,24 +87,24 @@ const BLOGS = [
 ];
 
 const NEWSLETTERS = [
-  { title: "GeoVision Monthly – June 2026",      month: "June 2026",     edition: 18, size: "3.2 MB" },
-  { title: "GeoVision Monthly – May 2026",       month: "May 2026",      edition: 17, size: "2.9 MB" },
-  { title: "GeoVision Monthly – April 2026",     month: "April 2026",    edition: 16, size: "3.0 MB" },
-  { title: "GeoVision Monthly – March 2026",     month: "March 2026",    edition: 15, size: "2.7 MB" },
-  { title: "GeoVision Monthly – February 2026",  month: "February 2026", edition: 14, size: "2.8 MB" },
-  { title: "GeoVision Monthly – January 2026",   month: "January 2026",  edition: 13, size: "3.1 MB" },
+  { title: "DeepEarth Monthly – June 2026",      month: "June 2026",     edition: 18, size: "3.2 MB" },
+  { title: "DeepEarth Monthly – May 2026",       month: "May 2026",      edition: 17, size: "2.9 MB" },
+  { title: "DeepEarth Monthly – April 2026",     month: "April 2026",    edition: 16, size: "3.0 MB" },
+  { title: "DeepEarth Monthly – March 2026",     month: "March 2026",    edition: 15, size: "2.7 MB" },
+  { title: "DeepEarth Monthly – February 2026",  month: "February 2026", edition: 14, size: "2.8 MB" },
+  { title: "DeepEarth Monthly – January 2026",   month: "January 2026",  edition: 13, size: "3.1 MB" },
 ];
 
 const SOCIALS = [
-  { platform: "LinkedIn",     handle: "GeoVisionPro",       url: "#", desc: "Follow us for GIS updates, job openings, and industry insights.",        dot: "#0077b5" },
-  { platform: "Twitter / X",  handle: "@GeoVisionPro",       url: "#", desc: "Real-time geo-tweets, quick tips, and breaking geospatial news.",        dot: "#1da1f2" },
-  { platform: "YouTube",      handle: "GeoVisionPro",       url: "#", desc: "Watch our full tutorial series, webinar recordings, and case studies.",    dot: "#ff0000" },
-  { platform: "Instagram",    handle: "@geovisionpro",       url: "#", desc: "Behind-the-scenes field photos, drone footage, and team moments.",        dot: "#e1306c" },
-  { platform: "Facebook",     handle: "GeoVisionPro India",  url: "#", desc: "Join our community, join discussions, and get event updates.",            dot: "#1877f2" },
+  { platform: "LinkedIn",     handle: "DeepEarthScience",       url: "#", desc: "Follow us for GIS updates, job openings, and industry insights.",        dot: "#0077b5" },
+  { platform: "Twitter / X",  handle: "@DeepEarthScience",       url: "#", desc: "Real-time geo-tweets, quick tips, and breaking geospatial news.",        dot: "#1da1f2" },
+  { platform: "YouTube",      handle: "DeepEarthScience",       url: "#", desc: "Watch our full tutorial series, webinar recordings, and case studies.",    dot: "#ff0000" },
+  { platform: "Instagram",    handle: "@DeepEarthScience",       url: "#", desc: "Behind-the-scenes field photos, drone footage, and team moments.",        dot: "#e1306c" },
+  { platform: "Facebook",     handle: "DeepEarthScience India",  url: "#", desc: "Join our community, join discussions, and get event updates.",            dot: "#1877f2" },
 ];
 
 const MEDIA_ASSETS = [
-  { name: "GeoVisionPro Logo Pack",          formats: "PNG, SVG",  size: "2.4 MB", file: "GVP-LogoPack-2026.pdf" },
+  { name: "DeepEarthScience Logo Pack",          formats: "PNG, SVG",  size: "2.4 MB", file: "GVP-LogoPack-2026.pdf" },
   { name: "Brand Guidelines Document",       formats: "PDF",       size: "5.1 MB", file: "GVP-BrandGuidelines-2026.pdf" },
   { name: "Press Kit (Full)",                formats: "ZIP",       size: "18.7 MB",file: "GVP-PressKit-2026.pdf" },
   { name: "High-Resolution Images",          formats: "ZIP (JPEG)",size: "34.2 MB",file: "GVP-Images-2026.pdf" },
@@ -114,10 +114,10 @@ const MEDIA_ASSETS = [
 ];
 
 const EVENTS = [
-  { name: "GIS India Summit 2026",           date: "Aug 15, 2026",  location: "New Delhi",   type: "Conference", desc: "India's largest annual geospatial conference. GeoVisionPro is a Silver Sponsor and will present three research papers.", upcoming: true },
+  { name: "GIS India Summit 2026",           date: "Aug 15, 2026",  location: "New Delhi",   type: "Conference", desc: "India's largest annual geospatial conference. DeepEarthScience is a Silver Sponsor and will present three research papers.", upcoming: true },
   { name: "Remote Sensing Workshop",          date: "July 5, 2026",  location: "Kolkata",     type: "Workshop",   desc: "A one-day intensive workshop on Sentinel-2 image analysis and QGIS workflows, limited to 40 participants.",                upcoming: true },
-  { name: "GeoVisionPro Annual Meet 2026",    date: "Sept 20, 2026", location: "Bangalore",   type: "Conference", desc: "Our annual stakeholder meeting featuring project reviews, research presentations, and partner networking sessions.",         upcoming: true },
-  { name: "Drone Mapping Expo 2026",          date: "Oct 10, 2026",  location: "Mumbai",      type: "Expo",       desc: "South Asia's premier drone technology expo. GeoVisionPro will showcase its latest UAV photogrammetry workflows.",          upcoming: true },
+  { name: "DeepEarthScience Annual Meet 2026",    date: "Sept 20, 2026", location: "Bangalore",   type: "Conference", desc: "Our annual stakeholder meeting featuring project reviews, research presentations, and partner networking sessions.",         upcoming: true },
+  { name: "Drone Mapping Expo 2026",          date: "Oct 10, 2026",  location: "Mumbai",      type: "Expo",       desc: "South Asia's premier drone technology expo. DeepEarthScience will showcase its latest UAV photogrammetry workflows.",          upcoming: true },
   { name: "International GIS Conference",     date: "Nov 3, 2026",   location: "Hyderabad",   type: "Conference", desc: "A global gathering of geospatial professionals discussing AI, climate change mapping, and smart city infrastructure.",       upcoming: true },
   { name: "GIS for Agriculture Seminar",      date: "Dec 1, 2026",   location: "Pune",        type: "Webinar",    desc: "Half-day seminar on satellite-based crop monitoring, yield estimation, and irrigation planning using GIS.",                  upcoming: true },
 ];
@@ -307,7 +307,7 @@ export default function NewsPage() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-14">
 
           {/* ══ 1 · PRESS RELEASES ══════════════════════════════════ */}
-          <SectionHead id="press-releases" title="Press Releases" sub="Official GeoVisionPro announcements — each downloadable as a branded PDF" />
+          <SectionHead id="press-releases" title="Press Releases" sub="Official DeepEarthScience announcements — each downloadable as a branded PDF" />
           <div className="flex flex-col gap-4 mb-5">
             {PRESS.map((p, i) => (
               <Card key={p.headline}>
@@ -348,7 +348,7 @@ export default function NewsPage() {
           <Divider />
 
           {/* ══ 3 · VIDEO SERIES ════════════════════════════════════ */}
-          <SectionHead id="videos" title="GeoVision Video Series" sub="Download transcript, slides, or study notes for any video" />
+          <SectionHead id="videos" title="DeepEarth Video Series" sub="Download transcript, slides, or study notes for any video" />
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {VIDEOS.map((v, i) => (
               <Card key={v.title}>
@@ -640,7 +640,7 @@ export default function NewsPage() {
             ← Back to main site
           </Link>
           <span className="mx-3" style={{ color: `${TEXT}22` }}>|</span>
-          © 2026 GeoVision Pro
+          © 2026 Deep Earth Science
         </div>
       </div>
     </>

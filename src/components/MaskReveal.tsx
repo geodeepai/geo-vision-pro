@@ -3,8 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 
-const BRAND        = "GeoVision";
-const BRAND_ACCENT = "Pro";
+const BRAND        = "DeepEarth";
+const BRAND_ACCENT = "science";
 const TAGLINE      = "Remote Sensing  ·  GIS  ·  AI";
 
 export default function MaskReveal() {

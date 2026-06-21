@@ -38,7 +38,7 @@ const SEARCH_INDEX: SearchItem[] = [
   { title: "AI-Powered Geo-Analytics",      desc: "Machine learning, deep learning, geospatial intelligence",href: "/ai-geo",               category: "Services" },
   { title: "Structural & Civil Consulting", desc: "STAAD Pro, AutoCAD, civil structural engineering",        href: "/structural",           category: "Services" },
   // Courses / Academy
-  { title: "GeoVisionPro Academy",          desc: "All courses in GIS, remote sensing, AI and geospatial",  href: "/learn/academy",        category: "Courses" },
+  { title: "DeepEarthScience Academy",          desc: "All courses in GIS, remote sensing, AI and geospatial",  href: "/learn/academy",        category: "Courses" },
   { title: "Google Earth Engine",           desc: "GEE programming, cloud-based satellite data analysis",   href: "/learn/academy",        category: "Courses" },
   { title: "ArcGIS Pro Training",           desc: "Professional GIS desktop software course",               href: "/learn/academy",        category: "Courses" },
   { title: "AutoCAD Course",                desc: "Technical drawing, drafting and 2D/3D design",           href: "/learn/academy",        category: "Courses" },
@@ -51,29 +51,29 @@ const SEARCH_INDEX: SearchItem[] = [
   { title: "Events & Workshops",            desc: "Live webinars, training sessions and conferences",        href: "/learn/events",         category: "Learn" },
   // News
   { title: "Press Releases",               desc: "Official announcements and media coverage",                href: "/news#press-releases",  category: "News" },
-  { title: "Recently Published Articles",  desc: "Latest research papers and articles from GeoVisionPro",   href: "/news#recently-published",category:"News" },
-  { title: "GeoVision Video Series",       desc: "Tutorial videos, case studies, project walkthroughs",     href: "/news#videos",          category: "News" },
+  { title: "Recently Published Articles",  desc: "Latest research papers and articles from DeepEarthScience",   href: "/news#recently-published",category:"News" },
+  { title: "DeepEarth Video Series",       desc: "Tutorial videos, case studies, project walkthroughs",     href: "/news#videos",          category: "News" },
   { title: "Podcasts & Webinars",          desc: "Expert talks, interviews and live Q&A sessions",          href: "/news#podcasts",        category: "News" },
   { title: "GIS Blogs",                    desc: "In-depth geospatial articles and technical insights",      href: "/news#blogs",           category: "News" },
-  { title: "Newsletters",                  desc: "Monthly digest, tips and GeoVisionPro updates",           href: "/news#newsletters",     category: "News" },
-  { title: "Social Media",                 desc: "Follow GeoVisionPro on LinkedIn, YouTube and more",       href: "/news#social",          category: "News" },
+  { title: "Newsletters",                  desc: "Monthly digest, tips and DeepEarthScience updates",           href: "/news#newsletters",     category: "News" },
+  { title: "Social Media",                 desc: "Follow DeepEarthScience on LinkedIn, YouTube and more",       href: "/news#social",          category: "News" },
   { title: "Media Resources",              desc: "Press kit, logos, imagery and brand assets",               href: "/news#media",           category: "News" },
   { title: "Events & Conferences",         desc: "Upcoming and past events, summits and expos",             href: "/news#events",          category: "News" },
   { title: "Field Survey Updates",         desc: "On-ground project reports and survey news",                href: "/news#field-updates",   category: "News" },
-  { title: "Partner Program",              desc: "Collaborate with GeoVisionPro, grow together",            href: "/news#partners",        category: "News" },
+  { title: "Partner Program",              desc: "Collaborate with DeepEarthScience, grow together",            href: "/news#partners",        category: "News" },
   // Company
   { title: "About Us",                     desc: "Our story, mission, vision and leadership team",           href: "#about",                category: "Company" },
   { title: "Contact Us",                   desc: "Get in touch, request a quote or consultation",           href: "#contact",              category: "Company" },
   { title: "Our Process",                  desc: "How we plan, execute and deliver geospatial projects",    href: "#process",              category: "Company" },
-  { title: "Testimonials",                 desc: "What clients say about GeoVisionPro services",            href: "#testimonials",         category: "Company" },
+  { title: "Testimonials",                 desc: "What clients say about DeepEarthScience services",            href: "#testimonials",         category: "Company" },
   { title: "Notices",                      desc: "Important announcements and public notices",               href: "/notices",              category: "Company" },
   // Support / Legal
   { title: "Help & Support",              desc: "FAQs, tutorials and support resources",                     href: "/help",                 category: "Support" },
   { title: "Privacy Policy",              desc: "How we collect and protect your data",                      href: "/privacy",              category: "Legal" },
-  { title: "Terms of Use",               desc: "Terms and conditions of using GeoVisionPro",                href: "/terms",                category: "Legal" },
+  { title: "Terms of Use",               desc: "Terms and conditions of using DeepEarthScience",                href: "/terms",                category: "Legal" },
   // Account
-  { title: "Login",                       desc: "Sign in to your GeoVisionPro account",                     href: "/login",                category: "Account" },
-  { title: "Register",                    desc: "Create a new GeoVisionPro account",                        href: "/register",             category: "Account" },
+  { title: "Login",                       desc: "Sign in to your DeepEarthScience account",                     href: "/login",                category: "Account" },
+  { title: "Register",                    desc: "Create a new DeepEarthScience account",                        href: "/register",             category: "Account" },
   { title: "My Profile",                  desc: "View your courses, projects and account settings",         href: "/profile",              category: "Account" },
   { title: "Forgot Password",             desc: "Reset your account password",                              href: "/forgot-password",      category: "Account" },
 ];
@@ -331,7 +331,7 @@ const SERVICE_LINKS = [
 const NEWS_LINKS = [
   { label: "Press Releases",        href: "/news#press-releases",      icon: IconNews,           desc: "Official announcements & media" },
   { label: "Recently Published",    href: "/news#recently-published",  icon: IconArticle,        desc: "Latest research & articles" },
-  { label: "GeoVision Video Series",href: "/news#videos",              icon: IconVideo,          desc: "Tutorials & case studies" },
+  { label: "DeepEarth Video Series",href: "/news#videos",              icon: IconVideo,          desc: "Tutorials & case studies" },
   { label: "Podcasts & Webinars",   href: "/news#podcasts",            icon: IconHeadphones,     desc: "Expert talks & live sessions" },
   { label: "GIS Blogs",             href: "/news#blogs",               icon: IconPencil,         desc: "In-depth GIS & RS insights" },
   { label: "Newsletters",           href: "/news#newsletters",         icon: IconMail,           desc: "Monthly digest & updates" },
@@ -343,7 +343,7 @@ const NEWS_LINKS = [
 ];
 
 const LEARN_LINKS = [
-  { label: "GeoVisionPro Academy", href: "/learn/academy" },
+  { label: "DeepEarthScience Academy", href: "/learn/academy" },
   { label: "Tutorials",            href: "/learn/tutorials" },
   { label: "Events",               href: "/learn/events" },
 ];
@@ -437,7 +437,7 @@ export default function Navbar() {
         </div>
 
         {/* CENTER: Logo */}
-        <a href="#home" className="absolute left-1/2 -translate-x-1/2 flex items-center gap-2.5 z-10" aria-label="GeoVisionPro Home">
+        <a href="#home" className="absolute left-1/2 -translate-x-1/2 flex items-center gap-2.5 z-10" aria-label="DeepEarthScience Home">
           <div className="w-8 h-8 rounded-lg flex items-center justify-center shadow-lg" style={{ background: "linear-gradient(135deg,#2563eb,#4f46e5)" }}>
             <svg viewBox="0 0 24 24" fill="none" className="w-[18px] h-[18px]">
               <circle cx="12" cy="12" r="9" stroke="white" strokeWidth="1.5" />
@@ -446,7 +446,7 @@ export default function Navbar() {
             </svg>
           </div>
           <span className="font-bold text-[16px] tracking-tight hidden sm:inline" style={{ color: "#fff" }}>
-            GeoVision<span style={{ color: "#60a5fa" }}>Pro</span>
+            DeepEarth<span style={{ color: "#60a5fa" }}>Science</span>
           </span>
         </a>
 
@@ -519,7 +519,7 @@ export default function Navbar() {
                     </div>
                     <div>
                       <p className="text-sm font-black" style={{ color: TEXT_HI }}>News &amp; Updates</p>
-                      <p className="text-[11px]" style={{ color: TEXT_MID }}>Stay informed with GeoVision Pro</p>
+                      <p className="text-[11px]" style={{ color: TEXT_MID }}>Stay informed with Deep Earth Science</p>
                     </div>
                   </div>
                   <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[9px] font-black uppercase tracking-widest" style={{ background: "rgba(29,158,117,0.18)", color: "#1d9e75", border: "1px solid rgba(29,158,117,0.35)" }}>

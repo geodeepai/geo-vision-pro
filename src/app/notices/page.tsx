@@ -60,7 +60,7 @@ const NOTICES: Notice[] = [
     id: "GVP-2026-002",
     title: "New Batch: Google Earth Engine Professional Course",
     summary: "Applications are open for the July 2026 batch of GEE Professional Certification. Limited seats — 30 participants only.",
-    fullContent: "GeoVision Pro Training Division is pleased to announce the commencement of the GEE Professional Certification Course — July 2026 Batch. The course spans 12 weeks (5 July – 27 September 2026) covering JavaScript API, Python API, large-scale image processing, time-series analysis, machine learning in GEE, and capstone project. Mode: Online (Live Sessions via Zoom) + Recorded Access. Fee: ₹18,500 (early bird ₹15,999 till 25 June). Eligibility: Graduate in Geography, Environmental Science, Civil Engineering or related field. Register at geovisionpro.com/courses. Contact: training@geovisionpro.com",
+    fullContent: "Deep Earth Science Training Division is pleased to announce the commencement of the GEE Professional Certification Course — July 2026 Batch. The course spans 12 weeks (5 July – 27 September 2026) covering JavaScript API, Python API, large-scale image processing, time-series analysis, machine learning in GEE, and capstone project. Mode: Online (Live Sessions via Zoom) + Recorded Access. Fee: ₹18,500 (early bird ₹15,999 till 25 June). Eligibility: Graduate in Geography, Environmental Science, Civil Engineering or related field. Register at DeepEarthScience.com/courses. Contact: training@DeepEarthScience.com",
     date: "2026-06-08",
     expiryDate: "2026-07-05",
     department: "Training & Education",
@@ -78,8 +78,8 @@ const NOTICES: Notice[] = [
   {
     id: "GVP-2026-003",
     title: "Tender Notice: UAV Survey Services — Highway Project",
-    summary: "GeoVision Pro invites sealed quotations from empanelled UAV service providers for aerial photogrammetry of NH-44 stretch.",
-    fullContent: "GeoVision Pro invites sealed quotations from DGCA-approved UAV operators for drone survey services for a 45 km stretch of NH-44. Scope of work includes aerial photogrammetry, orthomosaic generation (2 cm GSD), DEM/DSM creation, and corridor mapping. The survey must be completed within 21 working days of work order issuance. Bid documents can be downloaded from our portal. Last date for submission: 20 June 2026, 5:00 PM IST. Pre-bid meeting: 15 June 2026, 11:00 AM at our Hyderabad office. Contact: procurement@geovisionpro.com",
+    summary: "Deep Earth Science invites sealed quotations from empanelled UAV service providers for aerial photogrammetry of NH-44 stretch.",
+    fullContent: "Deep Earth Science invites sealed quotations from DGCA-approved UAV operators for drone survey services for a 45 km stretch of NH-44. Scope of work includes aerial photogrammetry, orthomosaic generation (2 cm GSD), DEM/DSM creation, and corridor mapping. The survey must be completed within 21 working days of work order issuance. Bid documents can be downloaded from our portal. Last date for submission: 20 June 2026, 5:00 PM IST. Pre-bid meeting: 15 June 2026, 11:00 AM at our Hyderabad office. Contact: procurement@DeepEarthScience.com",
     date: "2026-06-05",
     expiryDate: "2026-06-20",
     department: "Drone & UAV Operations",
@@ -98,7 +98,7 @@ const NOTICES: Notice[] = [
     id: "GVP-2026-004",
     title: "Result Announcement: ArcGIS Pro Certification Exam — May 2026",
     summary: "Results for the ArcGIS Pro Professional Certification Examination (May 2026) are now published on the student portal.",
-    fullContent: "The results for ArcGIS Pro Professional Certification Examination conducted on 28–29 May 2026 have been declared. Candidates can check their results by logging into the student portal at geovisionpro.com/portal using their enrollment ID. Overall pass percentage: 87.3%. Top scorer: 96/100. Certificates will be dispatched via courier within 15 working days for outstation candidates. Candidates who wish to apply for re-evaluation may submit the application form along with ₹500 fee by 25 June 2026.",
+    fullContent: "The results for ArcGIS Pro Professional Certification Examination conducted on 28–29 May 2026 have been declared. Candidates can check their results by logging into the student portal at DeepEarthScience.com/portal using their enrollment ID. Overall pass percentage: 87.3%. Top scorer: 96/100. Certificates will be dispatched via courier within 15 working days for outstation candidates. Candidates who wish to apply for re-evaluation may submit the application form along with ₹500 fee by 25 June 2026.",
     date: "2026-06-03",
     department: "Training & Education",
     category: "academic",
@@ -113,8 +113,8 @@ const NOTICES: Notice[] = [
   {
     id: "GVP-2026-005",
     title: "Job Opening: Senior GIS Analyst (3 Positions)",
-    summary: "GeoVision Pro is hiring Senior GIS Analysts with 3–5 years experience in ArcGIS Pro, Python scripting, and spatial database management.",
-    fullContent: "GeoVision Pro is expanding its Spatial Analytics division and invites applications for the position of Senior GIS Analyst (3 openings). Qualifications: M.Sc./B.Tech in Geography/Geomatics/Civil Engineering. Experience: 3–5 years in GIS project delivery. Required Skills: ArcGIS Pro, QGIS, Python/ArcPy, PostGIS, geodatabase design, cartographic production. Preferred: Experience in government GIS projects, knowledge of DGPS/Total Station, familiarity with OGC standards. Location: Hyderabad / Remote (hybrid). CTC: ₹6–10 LPA (based on experience). Send resume to: careers@geovisionpro.com by 30 June 2026.",
+    summary: "Deep Earth Science is hiring Senior GIS Analysts with 3–5 years experience in ArcGIS Pro, Python scripting, and spatial database management.",
+    fullContent: "Deep Earth Science is expanding its Spatial Analytics division and invites applications for the position of Senior GIS Analyst (3 openings). Qualifications: M.Sc./B.Tech in Geography/Geomatics/Civil Engineering. Experience: 3–5 years in GIS project delivery. Required Skills: ArcGIS Pro, QGIS, Python/ArcPy, PostGIS, geodatabase design, cartographic production. Preferred: Experience in government GIS projects, knowledge of DGPS/Total Station, familiarity with OGC standards. Location: Hyderabad / Remote (hybrid). CTC: ₹6–10 LPA (based on experience). Send resume to: careers@DeepEarthScience.com by 30 June 2026.",
     date: "2026-06-01",
     expiryDate: "2026-06-30",
     department: "GIS & Spatial Analysis",
@@ -132,8 +132,8 @@ const NOTICES: Notice[] = [
   {
     id: "GVP-2026-006",
     title: "Webinar: AI in Remote Sensing — Trends & Applications 2026",
-    summary: "Free webinar on AI/ML applications in satellite image analysis. Featuring speakers from ISRO, IIT Bombay, and GeoVision Pro.",
-    fullContent: "GeoVision Pro proudly presents a free online webinar titled 'AI in Remote Sensing: Trends & Applications 2026'. Date: 18 June 2026 | Time: 3:00 PM – 5:30 PM IST | Platform: Zoom Webinar. Speakers: Dr. P. Krishnan (ISRO SAC), Prof. S. Kumar (IIT Bombay, Geospatial Lab), Ms. N. Rao (GeoVision Pro, AI Lead). Topics: Deep Learning for LULC classification, SAR image interpretation using CNN, Geo-AI for disaster risk assessment, LLM-assisted geospatial data querying. Registration: Free | geovisionpro.com/webinar-june2026. Certificate of participation will be issued to all attendees.",
+    summary: "Free webinar on AI/ML applications in satellite image analysis. Featuring speakers from ISRO, IIT Bombay, and Deep Earth Science.",
+    fullContent: "Deep Earth Science proudly presents a free online webinar titled 'AI in Remote Sensing: Trends & Applications 2026'. Date: 18 June 2026 | Time: 3:00 PM – 5:30 PM IST | Platform: Zoom Webinar. Speakers: Dr. P. Krishnan (ISRO SAC), Prof. S. Kumar (IIT Bombay, Geospatial Lab), Ms. N. Rao (Deep Earth Science, AI Lead). Topics: Deep Learning for LULC classification, SAR image interpretation using CNN, Geo-AI for disaster risk assessment, LLM-assisted geospatial data querying. Registration: Free | DeepEarthScience.com/webinar-june2026. Certificate of participation will be issued to all attendees.",
     date: "2026-05-28",
     expiryDate: "2026-06-18",
     department: "AI & Analytics Division",
@@ -151,8 +151,8 @@ const NOTICES: Notice[] = [
   {
     id: "GVP-2026-007",
     title: "Office Closure: Eid al-Adha — 17 June 2026",
-    summary: "GeoVision Pro offices (Hyderabad & Delhi) will remain closed on 17 June 2026 on account of Eid al-Adha. All project deadlines falling on this date are automatically deferred.",
-    fullContent: "GeoVision Pro offices in Hyderabad and Delhi will remain closed on Tuesday, 17 June 2026, on account of Eid al-Adha (Bakrid). This is a gazetted public holiday. All project deadlines, client meetings, and deliverable submissions originally scheduled for 17 June 2026 are automatically rescheduled to the next working day, i.e., 18 June 2026. Ongoing field surveys and drone operations should be rescheduled by respective project managers. For urgent project matters, contact the emergency helpdesk: +91-98XXX-XXXXX.",
+    summary: "Deep Earth Science offices (Hyderabad & Delhi) will remain closed on 17 June 2026 on account of Eid al-Adha. All project deadlines falling on this date are automatically deferred.",
+    fullContent: "Deep Earth Science offices in Hyderabad and Delhi will remain closed on Tuesday, 17 June 2026, on account of Eid al-Adha (Bakrid). This is a gazetted public holiday. All project deadlines, client meetings, and deliverable submissions originally scheduled for 17 June 2026 are automatically rescheduled to the next working day, i.e., 18 June 2026. Ongoing field surveys and drone operations should be rescheduled by respective project managers. For urgent project matters, contact the emergency helpdesk: +91-98XXX-XXXXX.",
     date: "2026-05-25",
     department: "Administration",
     category: "administrative",
@@ -168,7 +168,7 @@ const NOTICES: Notice[] = [
     id: "GVP-2026-008",
     title: "STAAD Pro Structural Analysis — Intensive Weekend Batch",
     summary: "8-week intensive STAAD Pro course starting 6 July 2026 (weekends only). IS Code compliant design included. Limited to 20 participants.",
-    fullContent: "GeoVision Pro Training Division announces an intensive weekend batch for STAAD Pro Structural Analysis (July–August 2026). Schedule: Every Saturday & Sunday, 6 July – 30 August 2026 | 9:00 AM – 1:00 PM IST. Mode: Online (live) + Recorded Access. Fee: ₹12,500 (inclusive of GST). Topics: Structural modelling, load combinations as per IS 875, RCC design to IS 456, steel design to IS 800, foundation design, result interpretation and report generation. Eligibility: B.Tech/B.E. Civil Engineering students or graduates. Certificate: Yes, upon 80% attendance and passing the end assessment. Registration closes: 30 June 2026.",
+    fullContent: "Deep Earth Science Training Division announces an intensive weekend batch for STAAD Pro Structural Analysis (July–August 2026). Schedule: Every Saturday & Sunday, 6 July – 30 August 2026 | 9:00 AM – 1:00 PM IST. Mode: Online (live) + Recorded Access. Fee: ₹12,500 (inclusive of GST). Topics: Structural modelling, load combinations as per IS 875, RCC design to IS 456, steel design to IS 800, foundation design, result interpretation and report generation. Eligibility: B.Tech/B.E. Civil Engineering students or graduates. Certificate: Yes, upon 80% attendance and passing the end assessment. Registration closes: 30 June 2026.",
     date: "2026-05-20",
     expiryDate: "2026-07-06",
     department: "Training & Education",
@@ -187,7 +187,7 @@ const NOTICES: Notice[] = [
     id: "GVP-2026-009",
     title: "System Maintenance: GIS Portal Downtime — 22 June 2026",
     summary: "Scheduled server maintenance on 22 June 2026 (2:00 AM–6:00 AM IST). GIS portal, client dashboard, and data download services will be unavailable.",
-    fullContent: "GeoVision Pro IT Department informs all users that the GIS portal, client data dashboard, and project data download services will undergo scheduled maintenance on Sunday, 22 June 2026 from 2:00 AM to 6:00 AM IST (approximately 4 hours). During this window: all portal logins will be disabled, ongoing data uploads should be paused, email services will be functional, emergency support available at it-support@geovisionpro.com. This maintenance is required for server upgrades, security patches, and database optimization. We apologize for any inconvenience.",
+    fullContent: "Deep Earth Science IT Department informs all users that the GIS portal, client data dashboard, and project data download services will undergo scheduled maintenance on Sunday, 22 June 2026 from 2:00 AM to 6:00 AM IST (approximately 4 hours). During this window: all portal logins will be disabled, ongoing data uploads should be paused, email services will be functional, emergency support available at it-support@DeepEarthScience.com. This maintenance is required for server upgrades, security patches, and database optimization. We apologize for any inconvenience.",
     date: "2026-05-18",
     department: "IT & Systems",
     category: "administrative",
@@ -202,8 +202,8 @@ const NOTICES: Notice[] = [
   {
     id: "GVP-2026-010",
     title: "Research Paper Submission: ISPRS Journal — Special Issue",
-    summary: "GeoVision Pro researchers are encouraged to submit papers to ISPRS Journal of Photogrammetry special issue on 'AI-Driven Urban Remote Sensing'.",
-    fullContent: "The ISPRS Journal of Photogrammetry and Remote Sensing has announced a special issue on 'AI-Driven Urban Remote Sensing — Methods and Applications'. GeoVision Pro encourages its research staff and senior analysts to submit original research papers. Submission portal opens: 1 July 2026. Deadline for submission: 30 September 2026. Topics of interest: Deep learning for building extraction, Urban heat island mapping, Change detection using multi-sensor data, 3D city modelling, Smart city geospatial infrastructure. Research support (writing assistance, figure preparation) available from our Academic Division. Contact: research@geovisionpro.com",
+    summary: "Deep Earth Science researchers are encouraged to submit papers to ISPRS Journal of Photogrammetry special issue on 'AI-Driven Urban Remote Sensing'.",
+    fullContent: "The ISPRS Journal of Photogrammetry and Remote Sensing has announced a special issue on 'AI-Driven Urban Remote Sensing — Methods and Applications'. Deep Earth Science encourages its research staff and senior analysts to submit original research papers. Submission portal opens: 1 July 2026. Deadline for submission: 30 September 2026. Topics of interest: Deep learning for building extraction, Urban heat island mapping, Change detection using multi-sensor data, 3D city modelling, Smart city geospatial infrastructure. Research support (writing assistance, figure preparation) available from our Academic Division. Contact: research@DeepEarthScience.com",
     date: "2026-05-15",
     expiryDate: "2026-09-30",
     department: "Research & Development",
@@ -222,7 +222,7 @@ const NOTICES: Notice[] = [
     id: "GVP-2026-011",
     title: "Fee Revision: Professional Certification Courses — July 2026",
     summary: "Course fees for all professional certification programs will be revised upward by 8% effective from the July 2026 batch onwards.",
-    fullContent: "GeoVision Pro Training Division informs prospective students that professional certification course fees will be revised upward by approximately 8% for batches commencing from July 2026 onwards. This revision is necessitated by increased infrastructure costs, upgraded software licenses, and enhanced course content. The current fee structure remains applicable for all enrollments completed before 30 June 2026. Students enrolling before the deadline will be locked into the current pricing even if the batch starts after 1 July 2026. Early bird discounts will continue for eligible students. For detailed fee schedules, contact: training@geovisionpro.com",
+    fullContent: "Deep Earth Science Training Division informs prospective students that professional certification course fees will be revised upward by approximately 8% for batches commencing from July 2026 onwards. This revision is necessitated by increased infrastructure costs, upgraded software licenses, and enhanced course content. The current fee structure remains applicable for all enrollments completed before 30 June 2026. Students enrolling before the deadline will be locked into the current pricing even if the batch starts after 1 July 2026. Early bird discounts will continue for eligible students. For detailed fee schedules, contact: training@DeepEarthScience.com",
     date: "2026-05-10",
     department: "Finance & Accounts",
     category: "administrative",
@@ -239,8 +239,8 @@ const NOTICES: Notice[] = [
   {
     id: "GVP-2026-012",
     title: "Empanelment Notice: GIS Consultants & Freelance Analysts",
-    summary: "GeoVision Pro invites applications from qualified GIS professionals for empanelment as associate consultants for project-based assignments.",
-    fullContent: "GeoVision Pro is building a panel of qualified GIS consultants and remote sensing specialists for project-based engagements. Eligible candidates: M.Sc./B.Tech in Geography, Geomatics, Environmental Science; Minimum 2 years of relevant experience; Proficiency in ArcGIS Pro or QGIS (mandatory), additional tools (Google Earth Engine, ENVI, ERDAS, AutoCAD Civil 3D) preferred. Nature of work: Short-term project assignments (2–6 months), remote/hybrid. Remuneration: Competitive, project-based. How to apply: Send CV + portfolio to empanelment@geovisionpro.com with subject line 'GIS Consultant Empanelment 2026'. Last date: 15 July 2026.",
+    summary: "Deep Earth Science invites applications from qualified GIS professionals for empanelment as associate consultants for project-based assignments.",
+    fullContent: "Deep Earth Science is building a panel of qualified GIS consultants and remote sensing specialists for project-based engagements. Eligible candidates: M.Sc./B.Tech in Geography, Geomatics, Environmental Science; Minimum 2 years of relevant experience; Proficiency in ArcGIS Pro or QGIS (mandatory), additional tools (Google Earth Engine, ENVI, ERDAS, AutoCAD Civil 3D) preferred. Nature of work: Short-term project assignments (2–6 months), remote/hybrid. Remuneration: Competitive, project-based. How to apply: Send CV + portfolio to empanelment@DeepEarthScience.com with subject line 'GIS Consultant Empanelment 2026'. Last date: 15 July 2026.",
     date: "2026-05-05",
     expiryDate: "2026-07-15",
     department: "HR & Administration",
@@ -340,7 +340,7 @@ function downloadPDF(notice: Notice) {
         </svg>
       </div>
       <div>
-        <div class="org-name">GeoVision<span class="pro">Pro</span></div>
+        <div class="org-name">DeepEarth<span class="science">Science</span></div>
         <div class="org-sub">Remote Sensing · GIS · AI · Training</div>
       </div>
     </div>
@@ -370,7 +370,7 @@ function downloadPDF(notice: Notice) {
   </div>
 
   <div class="footer">
-    <span>GeoVision Pro · info@geovisionpro.com · geovisionpro.com</span>
+    <span>Deep Earth Science · info@DeepEarthScience.com · DeepEarthScience.com</span>
     <span class="watermark">Official Notice · ${notice.id}</span>
   </div>
 </body>
@@ -586,7 +586,7 @@ export default function NoticesPage() {
             Notice <span style={{ background: "linear-gradient(135deg,#2563eb,#059669)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Board</span>
           </h1>
           <p className="text-center text-sm md:text-base mb-10 max-w-xl mx-auto" style={{ color: "#94a3b8" }}>
-            Official announcements, tenders, course updates, and institutional notices from GeoVision Pro
+            Official announcements, tenders, course updates, and institutional notices from Deep Earth Science
           </p>
 
           {/* Stats row */}

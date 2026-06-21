@@ -1,4 +1,4 @@
-export default function CTA() {
+﻿export default function CTA() {
   return (
     <section className="relative py-24 overflow-hidden" style={{ background: "linear-gradient(135deg,#0f2d6e 0%,#1d4ed8 60%,#1e40af 100%)" }}>
       {/* Subtle dot grid */}
@@ -27,7 +27,7 @@ export default function CTA() {
           </span>
         </h2>
         <p className="text-blue-200 text-lg mb-10 max-w-xl mx-auto">
-          Join 1,200+ professionals who have transformed their careers with GeoVision Pro.
+          Join 1,200+ professionals who have transformed their careers with Deep Earth Science.
         </p>
         <div className="flex flex-wrap justify-center gap-4">
           <a

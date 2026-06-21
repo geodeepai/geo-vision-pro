@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -6,7 +6,7 @@ import Footer from "@/components/Footer";
 const SECTIONS = [
   {
     title: "1. Introduction",
-    body: `GeoVisionPro ("we", "us", "our") provides geospatial consultancy services and professional training courses through this website and learner dashboard. This Privacy Policy explains what information we collect, how we use it, and the choices you have.`,
+    body: `DeepEarthScience ("we", "us", "our") provides geospatial consultancy services and professional training courses through this website and learner dashboard. This Privacy Policy explains what information we collect, how we use it, and the choices you have.`,
   },
   {
     title: "2. Information We Collect",

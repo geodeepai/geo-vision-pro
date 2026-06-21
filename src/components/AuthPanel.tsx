@@ -49,7 +49,7 @@ export default function AuthPanel() {
           </svg>
         </div>
         <span className="text-white font-bold text-lg tracking-tight">
-          GeoVision<span className="text-blue-400">Pro</span>
+          DeepEarth<span className="text-blue-400">Science</span>
         </span>
       </div>
 

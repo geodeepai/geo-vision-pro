@@ -27,7 +27,7 @@ const LEARN_NAV = [
   },
 ];
 
-/* ── Inline GeoVisionPro logo mark ──────────────────────────────── */
+/* ── Inline DeepEarthScience logo mark ──────────────────────────────── */
 function LogoMark({ size = 28 }: { size?: number }) {
   return (
     <div
@@ -103,7 +103,7 @@ export default function LearnLayout({ children }: { children: React.ReactNode })
                 className="text-[13px] font-black tracking-tight transition-colors duration-200 group-hover:text-white"
                 style={{ color: "#d4e2f0" }}
               >
-                GeoVision<span style={{ color: "#3b82f6" }}>Pro</span>
+                DeepEarth<span style={{ color: "#3b82f6" }}>Science</span>
               </span>
               <div className="flex items-center gap-0.5 mt-0.5">
                 <span className="text-[9px] font-semibold uppercase tracking-widest transition-colors duration-200"

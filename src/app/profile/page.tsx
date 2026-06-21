@@ -89,7 +89,7 @@ const MOCK_USER = {
   interest: "Google Earth Engine (GEE)",
   memberSince: "January 2025",
   streak: 7,
-  plan: "Pro",
+  plan: "science",
 };
 
 const CERTIFICATES: Record<number, { date: string; id: string; grade: string; instructor: string }> = {
@@ -699,7 +699,7 @@ export default function ProfilePage() {
                 <circle cx="12" cy="12" r="2" fill="white" />
               </svg>
             </div>
-            <span className="font-bold text-slate-900 text-[16px] tracking-tight">GeoVision<span className="text-blue-600">Pro</span></span>
+            <span className="font-bold text-slate-900 text-[16px] tracking-tight">DeepEarth<span className="text-blue-600">Science</span></span>
             <span className="hidden lg:flex items-center gap-1.5 ml-2 pl-3 text-sm" style={{ borderLeft: "1px solid rgba(15,23,42,0.08)" }}>
               <span className="text-slate-400">Learner</span>
               <ChevronRight size={13} className="text-slate-300" />
@@ -1606,7 +1606,7 @@ export default function ProfilePage() {
       {/* ── Footer ─────────────────────────────────────────── */}
       <footer className="px-5 md:px-9 py-5" style={{ borderTop: "1px solid rgba(15,23,42,0.06)" }}>
         <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-400">
-          <p>&copy; 2026 GeoVisionPro. All rights reserved.</p>
+          <p>&copy; 2026 DeepEarthScience. All rights reserved.</p>
           <div className="flex items-center gap-5">
             <Link href="/help" className="hover:text-slate-600 transition-colors">Help &amp; Support</Link>
             <Link href="/privacy" className="hover:text-slate-600 transition-colors">Privacy Policy</Link>

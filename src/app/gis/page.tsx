@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { CheckCircle, Mail, Phone, MapPin } from "lucide-react";
@@ -209,10 +209,10 @@ export default function GISPage() {
             <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
               <svg viewBox="0 0 24 24" fill="none" className="w-4 h-4"><circle cx="12" cy="12" r="9" stroke="white" strokeWidth="1.5" /><path d="M4 12 Q8 6 12 12 Q16 18 20 12" stroke="white" strokeWidth="1.8" fill="none" strokeLinecap="round" /></svg>
             </div>
-            <span className="text-sm font-bold text-slate-800">GeoVision Pro</span>
+            <span className="text-sm font-bold text-slate-800">Deep Earth Science</span>
           </div>
           <div className="flex items-center gap-5 text-xs text-slate-500">
-            <a href="mailto:geovisionpro@email.com" className="flex items-center gap-1 hover:text-blue-600 transition-colors"><Mail size={11} /> geovisionpro@email.com</a>
+            <a href="mailto:DeepEarthScience@email.com" className="flex items-center gap-1 hover:text-blue-600 transition-colors"><Mail size={11} /> DeepEarthScience@email.com</a>
             <a href="tel:+91XXXXXXXXXX" className="flex items-center gap-1 hover:text-blue-600 transition-colors"><Phone size={11} /> +91 XXXX XXX XXX</a>
             <span className="flex items-center gap-1"><MapPin size={11} /> India</span>
           </div>

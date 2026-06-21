@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -6,11 +6,11 @@ import Footer from "@/components/Footer";
 const SECTIONS = [
   {
     title: "1. Acceptance of Terms",
-    body: `By creating an account, enrolling in a course, or otherwise using the GeoVisionPro website and learner dashboard, you agree to be bound by these Terms of Service. If you do not agree, please do not use our services.`,
+    body: `By creating an account, enrolling in a course, or otherwise using the DeepEarthScience website and learner dashboard, you agree to be bound by these Terms of Service. If you do not agree, please do not use our services.`,
   },
   {
     title: "2. Description of Service",
-    body: `GeoVisionPro provides geospatial consultancy services and online/offline professional training courses in GIS, remote sensing, drone mapping, AI-powered geo-analytics, and related fields.`,
+    body: `DeepEarthScience provides geospatial consultancy services and online/offline professional training courses in GIS, remote sensing, drone mapping, AI-powered geo-analytics, and related fields.`,
   },
   {
     title: "3. User Accounts",
@@ -26,7 +26,7 @@ const SECTIONS = [
   },
   {
     title: "6. Intellectual Property",
-    body: `All course materials, videos, documents, and certificates are the intellectual property of GeoVisionPro or its instructors and are licensed to you for personal, non-commercial learning use only. Redistribution or resale of course content is not permitted.`,
+    body: `All course materials, videos, documents, and certificates are the intellectual property of DeepEarthScience or its instructors and are licensed to you for personal, non-commercial learning use only. Redistribution or resale of course content is not permitted.`,
   },
   {
     title: "7. Code of Conduct",
@@ -38,7 +38,7 @@ const SECTIONS = [
   },
   {
     title: "9. Limitation of Liability",
-    body: `GeoVisionPro provides courses and consultancy services on an "as is" basis. We are not liable for indirect or incidental damages arising from use of our services, to the extent permitted by law.`,
+    body: `DeepEarthScience provides courses and consultancy services on an "as is" basis. We are not liable for indirect or incidental damages arising from use of our services, to the extent permitted by law.`,
   },
   {
     title: "10. Termination",

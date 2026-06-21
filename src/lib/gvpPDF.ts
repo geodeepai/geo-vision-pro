@@ -1,4 +1,4 @@
-/* ── GeoVisionPro PDF Generator ─────────────────────────────────────
+/* ── DeepEarthScience PDF Generator ─────────────────────────────────────
    Every PDF carries a GVP-[CODE]-2026-[NNN] reference number,
    full date in the header, short date in the footer, and
    professional body content throughout.
@@ -130,10 +130,10 @@ function addHeader(doc: Doc, m: DocMeta) {
   setTextColor(doc, WHITE);
   doc.setFont("helvetica", "bold");
   doc.setFontSize(13);
-  const gW = doc.getTextWidth("GeoVision");
-  doc.text("GeoVision", LX + LS + 4, LY + 7);
+  const gW = doc.getTextWidth("DeepEarth");
+  doc.text("DeepEarth", LX + LS + 4, LY + 7);
   setTextColor(doc, PRO_BLUE);
-  doc.text("Pro", LX + LS + 4 + gW, LY + 7);
+  doc.text("science", LX + LS + 4 + gW, LY + 7);
 
   setTextColor(doc, LIGHT);
   doc.setFont("helvetica", "normal");
@@ -145,7 +145,7 @@ function addHeader(doc: Doc, m: DocMeta) {
 
   setTextColor(doc, LIGHT);
   doc.setFontSize(7);
-  doc.text("www.geovisionpro.com", W - 10, LY + 10, { align: "right" });
+  doc.text("www.DeepEarthScience.com", W - 10, LY + 10, { align: "right" });
 
   // Metadata box
   setFill(doc, META_BG);
@@ -183,7 +183,7 @@ function addHeader(doc: Doc, m: DocMeta) {
 }
 
 /* ── Page footer ─────────────────────────────────────────────────── */
-function addFooter(doc: Doc, page: number, total: number, ref: string, entity = "GeoVisionPro") {
+function addFooter(doc: Doc, page: number, total: number, ref: string, entity = "DeepEarthScience") {
   const W = doc.internal.pageSize.getWidth();
   const H = doc.internal.pageSize.getHeight();
 
@@ -195,7 +195,7 @@ function addFooter(doc: Doc, page: number, total: number, ref: string, entity = 
   doc.setFontSize(7);
   doc.text(`Page ${page} of ${total}`, 10, H - 4.5);
   doc.text(`Ref: ${ref}  |  ${DATE_SHORT}  |  © 2026 ${entity}`, W / 2, H - 4.5, { align: "center" });
-  doc.text("www.geovisionpro.com", W - 10, H - 4.5, { align: "right" });
+  doc.text("www.DeepEarthScience.com", W - 10, H - 4.5, { align: "right" });
 }
 
 /* ══════════════════════════════════════════════════════════════════
@@ -216,7 +216,7 @@ export async function downloadPressRelease(
     ref,
     type: "Press Release",
     left: ["Issued by", "Corporate Communications Dept"],
-    right: [["Website", "www.geovisionpro.com"]],
+    right: [["Website", "www.DeepEarthScience.com"]],
   });
 
   let y = CY;
@@ -233,7 +233,7 @@ export async function downloadPressRelease(
   setTextColor(doc, [80, 110, 150] as RGB);
   doc.setFont("helvetica", "normal");
   doc.setFontSize(8);
-  doc.text(`Date: ${date}  ·  Source: GeoVisionPro Official Communications`, 10, y);
+  doc.text(`Date: ${date}  ·  Source: DeepEarthScience Official Communications`, 10, y);
   y += 8;
   hr(doc, y, GREEN); y += 8;
 
@@ -276,18 +276,18 @@ export async function downloadPressRelease(
     setTextColor(doc, [80, 110, 150] as RGB);
     doc.setFont("helvetica", "normal");
     doc.setFontSize(8);
-    doc.text("— Director, GeoVisionPro", 18, qy + 3);
+    doc.text("— Director, DeepEarthScience", 18, qy + 3);
     y = qy + 12;
   }
 
   y += 4;
   hr(doc, y); y += 8;
-  y = secHead(doc, "About GeoVisionPro", y);
+  y = secHead(doc, "About DeepEarthScience", y);
   setTextColor(doc, BODY_TXT);
   doc.setFont("helvetica", "normal");
   doc.setFontSize(9);
   y = wrappedText(doc,
-    "GeoVisionPro is India's premier geospatial technology company, specialising in remote sensing, GIS analysis, satellite mapping, drone surveys, and AI-powered geo-analytics. Serving government agencies, urban planners, and environmental organisations across 22 states.",
+    "DeepEarthScience is India's premier geospatial technology company, specialising in remote sensing, GIS analysis, satellite mapping, drone surveys, and AI-powered geo-analytics. Serving government agencies, urban planners, and environmental organisations across 22 states.",
     10, y, W - 20, 5);
   y += 7;
 
@@ -296,7 +296,7 @@ export async function downloadPressRelease(
   doc.setFont("helvetica", "bold");
   doc.text("Media Contact:", 10, y); y += 5;
   doc.setFont("helvetica", "normal");
-  doc.text("communications@geovisionpro.com  |  +91-XXXXX-XXXXX", 10, y);
+  doc.text("communications@DeepEarthScience.com  |  +91-XXXXX-XXXXX", 10, y);
 
   addFooter(doc, 1, 1, ref);
   doc.save(`${ref}.pdf`);
@@ -310,7 +310,7 @@ const PUB_CODE: Record<string, string> = {
 
 export async function downloadPublication(
   title: string, type: string, date: string, pages: number, desc: string,
-  author = "GeoVisionPro Research Division", idx = 1
+  author = "DeepEarthScience Research Division", idx = 1
 ) {
   const JsPDF = await getJsPDF();
   const doc   = new JsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
@@ -331,9 +331,9 @@ export async function downloadPublication(
   setTextColor(doc, WHITE);
   doc.setFont("helvetica", "bold");
   doc.setFontSize(14);
-  doc.text("GeoVision", W / 2 - doc.getTextWidth("GeoVisionPro") / 2, 78);
+  doc.text("DeepEarth", W / 2 - doc.getTextWidth("DeepEarthScience") / 2, 78);
   setTextColor(doc, PRO_BLUE);
-  doc.text("Pro", W / 2 - doc.getTextWidth("GeoVisionPro") / 2 + doc.getTextWidth("GeoVision"), 78);
+  doc.text("science", W / 2 - doc.getTextWidth("DeepEarthScience") / 2 + doc.getTextWidth("DeepEarth"), 78);
 
   tagBadge(doc, type.toUpperCase(), W / 2 - 15, 91);
 
@@ -446,7 +446,7 @@ export async function downloadTranscript(
   addHeader(doc, {
     ref, type,
     left: ["Duration", duration],
-    right: [["Speaker", "GeoVisionPro Expert Team"]],
+    right: [["Speaker", "DeepEarthScience Expert Team"]],
   });
 
   let y = CY;
@@ -462,17 +462,17 @@ export async function downloadTranscript(
   setTextColor(doc, [80, 110, 150] as RGB);
   doc.setFont("helvetica", "normal");
   doc.setFontSize(8);
-  doc.text(`GeoVision Video Series  ·  Duration: ${duration}  ·  GeoVisionPro Academy`, 10, y);
+  doc.text(`DeepEarth Video Series  ·  Duration: ${duration}  ·  DeepEarthScience Academy`, 10, y);
   y += 9;
   hr(doc, y, GREEN); y += 9;
 
   if (kind === "Transcript") {
     const segments = [
-      { time: "00:00", head: "Introduction",    text: `Welcome to GeoVisionPro's video series. Today's session covers: ${title}. This topic is fundamental to modern geospatial practice and has wide applications across urban planning, environmental monitoring, and infrastructure development.` },
+      { time: "00:00", head: "Introduction",    text: `Welcome to DeepEarthScience's video series. Today's session covers: ${title}. This topic is fundamental to modern geospatial practice and has wide applications across urban planning, environmental monitoring, and infrastructure development.` },
       { time: "02:15", head: "Background",       text: "We begin with the theoretical foundation — why this topic matters and how it fits into the broader landscape of GIS and remote sensing workflows used by professionals across India and globally." },
-      { time: "05:40", head: "Methodology",      text: "The methodology section covers data acquisition strategies, processing pipelines, and quality assurance techniques. We walk through each step with screen-captured examples from real GeoVisionPro project environments." },
-      { time: "09:00", head: "Case Study",        text: "A real-world case study from GeoVisionPro's field operations is examined in detail, demonstrating practical application of the technique and quantifying the accuracy gains achieved in the field." },
-      { time: "11:30", head: "Key Takeaways",     text: "We close with a concise summary of the most actionable learnings from this session, plus links to supplementary reading materials and GeoVisionPro Academy course registration." },
+      { time: "05:40", head: "Methodology",      text: "The methodology section covers data acquisition strategies, processing pipelines, and quality assurance techniques. We walk through each step with screen-captured examples from real DeepEarthScience project environments." },
+      { time: "09:00", head: "Case Study",        text: "A real-world case study from DeepEarthScience's field operations is examined in detail, demonstrating practical application of the technique and quantifying the accuracy gains achieved in the field." },
+      { time: "11:30", head: "Key Takeaways",     text: "We close with a concise summary of the most actionable learnings from this session, plus links to supplementary reading materials and DeepEarthScience Academy course registration." },
     ];
     y = secHead(doc, "Full Transcript", y);
     segments.forEach(s => {
@@ -503,7 +503,7 @@ export async function downloadTranscript(
       ["04", "Step-by-Step Methodology",      "Full data processing workflow with annotated screenshots."],
       ["05", "Data Sources & Tools",          "Overview of satellite data platforms and GIS tools used."],
       ["06", "Results & Visualisation",       "Thematic maps, charts, and accuracy assessment outputs."],
-      ["07", "Case Studies",                  "Two real-world project examples from GeoVisionPro's portfolio."],
+      ["07", "Case Studies",                  "Two real-world project examples from DeepEarthScience's portfolio."],
       ["08", "Summary & Q&A",                 "Key learnings, next steps, and audience question session."],
     ];
     slides.forEach(([num, title2, note]) => {
@@ -528,11 +528,11 @@ export async function downloadTranscript(
   } else {
     y = secHead(doc, "Study Notes & Exercises", y);
     const notes = [
-      ["Pre-reading Checklist",  "Review basic coordinate systems (WGS84/UTM), familiarise yourself with the QGIS or ArcGIS interface, and ensure access to the sample dataset at geovisionpro.com/academy/resources."],
+      ["Pre-reading Checklist",  "Review basic coordinate systems (WGS84/UTM), familiarise yourself with the QGIS or ArcGIS interface, and ensure access to the sample dataset at DeepEarthScience.com/academy/resources."],
       ["Core Terminology",        "Key terms: multi-temporal analysis, supervised classification, accuracy assessment, NDVI, spectral bands, ground truth, spatial resolution, and confusion matrix."],
       ["Exercise 1 – Hands-on",  "Download the provided Sentinel-2 data subset. Apply atmospheric correction (DOS1 method) using QGIS Semi-Automatic Classification Plugin. Export the corrected image as GeoTIFF."],
       ["Exercise 2 – Analysis",   "Perform supervised classification using a minimum of 5 land-cover classes. Calculate overall accuracy and Kappa coefficient from the resulting confusion matrix."],
-      ["Further Reading",          "Lillesand, Kiefer & Chipman (2015) — Remote Sensing and Image Interpretation; Jensen (2016) — Introductory Digital Image Processing; GeoVisionPro blog at geovisionpro.com/blogs."],
+      ["Further Reading",          "Lillesand, Kiefer & Chipman (2015) — Remote Sensing and Image Interpretation; Jensen (2016) — Introductory Digital Image Processing; DeepEarthScience blog at DeepEarthScience.com/blogs."],
     ];
     notes.forEach(([head, text]) => {
       if (y > H - 30) return;
@@ -576,7 +576,7 @@ export async function downloadNewsletter(month: string, edition: number) {
   setTextColor(doc, WHITE);
   doc.setFont("helvetica", "bold");
   doc.setFontSize(16);
-  doc.text("GeoVision Monthly", W / 2, CY + 11, { align: "center" });
+  doc.text("DeepEarth Monthly", W / 2, CY + 11, { align: "center" });
   setTextColor(doc, GREEN);
   doc.setFontSize(9);
   doc.text(`${month}  ·  Edition #${edition}`, W / 2, CY + 17.5, { align: "center" });
@@ -592,18 +592,18 @@ export async function downloadNewsletter(month: string, edition: number) {
   doc.setFont("helvetica", "normal");
   doc.setFontSize(9);
   y = wrappedText(doc,
-    `Dear GeoVisionPro Community, welcome to the ${month} edition of the GeoVision Monthly. This issue brings you updates from our field operations, course launches, platform improvements, and upcoming events across India.`,
+    `Dear DeepEarthScience Community, welcome to the ${month} edition of the DeepEarth Monthly. This issue brings you updates from our field operations, course launches, platform improvements, and upcoming events across India.`,
     10, y, W - 20, 5);
   y += 8;
 
   const stories = [
     {
       head: "Platform Update",
-      body: "Our satellite data portal now supports batch download of multi-temporal Sentinel-2 composites, reducing processing time by up to 60% for large area studies. The updated interface is available at portal.geovisionpro.com with role-based access for enterprise and government clients.",
+      body: "Our satellite data portal now supports batch download of multi-temporal Sentinel-2 composites, reducing processing time by up to 60% for large area studies. The updated interface is available at portal.DeepEarthScience.com with role-based access for enterprise and government clients.",
     },
     {
       head: "Training Spotlight",
-      body: "New batch of the Google Earth Engine Professional Course opens next month. Early bird enrolment is live at geovisionpro.com/courses. The programme covers satellite data processing, machine learning classification, and large-scale environmental analysis using GEE's JavaScript API.",
+      body: "New batch of the Google Earth Engine Professional Course opens next month. Early bird enrolment is live at DeepEarthScience.com/courses. The programme covers satellite data processing, machine learning classification, and large-scale environmental analysis using GEE's JavaScript API.",
     },
     {
       head: "Project Milestone",
@@ -611,7 +611,7 @@ export async function downloadNewsletter(month: string, edition: number) {
     },
     {
       head: "Industry News",
-      body: "India's National Remote Sensing Centre has published updated LULC basemaps for 2025. GeoVisionPro's comparative analysis — validating NRSC outputs against our field-verified datasets across five states — is now available for download on our publications page.",
+      body: "India's National Remote Sensing Centre has published updated LULC basemaps for 2025. DeepEarthScience's comparative analysis — validating NRSC outputs against our field-verified datasets across five states — is now available for download on our publications page.",
     },
   ];
 
@@ -643,7 +643,7 @@ export async function downloadNewsletter(month: string, edition: number) {
     setTextColor(doc, LIGHT);
     doc.setFont("helvetica", "normal");
     doc.setFontSize(8);
-    doc.text("•  GeoVisionPro Training Webinar – Free registration open at geovisionpro.com/events", 14, y + 13);
+    doc.text("•  DeepEarthScience Training Webinar – Free registration open at DeepEarthScience.com/events", 14, y + 13);
     doc.text("•  Field Survey debrief meeting – Internal calendar invite sent to project teams", 14, y + 18.5);
   }
 
@@ -667,7 +667,7 @@ export async function downloadNewsletter(month: string, edition: number) {
   const evList: [string, string, string][] = [
     ["Remote Sensing Workshop",  "July 5, 2026",     "Kolkata"],
     ["GIS India Summit",         "August 15, 2026",  "New Delhi"],
-    ["GeoVisionPro Annual Meet", "Sept 20, 2026",    "Bangalore"],
+    ["DeepEarthScience Annual Meet", "Sept 20, 2026",    "Bangalore"],
   ];
   evList.forEach(([name, d, loc]) => {
     setFill(doc, DARK);
@@ -688,11 +688,11 @@ export async function downloadNewsletter(month: string, edition: number) {
   setTextColor(doc, BODY_TXT);
   doc.setFont("helvetica", "normal");
   doc.setFontSize(9);
-  doc.text("newsletter@geovisionpro.com  |  www.geovisionpro.com/newsletter", 10, y2);
+  doc.text("newsletter@DeepEarthScience.com  |  www.DeepEarthScience.com/newsletter", 10, y2);
   y2 += 6;
   setTextColor(doc, [80, 110, 150] as RGB);
   doc.setFontSize(8);
-  doc.text("To unsubscribe reply UNSUBSCRIBE to the address above. View past issues at geovisionpro.com/newsletters.", 10, y2);
+  doc.text("To unsubscribe reply UNSUBSCRIBE to the address above. View past issues at DeepEarthScience.com/newsletters.", 10, y2);
 
   addFooter(doc, 2, 2, ref);
   doc.save(`${ref}-${month.replace(/\s/g, "")}.pdf`);
@@ -811,7 +811,7 @@ export async function downloadEventPDF(
     setTextColor(doc, WHITE);
     doc.setFont("helvetica", "bold");
     doc.setFontSize(9);
-    doc.text("Submit to: events@geovisionpro.com  |  WhatsApp: +91-XXXXX-XXXXX", W / 2, y + 6.5, { align: "center" });
+    doc.text("Submit to: events@DeepEarthScience.com  |  WhatsApp: +91-XXXXX-XXXXX", W / 2, y + 6.5, { align: "center" });
 
   } else {
     y = secHead(doc, "Why Attend?", y);
@@ -820,7 +820,7 @@ export async function downloadEventPDF(
       "Attend technical paper presentations on cutting-edge geospatial research.",
       "Visit the technology expo showcasing the latest mapping and survey equipment.",
       "Earn CPD points towards your professional continuing development requirements.",
-      "Receive a certificate of participation from GeoVisionPro and supporting bodies.",
+      "Receive a certificate of participation from DeepEarthScience and supporting bodies.",
     ].forEach(b => {
       if (y > H - 20) return;
       setTextColor(doc, BODY_TXT);
@@ -835,7 +835,7 @@ export async function downloadEventPDF(
     setTextColor(doc, WHITE);
     doc.setFont("helvetica", "bold");
     doc.setFontSize(9);
-    doc.text("Register: events.geovisionpro.com  |  events@geovisionpro.com", W / 2, y + 7.5, { align: "center" });
+    doc.text("Register: events.DeepEarthScience.com  |  events@DeepEarthScience.com", W / 2, y + 7.5, { align: "center" });
   }
 
   addFooter(doc, 1, 1, ref);
@@ -889,7 +889,7 @@ export async function downloadSurveyPDF(
   setTextColor(doc, GREEN);
   doc.setFontSize(8.5);
   doc.setFont("helvetica", "normal");
-  doc.text(`Location: ${location}  ·  Team: GeoVisionPro Survey Division`, 10, y);
+  doc.text(`Location: ${location}  ·  Team: DeepEarthScience Survey Division`, 10, y);
   y += 9;
   hr(doc, y, GREEN); y += 9;
 
@@ -951,7 +951,7 @@ export async function downloadSurveyPDF(
       { h: "1. Project Overview",     t: `This survey was commissioned to systematically assess and document ${project} using precision geospatial methods. The scope covers the full designated study area in ${location} with deliverables conforming to national mapping and reporting standards.` },
       { h: "2. Methodology",          t: "Multi-phase approach: Phase 1 — reconnaissance and horizontal/vertical control establishment using DGPS. Phase 2 — data acquisition via UAV photogrammetry and multispectral satellite imagery. Phase 3 — processing, classification, and statistical accuracy assessment against independent check points." },
       { h: "3. Preliminary Findings", t: "Initial analysis indicates significant spatial variation in land-cover and terrain characteristics across the study zone. Quantitative results, cartographic outputs, and accuracy statistics are included in the complete deliverable package submitted to the client authority." },
-      { h: "4. Recommendations",      t: "Continued monitoring at 6-month intervals is recommended based on survey findings. GeoVisionPro is available to provide Phase II extended survey services and GIS database maintenance upon formal request from the project authority." },
+      { h: "4. Recommendations",      t: "Continued monitoring at 6-month intervals is recommended based on survey findings. DeepEarthScience is available to provide Phase II extended survey services and GIS database maintenance upon formal request from the project authority." },
     ];
     secs.forEach(s => {
       if (y > H - 40) { doc.addPage(); addHeader(doc, { ref, type: SR_TYPE[kind] }); addFooter(doc, 2, 2, ref); y = CY; }
@@ -990,7 +990,7 @@ export async function downloadPartnerPDF(kind: "Brochure" | "Agreement" | "Benef
   setTextColor(doc, [10,22,40] as RGB);
   doc.setFont("helvetica", "bold");
   doc.setFontSize(15);
-  doc.text("GeoVisionPro Partner Program", W / 2, y, { align: "center" });
+  doc.text("DeepEarthScience Partner Program", W / 2, y, { align: "center" });
   y += 7;
   setTextColor(doc, GREEN);
   doc.setFontSize(9.5);
@@ -1003,7 +1003,7 @@ export async function downloadPartnerPDF(kind: "Brochure" | "Agreement" | "Benef
     setTextColor(doc, BODY_TXT);
     doc.setFont("helvetica", "normal");
     doc.setFontSize(9);
-    y = wrappedText(doc, "Complete all fields and email to partners@geovisionpro.com. Our team will respond within 7 working days.", 10, y, W - 20, 5); y += 8;
+    y = wrappedText(doc, "Complete all fields and email to partners@DeepEarthScience.com. Our team will respond within 7 working days.", 10, y, W - 20, 5); y += 8;
     const fields = [
       "Organisation / Institution Name",
       "Type  (Academic / Private / Government / NGO)",
@@ -1035,13 +1035,13 @@ export async function downloadPartnerPDF(kind: "Brochure" | "Agreement" | "Benef
     setTextColor(doc, WHITE);
     doc.setFont("helvetica", "bold");
     doc.setFontSize(9);
-    doc.text("Submit to: partners@geovisionpro.com  |  WhatsApp: +91-XXXXX-XXXXX", W / 2, y + 6.5, { align: "center" });
+    doc.text("Submit to: partners@DeepEarthScience.com  |  WhatsApp: +91-XXXXX-XXXXX", W / 2, y + 6.5, { align: "center" });
 
   } else if (kind === "Benefits") {
     const tiers = [
-      { name: "Silver Partner",   bs: ["Access to GeoVisionPro public GIS datasets and basemaps", "Company logo on GeoVisionPro website partner page", "One joint webinar per calendar year", "Quarterly newsletter co-branding feature", "10% discount on all training programmes"] },
-      { name: "Gold Partner",     bs: ["All Silver Partner benefits", "Access to curated 5-year satellite imagery archive", "Co-branded project reports and publications", "Two joint webinars per year", "Dedicated partner liaison officer", "20% discount on training programmes", "Priority project referrals from GeoVisionPro network"] },
-      { name: "Platinum Partner", bs: ["All Gold Partner benefits", "Full research dataset access (proprietary and licensed)", "Joint project development with revenue-share arrangement", "Annual co-research publication in peer-reviewed journal", "GeoVisionPro brand ambassador status for 1 year", "Up to 5 complimentary training seats per course batch", "Custom API access to GeoVisionPro geospatial tools"] },
+      { name: "Silver Partner",   bs: ["Access to DeepEarthScience public GIS datasets and basemaps", "Company logo on DeepEarthScience website partner page", "One joint webinar per calendar year", "Quarterly newsletter co-branding feature", "10% discount on all training programmes"] },
+      { name: "Gold Partner",     bs: ["All Silver Partner benefits", "Access to curated 5-year satellite imagery archive", "Co-branded project reports and publications", "Two joint webinars per year", "Dedicated partner liaison officer", "20% discount on training programmes", "Priority project referrals from DeepEarthScience network"] },
+      { name: "Platinum Partner", bs: ["All Gold Partner benefits", "Full research dataset access (proprietary and licensed)", "Joint project development with revenue-share arrangement", "Annual co-research publication in peer-reviewed journal", "DeepEarthScience brand ambassador status for 1 year", "Up to 5 complimentary training seats per course batch", "Custom API access to DeepEarthScience geospatial tools"] },
     ];
     tiers.forEach(t => {
       if (y > H - 30) return;
@@ -1064,7 +1064,7 @@ export async function downloadPartnerPDF(kind: "Brochure" | "Agreement" | "Benef
 
   } else if (kind === "Agreement") {
     const clauses = [
-      { h: "1. Parties",              t: "This Partnership Agreement is entered into between GeoVisionPro (hereinafter 'GVP') and the Partner Organisation as identified in the accepted application form (GVP-AF-2026-001)." },
+      { h: "1. Parties",              t: "This Partnership Agreement is entered into between DeepEarthScience (hereinafter 'GVP') and the Partner Organisation as identified in the accepted application form (GVP-AF-2026-001)." },
       { h: "2. Scope of Partnership", t: "The partnership covers joint activities in GIS project delivery, training programmes, research publications, and co-branding as outlined in the selected Partner Tier document (GVP-PB-2026-001 or GVP-PB-2026-002)." },
       { h: "3. Term",                 t: "This agreement is valid for one (1) calendar year from the date of signing and may be renewed by mutual written consent at least 30 days prior to the expiry date." },
       { h: "4. Confidentiality",      t: "Both parties agree to maintain strict confidentiality of all proprietary data, client information, and business strategies shared in the course of the partnership." },
@@ -1083,18 +1083,18 @@ export async function downloadPartnerPDF(kind: "Brochure" | "Agreement" | "Benef
     y += 4; hr(doc, y); y += 10;
     setTextColor(doc, [80,110,150] as RGB);
     doc.setFontSize(8);
-    doc.text("Authorised Signature (GeoVisionPro):  ___________________________   Date: ___________", 10, y); y += 11;
+    doc.text("Authorised Signature (DeepEarthScience):  ___________________________   Date: ___________", 10, y); y += 11;
     doc.text("Authorised Signature (Partner Org):   ___________________________   Date: ___________", 10, y);
 
   } else {
     setTextColor(doc, BODY_TXT);
     doc.setFont("helvetica", "normal");
     doc.setFontSize(9.5);
-    y = wrappedText(doc, "GeoVisionPro Partner Program connects academic institutions, NGOs, government departments, and private sector organisations with India's leading geospatial expertise. Join our network to collaborate on field surveys, research, training, and technology projects.", 10, y, W - 20, 5.5); y += 9;
+    y = wrappedText(doc, "DeepEarthScience Partner Program connects academic institutions, NGOs, government departments, and private sector organisations with India's leading geospatial expertise. Join our network to collaborate on field surveys, research, training, and technology projects.", 10, y, W - 20, 5.5); y += 9;
     y = secHead(doc, "How to Apply", y);
     [
       "Step 1:  Download and complete the Partner Application Form (GVP-AF-2026-001).",
-      "Step 2:  Email the completed form along with your organisation profile to partners@geovisionpro.com.",
+      "Step 2:  Email the completed form along with your organisation profile to partners@DeepEarthScience.com.",
       "Step 3:  Our partnerships team reviews the application and responds within 5 working days.",
       "Step 4:  MoU signing and partner onboarding session scheduled at mutual convenience.",
       "Step 5:  Access partner resources, co-branding assets, and begin active collaboration.",
@@ -1111,7 +1111,7 @@ export async function downloadPartnerPDF(kind: "Brochure" | "Agreement" | "Benef
     setTextColor(doc, WHITE);
     doc.setFont("helvetica", "bold");
     doc.setFontSize(9);
-    doc.text("Contact: partners@geovisionpro.com  |  www.geovisionpro.com/partners", W / 2, y + 7.5, { align: "center" });
+    doc.text("Contact: partners@DeepEarthScience.com  |  www.DeepEarthScience.com/partners", W / 2, y + 7.5, { align: "center" });
   }
 
   addFooter(doc, 1, 1, ref);
@@ -1132,22 +1132,22 @@ export async function downloadSocialKit() {
   setTextColor(doc, [10,22,40] as RGB);
   doc.setFont("helvetica", "bold");
   doc.setFontSize(14);
-  doc.text("GeoVisionPro — Official Social Media Kit 2026", W / 2, y, { align: "center" });
+  doc.text("DeepEarthScience — Official Social Media Kit 2026", W / 2, y, { align: "center" });
   y += 11;
   hr(doc, y, GREEN); y += 9;
 
   setTextColor(doc, BODY_TXT);
   doc.setFont("helvetica", "normal");
   doc.setFontSize(9.5);
-  y = wrappedText(doc, "This document contains GeoVisionPro's official social media handles, verified URLs, approved hashtags, and brand usage guidelines. Use this kit when referencing GeoVisionPro in any social media post, press mention, or digital publication.", 10, y, W - 20, 5.5); y += 9;
+  y = wrappedText(doc, "This document contains DeepEarthScience's official social media handles, verified URLs, approved hashtags, and brand usage guidelines. Use this kit when referencing DeepEarthScience in any social media post, press mention, or digital publication.", 10, y, W - 20, 5.5); y += 9;
 
   y = secHead(doc, "Official Handles & Platforms", y);
   const platforms: [string, string, string, RGB][] = [
-    ["LinkedIn",    "GeoVisionPro",      "linkedin.com/company/geovisionpro", [0,119,181]   ],
-    ["Twitter / X", "@GeoVisionPro",     "x.com/GeoVisionPro",               [29,161,242]  ],
-    ["YouTube",     "GeoVisionPro",      "youtube.com/@GeoVisionPro",         [255,0,0]     ],
-    ["Instagram",   "@geovisionpro",     "instagram.com/geovisionpro",        [225,48,108]  ],
-    ["Facebook",    "GeoVisionPro India","facebook.com/GeoVisionPro",         [24,119,242]  ],
+    ["LinkedIn",    "DeepEarthScience",      "linkedin.com/company/DeepEarthScience", [0,119,181]   ],
+    ["Twitter / X", "@DeepEarthScience",     "x.com/DeepEarthScience",               [29,161,242]  ],
+    ["YouTube",     "DeepEarthScience",      "youtube.com/@DeepEarthScience",         [255,0,0]     ],
+    ["Instagram",   "@DeepEarthScience",     "instagram.com/DeepEarthScience",        [225,48,108]  ],
+    ["Facebook",    "DeepEarthScience India","facebook.com/DeepEarthScience",         [24,119,242]  ],
   ];
   platforms.forEach(([pname, handle, url, color]) => {
     if (y > H - 20) return;
@@ -1170,7 +1170,7 @@ export async function downloadSocialKit() {
 
   y += 6;
   y = secHead(doc, "Official Hashtags", y);
-  const htags = ["#GeoVisionPro","#GIS","#RemoteSensing","#LULC","#DroneMapping","#GeospatialIndia","#SatelliteImagery","#GISTraining","#GeospatialTech","#AIinGIS"];
+  const htags = ["#DeepEarthScience","#GIS","#RemoteSensing","#LULC","#DroneMapping","#GeospatialIndia","#SatelliteImagery","#GISTraining","#GeospatialTech","#AIinGIS"];
   let xTag = 10;
   htags.forEach(t => {
     doc.setFontSize(7.5);
@@ -1186,11 +1186,11 @@ export async function downloadSocialKit() {
   hr(doc, y); y += 8;
 
   y = secHead(doc, "Posting Guidelines", y);
-  ["Always use the official GeoVisionPro logo from the Logo Pack (GVP-MR-2026-001).",
+  ["Always use the official DeepEarthScience logo from the Logo Pack (GVP-MR-2026-001).",
    "Use approved brand colours only: Navy #0a1628, Green #1d9e75, Text #b0c4d8.",
-   "Tag @GeoVisionPro in all posts, articles, and social media mentions.",
+   "Tag @DeepEarthScience in all posts, articles, and social media mentions.",
    "Approved image formats: JPG and PNG only. Minimum resolution: 1920 × 1080 px.",
-   "Do not alter, distort, or recolour the GeoVisionPro logo under any circumstances.",
+   "Do not alter, distort, or recolour the DeepEarthScience logo under any circumstances.",
   ].forEach(g => {
     if (y > H - 20) return;
     setTextColor(doc, BODY_TXT);
@@ -1201,7 +1201,7 @@ export async function downloadSocialKit() {
   y += 7;
   setTextColor(doc, [80,110,150] as RGB);
   doc.setFontSize(8);
-  doc.text("Brand enquiries: social@geovisionpro.com  |  www.geovisionpro.com", 10, y);
+  doc.text("Brand enquiries: social@DeepEarthScience.com  |  www.DeepEarthScience.com", 10, y);
 
   addFooter(doc, 1, 1, ref);
   doc.save(`${ref}-SocialMediaKit.pdf`);
@@ -1237,7 +1237,7 @@ export async function downloadBlog(
   setTextColor(doc, [80,110,150] as RGB);
   doc.setFont("helvetica", "normal");
   doc.setFontSize(8);
-  doc.text(`By ${author}   ·   ${date}   ·   geovisionpro.com/blogs`, 10, y);
+  doc.text(`By ${author}   ·   ${date}   ·   DeepEarthScience.com/blogs`, 10, y);
   y += 9;
   hr(doc, y, GREEN); y += 9;
 
@@ -1245,7 +1245,7 @@ export async function downloadBlog(
     excerpt,
     "Remote sensing and GIS technologies have fundamentally changed the way professionals analyse, map, and monitor our environment. With freely available satellite data from programmes like Copernicus and NASA/USGS Landsat, geospatial analysis is now accessible to a far wider professional audience than ever before.",
     "The tools available today — from open-source platforms like QGIS and Google Earth Engine to enterprise solutions like ArcGIS Pro and ERDAS IMAGINE — provide unprecedented analytical power for crop monitoring, urban sprawl detection, disaster response, and coastal zone management.",
-    "In this article, we explore practical workflows, industry best practices, and expert insights drawn from GeoVisionPro's experience across hundreds of projects spanning infrastructure, agriculture, environmental monitoring, and field survey operations.",
+    "In this article, we explore practical workflows, industry best practices, and expert insights drawn from DeepEarthScience's experience across hundreds of projects spanning infrastructure, agriculture, environmental monitoring, and field survey operations.",
     "Whether you are a student beginning your GIS journey or a seasoned professional updating your toolkit, we hope this article provides actionable guidance you can apply immediately in your own geospatial work.",
   ];
   body.forEach(para => {
@@ -1260,7 +1260,7 @@ export async function downloadBlog(
   setTextColor(doc, GREEN);
   doc.setFont("helvetica", "bold");
   doc.setFontSize(8.5);
-  doc.text("More at: geovisionpro.com/blogs  |  Subscribe: newsletter@geovisionpro.com", 10, y);
+  doc.text("More at: DeepEarthScience.com/blogs  |  Subscribe: newsletter@DeepEarthScience.com", 10, y);
 
   addFooter(doc, 1, 1, ref);
   const slug = title.replace(/[^a-z0-9]/gi, "-").substring(0, 35);
@@ -1290,7 +1290,7 @@ export async function downloadMediaResource(name: string, filename: string, idx 
   doc.setFont("helvetica", "normal");
   doc.setFontSize(9.5);
   y = wrappedText(doc,
-    "GeoVisionPro is a leading geospatial technology company headquartered in Kolkata, West Bengal. We specialise in GIS mapping, remote sensing, satellite image processing, drone and UAV surveys, and geospatial training, serving government agencies, urban planners, agricultural bodies, and educational institutions across 22 states of India.",
+    "DeepEarthScience is a leading geospatial technology company headquartered in Kolkata, West Bengal. We specialise in GIS mapping, remote sensing, satellite image processing, drone and UAV surveys, and geospatial training, serving government agencies, urban planners, agricultural bodies, and educational institutions across 22 states of India.",
     10, y, W - 20, 5.5); y += 9;
 
   y = secHead(doc, "Key Facts", y);
@@ -1338,7 +1338,7 @@ export async function downloadMediaResource(name: string, filename: string, idx 
   doc.setFont("helvetica", "normal");
   doc.setFontSize(8);
   doc.text(`Document: ${name}  ·  File: ${filename}`, 10, y); y += 5;
-  doc.text("For the complete media pack contact: media@geovisionpro.com  |  www.geovisionpro.com", 10, y);
+  doc.text("For the complete media pack contact: media@DeepEarthScience.com  |  www.DeepEarthScience.com", 10, y);
 
   addFooter(doc, 1, 1, ref);
   doc.save(`${ref}-${filename}`);
@@ -1405,7 +1405,7 @@ export async function downloadCourseBrochure(
     });
   }
 
-  addFooter(doc, 1, 2, ref, "GeoVisionPro Academy");
+  addFooter(doc, 1, 2, ref, "DeepEarthScience Academy");
 
   /* Page 2 */
   doc.addPage();
@@ -1468,10 +1468,10 @@ export async function downloadCourseBrochure(
     setTextColor(doc, WHITE);
     doc.setFont("helvetica", "bold");
     doc.setFontSize(9);
-    doc.text("Enroll: www.geovisionpro.com/academy  |  academy@geovisionpro.com", W / 2, y + 7.5, { align: "center" });
+    doc.text("Enroll: www.DeepEarthScience.com/academy  |  academy@DeepEarthScience.com", W / 2, y + 7.5, { align: "center" });
   }
 
-  addFooter(doc, 2, 2, ref, "GeoVisionPro Academy");
+  addFooter(doc, 2, 2, ref, "DeepEarthScience Academy");
   doc.save(`${ref}.pdf`);
 }
 
@@ -1508,7 +1508,7 @@ export async function downloadTutorialPDF(
   setTextColor(doc, [80, 110, 150] as RGB);
   doc.setFont("helvetica", "normal");
   doc.setFontSize(8);
-  doc.text(`Level: ${level}  ·  Software: ${software}  ·  GeoVisionPro Academy`, 10, y);
+  doc.text(`Level: ${level}  ·  Software: ${software}  ·  DeepEarthScience Academy`, 10, y);
   y += 9;
   hr(doc, y, GREEN); y += 9;
 
@@ -1527,7 +1527,7 @@ export async function downloadTutorialPDF(
   doc.setFontSize(9);
   const prereqs = level === "Beginner"
     ? ["No prior GIS experience required.", `${software} installed on your computer.`, "Basic computer literacy."]
-    : ["Basic GIS knowledge recommended.", `${software} installed and configured.`, "Sample dataset (download from geovisionpro.com/academy/resources)."];
+    : ["Basic GIS knowledge recommended.", `${software} installed and configured.`, "Sample dataset (download from DeepEarthScience.com/academy/resources)."];
   prereqs.forEach(p => {
     if (y > H - 30) return;
     y = wrappedText(doc, `•  ${p}`, 14, y, W - 24, 5); y += 2;
@@ -1571,10 +1571,10 @@ export async function downloadTutorialPDF(
     setTextColor(doc, GREEN);
     doc.setFont("helvetica", "bold");
     doc.setFontSize(8.5);
-    doc.text("More tutorials: www.geovisionpro.com/learn/tutorials  |  academy@geovisionpro.com", 10, y);
+    doc.text("More tutorials: www.DeepEarthScience.com/learn/tutorials  |  academy@DeepEarthScience.com", 10, y);
   }
 
-  addFooter(doc, page, totalPages, ref, "GeoVisionPro Academy");
+  addFooter(doc, page, totalPages, ref, "DeepEarthScience Academy");
   const slug = title.replace(/[^a-z0-9]/gi, "-").substring(0, 30);
   doc.save(`${ref}-${slug}.pdf`);
 }
@@ -1610,7 +1610,7 @@ export async function downloadCertBrochure(
   doc.setFont("helvetica", "normal");
   doc.setFontSize(9.5);
   y = wrappedText(doc,
-    `The ${title} is GeoVisionPro Academy's professional certification program for geospatial practitioners. Completing this program demonstrates mastery of GIS concepts, advanced analytical techniques, and professional mapping standards. The certificate is recognised by leading GIS employers across India and is awarded upon passing all included courses.`,
+    `The ${title} is DeepEarthScience Academy's professional certification program for geospatial practitioners. Completing this program demonstrates mastery of GIS concepts, advanced analytical techniques, and professional mapping standards. The certificate is recognised by leading GIS employers across India and is awarded upon passing all included courses.`,
     10, y, W - 20, 5.5);
   y += 9;
 
@@ -1638,7 +1638,7 @@ export async function downloadCertBrochure(
       "Professional credential recognised by leading Indian GIS employers and institutions.",
       "Comprehensive coverage of theory, software proficiency, and practical fieldwork.",
       "Lifetime access to all included course materials and future content updates.",
-      "One-on-one mentorship session with a GeoVisionPro domain expert.",
+      "One-on-one mentorship session with a DeepEarthScience domain expert.",
       "Alumni network access and job placement assistance for graduates.",
       "Digital certificate + physical copy shipped to your registered address.",
     ].forEach(b => {
@@ -1663,7 +1663,7 @@ export async function downloadCertBrochure(
     setTextColor(doc, LIGHT);
     doc.setFont("helvetica", "normal");
     doc.setFontSize(8.5);
-    doc.text("100% Online & Self-paced  ·  GeoVisionPro Academy Certificate Awarded", 17, y + 15);
+    doc.text("100% Online & Self-paced  ·  DeepEarthScience Academy Certificate Awarded", 17, y + 15);
     y += 26;
   }
 
@@ -1673,10 +1673,10 @@ export async function downloadCertBrochure(
     setTextColor(doc, WHITE);
     doc.setFont("helvetica", "bold");
     doc.setFontSize(9);
-    doc.text("Enroll: www.geovisionpro.com/academy  |  academy@geovisionpro.com", W / 2, y + 7.5, { align: "center" });
+    doc.text("Enroll: www.DeepEarthScience.com/academy  |  academy@DeepEarthScience.com", W / 2, y + 7.5, { align: "center" });
   }
 
-  addFooter(doc, 1, 1, ref, "GeoVisionPro Academy");
+  addFooter(doc, 1, 1, ref, "DeepEarthScience Academy");
   doc.save(`${ref}.pdf`);
 }
 
@@ -1824,11 +1824,11 @@ export async function downloadPaymentReceipt(data: ReceiptData) {
     doc.text("Note:", 14, y + 6);
     doc.setFont("helvetica", "normal");
     doc.setFontSize(8);
-    const note = "Please retain this receipt for your records. Present this at the time of course commencement. For support: academy@geovisionpro.com  |  +91-98765-43210";
+    const note = "Please retain this receipt for your records. Present this at the time of course commencement. For support: academy@DeepEarthScience.com  |  +91-98765-43210";
     wrappedText(doc, note, 14, y + 12, W - 28, 4.5);
   }
 
-  addFooter(doc, 1, 1, data.receiptNo, "GeoVisionPro Academy");
+  addFooter(doc, 1, 1, data.receiptNo, "DeepEarthScience Academy");
   doc.save(`${data.receiptNo}.pdf`);
 }
 
@@ -1881,7 +1881,7 @@ export async function downloadEnrollmentLetter(data: EnrollLetterData) {
   doc.setFontSize(9);
   y = wrappedText(doc, `Dear ${data.studentName},`, 10, y, W - 20, 5); y += 5;
 
-  const para = "We are delighted to confirm your enrollment at GeoVisionPro Academy. Your application has been successfully processed and you are now officially enrolled in the course detailed below. We look forward to supporting your journey in the field of Geospatial Technology and Remote Sensing.";
+  const para = "We are delighted to confirm your enrollment at DeepEarthScience Academy. Your application has been successfully processed and you are now officially enrolled in the course detailed below. We look forward to supporting your journey in the field of Geospatial Technology and Remote Sensing.";
   y = wrappedText(doc, para, 10, y, W - 20, 5); y += 8;
 
   /* Enrollment details table */
@@ -1915,11 +1915,11 @@ export async function downloadEnrollmentLetter(data: EnrollLetterData) {
   if (y < H - 70) {
     y = secHead(doc, "Getting Started", y);
     const steps = [
-      "Access your course materials via the GeoVisionPro Learning Portal at portal.geovisionpro.com",
+      "Access your course materials via the DeepEarthScience Learning Portal at portal.DeepEarthScience.com",
       "Log in using your registered email. Your temporary password has been sent separately.",
       "Join your batch’s dedicated WhatsApp group — link shared in your welcome email.",
       "Attend the orientation session on the first day of your batch — details emailed separately.",
-      "For any queries: academy@geovisionpro.com  ·  +91-98765-43210 (Mon–Sat, 9 AM–6 PM IST)",
+      "For any queries: academy@DeepEarthScience.com  ·  +91-98765-43210 (Mon–Sat, 9 AM–6 PM IST)",
     ];
     steps.forEach((s, i) => {
       if (y > H - 40) return;
@@ -1936,7 +1936,7 @@ export async function downloadEnrollmentLetter(data: EnrollLetterData) {
     setTextColor(doc, BODY_TXT);
     doc.setFont("helvetica", "normal");
     doc.setFontSize(9);
-    y = wrappedText(doc, "Congratulations and welcome to the GeoVisionPro Academy family. We wish you great success in your studies!", 10, y, W - 20, 5);
+    y = wrappedText(doc, "Congratulations and welcome to the DeepEarthScience Academy family. We wish you great success in your studies!", 10, y, W - 20, 5);
     y += 8;
     doc.text("Warm regards,", 10, y); y += 6;
     doc.setFont("helvetica", "bold");
@@ -1945,8 +1945,8 @@ export async function downloadEnrollmentLetter(data: EnrollLetterData) {
     doc.setFont("helvetica", "normal");
     doc.setFontSize(8.5);
     setTextColor(doc, META_LBL);
-    doc.text("Director, GeoVisionPro Academy", 10, y); y += 4;
-    doc.text("academy@geovisionpro.com  ·  +91-98765-43210", 10, y);
+    doc.text("Director, DeepEarthScience Academy", 10, y); y += 4;
+    doc.text("academy@DeepEarthScience.com  ·  +91-98765-43210", 10, y);
 
     /* Official stamp */
     const sx = W - 55;
@@ -1960,11 +1960,11 @@ export async function downloadEnrollmentLetter(data: EnrollLetterData) {
     doc.setFont("helvetica", "bold");
     doc.setFontSize(7.5);
     doc.text("OFFICIAL SEAL", sx + 22.5, sy + 8,  { align: "center" });
-    doc.text("GeoVisionPro",  sx + 22.5, sy + 15, { align: "center" });
+    doc.text("DeepEarthScience",  sx + 22.5, sy + 15, { align: "center" });
     doc.text("Academy",       sx + 22.5, sy + 22, { align: "center" });
   }
 
-  addFooter(doc, 1, 1, data.enrollmentId, "GeoVisionPro Academy");
+  addFooter(doc, 1, 1, data.enrollmentId, "DeepEarthScience Academy");
   doc.save(`${data.enrollmentId}-Enrollment-Letter.pdf`);
 }
 
@@ -1976,12 +1976,12 @@ export function downloadICS(name: string, dateStr: string, location: string, des
   const stamp = new Date().toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
 
   const ics = [
-    "BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//GeoVisionPro//Events//EN",
+    "BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//DeepEarthScience//Events//EN",
     "BEGIN:VEVENT",
-    `UID:${stamp}@geovisionpro.com`, `DTSTAMP:${stamp}`,
+    `UID:${stamp}@DeepEarthScience.com`, `DTSTAMP:${stamp}`,
     `DTSTART;VALUE=DATE:${ymd}`, `DTEND;VALUE=DATE:${ymd}`,
     `SUMMARY:${name}`, `LOCATION:${location}`,
-    `DESCRIPTION:${desc.replace(/\n/g, "\\n")} — GeoVisionPro Events`,
+    `DESCRIPTION:${desc.replace(/\n/g, "\\n")} — DeepEarthScience Events`,
     "END:VEVENT", "END:VCALENDAR",
   ].join("\r\n");
 

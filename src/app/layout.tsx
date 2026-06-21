@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Providers from "@/components/Providers";
@@ -17,21 +17,21 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://geovisionpro.com"),
+  metadataBase: new URL("https://DeepEarthScience.com"),
   title: {
-    default: "GeoVision Pro | AI-Powered Geospatial Intelligence & Remote Sensing",
-    template: "%s | GeoVision Pro",
+    default: "Deep Earth Science | AI-Powered Geospatial Intelligence & Remote Sensing",
+    template: "%s | Deep Earth Science",
   },
   description:
-    "GeoVision Pro is a premier AI-driven geospatial consultancy. Expert services in Remote Sensing, LULC Mapping, GIS Analysis, Drone Mapping, and professional training in GEE, ArcGIS, AutoCAD, STAAD Pro & AI.",
+    "Deep Earth Science is a premier AI-driven geospatial consultancy. Expert services in Remote Sensing, LULC Mapping, GIS Analysis, Drone Mapping, and professional training in GEE, ArcGIS, AutoCAD, STAAD Pro & AI.",
   keywords: [
     "Remote Sensing", "LULC Mapping", "GIS", "Google Earth Engine", "ArcGIS",
     "AutoCAD", "STAAD Pro", "AI Geospatial", "Satellite Image Analysis",
     "Drone Mapping", "Geospatial Consultancy", "India GIS", "SAR", "LiDAR",
   ],
-  authors: [{ name: "GeoVision Pro" }],
-  creator: "GeoVision Pro",
-  publisher: "GeoVision Pro",
+  authors: [{ name: "Deep Earth Science" }],
+  creator: "Deep Earth Science",
+  publisher: "Deep Earth Science",
   robots: {
     index: true,
     follow: true,
@@ -40,9 +40,9 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_IN",
-    url: "https://geovisionpro.com",
-    siteName: "GeoVision Pro",
-    title: "GeoVision Pro | AI-Powered Geospatial Intelligence",
+    url: "https://DeepEarthScience.com",
+    siteName: "Deep Earth Science",
+    title: "Deep Earth Science | AI-Powered Geospatial Intelligence",
     description:
       "Premier AI-driven Remote Sensing, GIS, and Geospatial Consultancy transforming satellite data into strategic decisions for infrastructure, environment, and sustainable development.",
     images: [
@@ -50,13 +50,13 @@ export const metadata: Metadata = {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "GeoVision Pro — AI-Powered Geospatial Intelligence",
+        alt: "Deep Earth Science — AI-Powered Geospatial Intelligence",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "GeoVision Pro | AI-Powered Geospatial Intelligence",
+    title: "Deep Earth Science | AI-Powered Geospatial Intelligence",
     description: "Premier AI-driven Remote Sensing, GIS & Geospatial Consultancy.",
     images: ["/og-image.png"],
   },
@@ -65,9 +65,9 @@ export const metadata: Metadata = {
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "Organization",
-  name: "GeoVision Pro",
-  url: "https://geovisionpro.com",
-  logo: "https://geovisionpro.com/logo.png",
+  name: "Deep Earth Science",
+  url: "https://DeepEarthScience.com",
+  logo: "https://DeepEarthScience.com/logo.png",
   description:
     "AI-powered geospatial consultancy specialising in Remote Sensing, LULC Mapping, GIS Analysis, and professional training.",
   address: {
@@ -77,11 +77,11 @@ const jsonLd = {
   contactPoint: {
     "@type": "ContactPoint",
     contactType: "customer service",
-    email: "info@geovisionpro.com",
+    email: "info@DeepEarthScience.com",
   },
   sameAs: [
-    "https://www.linkedin.com/company/geovisionpro",
-    "https://www.youtube.com/@geovisionpro",
+    "https://www.linkedin.com/company/DeepEarthScience",
+    "https://www.youtube.com/@DeepEarthScience",
   ],
   offers: {
     "@type": "AggregateOffer",

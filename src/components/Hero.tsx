@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useCallback, useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -128,7 +128,7 @@ export default function Hero() {
   return (
     <section
       id="home"
-      aria-label="GeoVisionPro hero"
+      aria-label="DeepEarthScience hero"
       className="relative flex flex-col"
       style={{ background: "var(--section-bg)" }}
     >

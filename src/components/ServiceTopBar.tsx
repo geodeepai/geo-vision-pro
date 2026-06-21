@@ -108,7 +108,7 @@ function SiteNavDrawer({ open, onClose }: { open: boolean; onClose: () => void }
                   </svg>
                 </div>
                 <span className="font-bold text-slate-900" style={{ fontSize: 17 }}>
-                  GeoVision<span className="text-blue-500">Pro</span>
+                  DeepEarth<span className="text-blue-500">Science</span>
                 </span>
               </a>
               <button
@@ -217,7 +217,7 @@ function SiteNavDrawer({ open, onClose }: { open: boolean; onClose: () => void }
               >
                 Get Started
               </a>
-              <p className="text-center text-[11px] text-slate-400 pt-1">GeoVision Pro · All services across India</p>
+              <p className="text-center text-[11px] text-slate-400 pt-1">Deep Earth Science · All services across India</p>
             </div>
           </motion.div>
         </>
@@ -322,7 +322,7 @@ export default function ServiceTopBar({ color, gradientTo, title, navLinks }: Pr
             </div>
             <div className="hidden sm:block">
               <p className="font-black leading-none" style={{ fontSize: 14, color: "#0f172a" }}>
-                GeoVision<span style={{ color: "#3b82f6" }}>Pro</span>
+                DeepEarth<span style={{ color: "#3b82f6" }}>Science</span>
               </p>
               <p className="font-semibold leading-none mt-0.5 truncate max-w-[180px]" style={{ fontSize: 11, color }}>
                 {title}

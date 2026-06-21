@@ -89,7 +89,7 @@ function LoginForm() {
                 <circle cx="12" cy="12" r="2" fill="white" />
               </svg>
             </div>
-            <span className="font-bold text-slate-900">GeoVision<span className="text-blue-600">Pro</span></span>
+            <span className="font-bold text-slate-900">DeepEarth<span className="text-blue-600">Science</span></span>
           </Link>
           <Link
             href="/"
@@ -271,7 +271,7 @@ function LoginForm() {
 
         {/* Footer */}
         <div className="px-8 py-4 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-400">
-          <span>&copy; 2025 GeoVision Pro</span>
+          <span>&copy; 2025 Deep Earth Science</span>
           <div className="flex gap-4">
             <Link href="/privacy" className="hover:text-slate-600 transition-colors">Privacy Policy</Link>
             <Link href="/terms" className="hover:text-slate-600 transition-colors">Terms of Service</Link>
